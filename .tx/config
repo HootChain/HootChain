@@ -1,0 +1,7 @@
+[main]
+host = https://www.transifex.com
+
+[hoot.hoot_ents]
+file_filter = src/qt/locale/hoot_<lang>.ts
+source_file = src/qt/locale/hoot_en.xlf
+source_lang = en

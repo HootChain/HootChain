@@ -1,0 +1,22 @@
+QT_TS = \
+  qt/locale/hoot_ar.ts \
+  qt/locale/hoot_bg.ts \
+  qt/locale/hoot_de.ts \
+  qt/locale/hoot_en.ts \
+  qt/locale/hoot_es.ts \
+  qt/locale/hoot_fi.ts \
+  qt/locale/hoot_fr.ts \
+  qt/locale/hoot_it.ts \
+  qt/locale/hoot_ja.ts \
+  qt/locale/hoot_ko.ts \
+  qt/locale/hoot_nl.ts \
+  qt/locale/hoot_pl.ts \
+  qt/locale/hoot_pt.ts \
+  qt/locale/hoot_ro.ts \
+  qt/locale/hoot_ru.ts \
+  qt/locale/hoot_sk.ts \
+  qt/locale/hoot_th.ts \
+  qt/locale/hoot_tr.ts \
+  qt/locale/hoot_vi.ts \
+  qt/locale/hoot_zh_CN.ts \
+  qt/locale/hoot_zh_TW.ts

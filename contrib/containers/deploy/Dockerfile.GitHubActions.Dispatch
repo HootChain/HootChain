@@ -1,0 +1,80 @@
+# syntax=docker/dockerfile:1.3
+
+FROM --platform=$BUILDPLATFORM ubuntu:focal as builder
+RUN apt-get update && \
+    apt-get -y install --no-install-recommends \
+    automake \
+    autotools-dev \
+    bsdmainutils \
+    build-essential \
+    ca-certificates \
+    curl \
+    g++-arm-linux-gnueabihf \
+    libtool \
+    pkg-config \
+    python3 \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /home/hoot
+
+COPY . .
+
+ARG TARGETPLATFORM
+
+RUN case "$TARGETPLATFORM" in \
+  "linux/arm64") make HOST=arm-linux-gnueabihf -C depends -j`nproc | awk '{x=$1/2; print x}'` ;; \
+  "linux/amd64") make HOST=x86_64-pc-linux-gnu -C depends -j`nproc | awk '{x=$1/2; print x}'` ;; \
+  *) exit 1 ;; \
+esac
+
+RUN ./autogen.sh && \
+  case "$TARGETPLATFORM" in \
+  "linux/arm64") ./configure --prefix=`pwd`/depends/arm-linux-gnueabihf ;; \
+  "linux/amd64") ./configure --prefix=`pwd`/depends/x86_64-pc-linux-gnu ;; \
+esac
+
+RUN make -j`nproc | awk '{x=$1/2; print x}'` && make install
+
+RUN mkdir built-target && \
+  case "$TARGETPLATFORM" in \
+  "linux/arm64") cp depends/arm-linux-gnueabihf/bin/hoot* /home/hoot/built-target ;; \
+  "linux/amd64") cp depends/x86_64-pc-linux-gnu/bin/hoot* /home/hoot/built-target ;; \
+esac
+
+FROM ubuntu:focal
+LABEL maintainer="Hootchain Developers <dev@hoot.org>"
+LABEL description="Dockerised HootchainCore"
+
+ARG USER_ID
+ARG GROUP_ID
+ARG TAG
+
+ENV HOME /home/hoot
+
+# add user with specified (or default) user/group ids
+ENV USER_ID ${USER_ID:-1000}
+ENV GROUP_ID ${GROUP_ID:-1000}
+RUN groupadd -g ${GROUP_ID} hoot && \
+    useradd -u ${USER_ID} -g hoot -s /bin/bash -m -d /home/hoot hoot  && \
+    mkdir /home/hoot/.hootcore && \
+    chown ${USER_ID}:${GROUP_ID} -R /home/hoot
+
+RUN apt-get update && \
+    apt-get -y install --no-install-recommends \
+    wget \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /home/hoot/built-target/hoot* /usr/local/bin
+
+USER hoot
+
+VOLUME ["/home/hoot"]
+
+COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+EXPOSE 9968 9969 19968 19969
+
+WORKDIR /home/hoot

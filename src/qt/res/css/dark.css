@@ -21,8 +21,8 @@ Loaded in GUIUtil::loadStyleSheet() in guitil.cpp.
 
 #00000000
 #333
-#AB84BB
-#AB84BB
+#76b384
+#76b384
 #111314
 #111314
 #363637
@@ -32,7 +32,7 @@ Loaded in GUIUtil::loadStyleSheet() in guitil.cpp.
 #818181
 #ffffff
 #f6f6f6
-#cc323232
+#32cc6d32
 
 </colors>
 */
@@ -50,7 +50,7 @@ WalletFrame {
 
 QWidget { /* override text selection background color for all text widgets */
     selection-color: #fff;
-    selection-background-color: #AB84BB;
+    selection-background-color: #76b384;
 }
 
 QCheckBox,
@@ -99,7 +99,7 @@ QComboBox:focus,
 QPlainTextEdit:focus,
 QLineEdit:focus {
     background-color: #ffffff;
-    border-color: #AB84BB;
+    border-color: #76b384;
 }
 
 BitcoinAmountField:disabled,
@@ -280,12 +280,12 @@ QHeaderView
 ******************************************************/
 
 QHeaderView::section { /* Table Header Sections */
-    background-color: #AB84BB;
+    background-color: #76b384;
     color: #ffffff;
 }
 
 QHeaderView::section:hover { /* Table Header Sections */
-    background-color: #AB84BB;
+    background-color: #76b384;
     color: #ffffff;
 }
 
@@ -301,14 +301,14 @@ QMenu
 
 QMenu {
     background-color: #1E1E1E;
-    border-color: #AB84BB;
+    border-color: #76b384;
 }
 
 QMenu::item {
     color: #B5BABD;
 }
 QMenu::item:selected:!disabled {
-    background-color: #AB84BB;
+    background-color: #76b384;
     color: #ffffff;
 }
 QMenu::item:disabled {
@@ -316,7 +316,7 @@ QMenu::item:disabled {
 }
 
 QMenu::separator {
-    background-color: #AB84BB;
+    background-color: #76b384;
 }
 
 /******************************************************
@@ -335,7 +335,7 @@ QMenu::item {
 
 QMenuBar::item:selected {
     background-color: #111314;
-    color: #AB84BB;
+    color: #76b384;
 }
 
 /******************************************************
@@ -348,7 +348,7 @@ QProgressBar {
 }
 
 QProgressBar::chunk {
-    background-color: #AB84BB;
+    background-color: #76b384;
 }
 
 /******************************************************
@@ -365,12 +365,12 @@ QPushButton
 ******************************************************/
 
 QPushButton {
-    background-color: #AB84BB;
+    background-color: #76b384;
     color: #ffffff;
 }
 
 QPushButton:hover {
-    background-color: #77478B;
+    background-color: #2f9250;
 }
 
 QPushButton:focus {
@@ -379,7 +379,7 @@ QPushButton:focus {
 }
 
 QPushButton:pressed {
-    background-color: #AB84BB;
+    background-color: #76b384;
 }
 
 QPushButton:disabled {
@@ -481,7 +481,7 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage,
 #btnVerifyMessage {
-    border-color: #AB84BB;
+    border-color: #76b384;
     /* color: #818181; */
     color: #fff;
 }
@@ -503,9 +503,9 @@ QPushButton - Special case, tabbar replacement buttons
 #btnSignMessage:hover:checked,
 #btnVerifyMessage:hover:checked {
     /* border-color: #ffffff; */
-    border-color: #AB84BB;
+    border-color: #76b384;
     /* color: #fff; */
-    color: #AB84BB;
+    color: #76b384;
 }
 
 /* Debug window buttons */
@@ -524,8 +524,8 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage:hover:!checked,
 #btnVerifyMessage:hover:!checked {
-    border-color: #AB84BB;
-    color: #AB84BB;
+    border-color: #76b384;
+    color: #76b384;
     /* color: #ffffff; */
 }
 
@@ -546,9 +546,9 @@ QPushButton - Special case, tabbar replacement buttons
 #btnSignMessage:checked,
 #btnVerifyMessage:checked {
     /* border-color: #ffffff; */
-    border-color: #AB84BB;
+    border-color: #76b384;
     /* color: #ffffff; */
-    color: #AB84BB;
+    color: #76b384;
 }
 
 /******************************************************
@@ -596,10 +596,10 @@ QSlider
 ******************************************************/
 
 QSlider::handle:horizontal {
-	background-color: #AB84BB;
+	background-color: #76b384;
 }
 QSlider::handle:horizontal:hover {
-	background-color: #AB84BB;
+	background-color: #76b384;
 }
 QSlider::sub-page:horizontal {
 	background-color: #ffffff;
@@ -632,7 +632,7 @@ QTableView::item { /* Table Item */
 }
 
 QTableView::item:selected { /* Table Item Selected */
-    background-color: #AB84BB;
+    background-color: #76b384;
     color: #ffffff;
 }
 
@@ -677,12 +677,12 @@ QToolBar > QToolButton {
 
 QToolBar > QToolButton:hover:!checked {
     background-color: #111314;
-    color: #AB84BB;
+    color: #76b384;
 }
 
 QToolBar > QToolButton:checked {
     background-color: #111314;
-    color: #AB84BB;
+    color: #76b384;
 }
 
 QToolBar > QToolButton:disabled {
@@ -701,7 +701,7 @@ QToolTip
 
 QToolTip {
     background-color: #1E1E1E;
-    border-color: #AB84BB;
+    border-color: #76b384;
     color: #ffffff;
 }
 
@@ -857,7 +857,7 @@ ModalOverlay
 ******************************************************/
 
 QWidget#bgWidget { /* The frame overlaying the overview-page */
-    background-color: #cc323232;
+    background-color: #32cc6d32;
     color: #585858;
 }
 
@@ -886,7 +886,7 @@ QDialog#OptionsDialog #frame {
  ******************************************************/
 
 QWidget#no_wallet_group {
-    background-color: #cc323232;
+    background-color: #32cc6d32;
 }
 
 /******************************************************
@@ -938,7 +938,7 @@ RPCConsole QTableView {
 
 #rpcAutoCompleter {
     background-color: #1E1E1E;
-    border-color: #AB84BB;
+    border-color: #76b384;
     border-radius: 4px;
 }
 
@@ -947,7 +947,7 @@ RPCConsole QTableView {
 }
 
 #rpcAutoCompleter::item:selected {
-    background-color: #AB84BB;
+    background-color: #76b384;
     color: #ffffff;
 }
 
@@ -957,7 +957,7 @@ SendCoinsDialog
 
 QDialog#SendCoinsDialog .QFrame#frameCoinControl,
 QDialog#SendCoinsDialog #scrollArea {
-    border-color: #AB84BB;
+    border-color: #76b384;
 }
 
 /******************************************************

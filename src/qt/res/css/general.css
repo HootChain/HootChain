@@ -883,7 +883,7 @@ QToolBar / QToolButton
 QToolBar {
     background-color: red;
     border: none;
-    border-bottom: 2px solid #AB84BB;
+    border-bottom: 2px solid #76b384;
     width: 100%;
     padding: 0;
     margin: 0;
@@ -895,7 +895,7 @@ QToolBar {
 QToolBar > QToolButton {
     background-color: #00000000;
     border: none;
-    border-bottom: 2px solid #AB84BB;
+    border-bottom: 2px solid #76b384;
     min-height: 70px;
     max-height: 70px;
     width: 100%;
@@ -1294,7 +1294,7 @@ QDialog#OptionsDialog QLabel#label_3 { /* Translations Missing? Label */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
     padding-left: 8px;
     min-height: 60px;
-    color: #AB84BB;
+    color: #76b384;
 }
 
 QDialog#OptionsDialog #line,
@@ -1316,7 +1316,7 @@ QDialog#OptionsDialog QLabel#overriddenByCommandLineInfoLabel {
  ******************************************************/
 
 QWidget#OverviewPage QLabel#labelAlerts {
-     background-color: #AB84BB;
+     background-color: #76b384;
      color: #ffffff;
      border-radius: 5px;
      padding: 5px;
@@ -1346,7 +1346,7 @@ QWidget .QFrame#frame .QLabel#label_5 { /* Wallet Label */
 
 QWidget .QFrame#frame .QLabel#labelWalletStatus { /* Wallet Sync Status */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
-    color: #AB84BB;
+    color: #76b384;
 }
 
 QWidget .QFrame#frame .QLabel#labelSpendable { /* Spendable Header */
@@ -1457,7 +1457,7 @@ QWidget .QFrame#frameCoinJoin .QLabel#labelCoinJoinHeader { /* CoinJoin Header *
 
 QWidget .QFrame#frameCoinJoin .QLabel#labelCoinJoinSyncStatus { /* CoinJoin Sync Status */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
-    color: #AB84BB;
+    color: #76b384;
 }
 
 QWidget .QFrame#frameCoinJoin  .QLabel#labelCoinJoinEnabledText { /* CoinJoin Enabled Status Label */
@@ -1545,7 +1545,7 @@ QWidget .QFrame#frame_2 .QLabel#label_4 { /* Recent Transactions Label */
 
 QWidget .QFrame#frame_2 .QLabel#labelTransactionsStatus { /* Recent Transactions Sync Status */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
-    color: #AB84BB;
+    color: #76b384;
 }
 
 QWidget .QFrame#frame_2 QListView { /* Transaction List */
@@ -1597,7 +1597,7 @@ QWidget#RPCConsole QLabel#banHeading {
 }
 
 QWidget#RPCConsole QLabel#label_alerts {
-    background-color: #AB84BB;
+    background-color: #76b384;
     color: #ffffff;
     border-radius: 5px;
     padding: 5px;
@@ -1645,7 +1645,7 @@ QWidget#RPCConsole .QGroupBox #line { /* Network In Line */
 }
 
 QWidget#RPCConsole .QGroupBox #line_2 { /* Network Out Line */
-    background-color: #AB84BB;
+    background-color: #76b384;
 }
 
 #rpcAutoCompleter {

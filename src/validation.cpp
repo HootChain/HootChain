@@ -1165,11 +1165,11 @@ static std::pair<CAmount, CAmount> GetBlockSubsidyHelper(int nPrevBits, int nPre
     const bool isDevnet = Params().NetworkIDString() == CBaseChainParams::DEVNET;
 
     if (nPrevHeight == 0) {
-        nSubsidyBase = 8000;
-    } else if (nPrevHeight <= 500) {
-        nSubsidyBase = 0.1;
+        nSubsidyBase = 15000;
+    } else if (nPrevHeight <= 350) {
+        nSubsidyBase = 0.5;
     } else {
-        nSubsidyBase = 1;
+        nSubsidyBase = 5;
     }
 
     CAmount nSubsidy = nSubsidyBase * COIN;
@@ -1186,10 +1186,10 @@ static std::pair<CAmount, CAmount> GetBlockSubsidyHelper(int nPrevBits, int nPre
         nSubsidy *= consensusParams.nHighSubsidyFactor;
     }
 
-    // Allocates 5% superblock rewards
+    // Allocates 2,5% superblock rewards
     CAmount nSuperblockPart{};
     if (nPrevHeight > consensusParams.nSuperblockStartBlock) {
-        nSuperblockPart = nSubsidy / 20;
+        nSuperblockPart = nSubsidy / 40;
     }
 
     return {nSubsidy - nSuperblockPart, nSuperblockPart};

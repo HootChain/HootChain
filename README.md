@@ -1,11 +1,7 @@
 Hootchain Core staging tree
 ===========================
 
-|CI|master|develop|
-|-|-|-|
-|Gitlab|[![Build Status](https://gitlab.com/hoot-labs/hoot/badges/master/pipeline.svg)](https://gitlab.com/hoot-labs/hoot/-/tree/master)|[![Build Status](https://gitlab.com/hoot-labs/hoot/badges/develop/pipeline.svg)](https://gitlab.com/hoot-labs/hoot/-/tree/develop)|
-
-https://www.hoot.space
+https:/hootchain.org
 
 For an immediately usable, binary version of the Hootchain Core software, see releases in our GitHub.
 

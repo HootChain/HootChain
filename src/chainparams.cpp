@@ -308,11 +308,11 @@ public:
         nLLMQConnectionRetryTimeout = 60;
         m_is_mockable_chain = false;
 
-        nPoolMinParticipants = 3;
+        nPoolMinParticipants = 1;
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        vSporkAddresses = {"hWExnj1KkpNdPsjyHTiohcUPEHonNtdk8S"};
+        vSporkAddresses = {"hJmAamEQTQ6FSQAAq1B9u6yXxAvRr9T4NA"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 39}  }; // 2'5% dev fee

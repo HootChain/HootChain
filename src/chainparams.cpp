@@ -229,8 +229,8 @@ public:
         pchMessageStart[1] = 0x6f; // o
         pchMessageStart[2] = 0x6f; // o
         pchMessageStart[3] = 0x74; // t
-        nDefaultPort = 9969;
-        nDefaultPlatformP2PPort = 26656;
+        nDefaultPort = 10442;
+        nDefaultPlatformP2PPort = 20442;
         nDefaultPlatformHTTPPort = 443;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 1;
@@ -270,7 +270,7 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("dnsseed.hoot.space");
+        vSeeds.emplace_back("dnsseed.hootchain.org");
 
         // Hootchain addresses start with 'h'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,100);
@@ -320,7 +320,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x000007a47e3912a2e5d08e54f6a8455da0cf77e1d6ff10079133309250d58536")}
+                {0, uint256S("0x00000271e0877a8eb773a20518e0ec2146a587d3edb64068ca7cfe92ec1aac9e")}
             }
         };
 

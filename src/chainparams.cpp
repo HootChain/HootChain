@@ -225,12 +225,14 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0x68; // h
-        pchMessageStart[1] = 0x6f; // o
-        pchMessageStart[2] = 0x6f; // o
-        pchMessageStart[3] = 0x74; // t
-        nDefaultPort = 10442;
-        nDefaultPlatformP2PPort = 20442;
+	unsigned char hootchain_sum =  ('h' + 'o' + 'o' + 't' + 'c' + 'h' + 'a' + 'i' + 'n') % 256;
+
+	// Utilizar la suma como base para los valores pchMessageStart
+	pchMessageStart[0] = hootchain_sum;
+	pchMessageStart[1] = hootchain_sum + 1;
+	pchMessageStart[2] = hootchain_sum + 2;
+	pchMessageStart[3] = hootchain_sum + 3;
+	nDefaultPlatformP2PPort = 20442;
         nDefaultPlatformHTTPPort = 443;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 1;

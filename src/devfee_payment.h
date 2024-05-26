@@ -16,7 +16,7 @@ static const std::string DEFAULT_DEVFEE_ADDRESS = "hQyDqpZsTVMFNRhTJgQAn2kJkoUJS
 
 struct DevfeeRewardStructure {
 	  int blockHeight;
-	  int rewardDivisor;
+	  double rewardDivisor;
 };
 
 class DevfeePayment {

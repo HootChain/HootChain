@@ -77,7 +77,7 @@ static CBlock CreateDevNetGenesisBlock(const uint256 &prevBlockHash, const std::
  */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    const char* pszTimestamp = "Progress is impossible without change - George Bernard Shaw";
+    const char* pszTimestamp = "In the beginning, there was nothing, which exploded.-Terry Pratchett";
     const CScript genesisOutputScript = CScript() << ParseHex("04601fcdcaa9273c9bd197159cd81d2c21c0b879fe326d0e54a98d082acf194b36e3ab601119cba6ccba193f97cbf10ef5b27aa6f5fcf5fe2e5d06d64450a4c9a6") << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
@@ -146,19 +146,19 @@ class CMainParams : public CChainParams {
 public:
     CMainParams() {
         strNetworkID = CBaseChainParams::MAIN;
-        consensus.nSubsidyHalvingInterval = 172800;
+        consensus.nSubsidyHalvingInterval = 129600;
         consensus.BIP16Height = 0;
-        consensus.nMasternodePaymentsStartBlock = 250; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
-        consensus.nMasternodePaymentsIncreaseBlock = 99999999; // disabled
-        consensus.nMasternodePaymentsIncreasePeriod = 960 * 30;
+        consensus.nMasternodePaymentsStartBlock = 101; // not true, but it's ok as long as it's less then nMasternodePaymentsIncreaseBlock
+        consensus.nMasternodePaymentsIncreaseBlock = 9999999; // disabled
+        consensus.nMasternodePaymentsIncreasePeriod = 720 * 30;
         consensus.nInstantSendConfirmationsRequired = 6;
         consensus.nInstantSendKeepLock = 24;
         consensus.nBudgetPaymentsStartBlock = 250;
         consensus.nBudgetPaymentsCycleBlocks = 250;
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nSuperblockStartBlock = 450;
+        consensus.nSuperblockStartBlock = 350;
         consensus.nSuperblockStartHash = uint256();
-        consensus.nSuperblockCycle = 720 * 60; // ~ one month
+        consensus.nSuperblockCycle = 720 * 60; // ~ two months
         consensus.nSuperblockMaturityWindow = 720 * 3; // ~3 days before actual Superblock is emitted
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 20000;
@@ -179,15 +179,15 @@ public:
         consensus.DIP0024Height = 350;
         consensus.DIP0024QuorumsHeight = 350;
         consensus.V19Height = 350;
-        consensus.MinBIP9WarningHeight = 350 + 720; // V19 activation height + miner confirmation window
+        consensus.MinBIP9WarningHeight = 350 + 960; // V19 activation height + miner confirmation window
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.nPowTargetTimespan = 24 * 60 * 60; // Hootchain: 1 day
-        consensus.nPowTargetSpacing = 2 * 60; // Hootchain: 2  minutes
+        consensus.nPowTargetSpacing = 2 * 60; // Hootchain: 2 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nPowDGWHeight = 60;
-        consensus.nRuleChangeActivationThreshold = 912; // 95% of 2016
-        consensus.nMinerConfirmationWindow = 720; // nPowTargetTimespan / nPowTargetSpacing
+        consensus.nRuleChangeActivationThreshold = 722; // 95% of 2016
+        consensus.nMinerConfirmationWindow = 760; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
@@ -211,10 +211,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_MN_RR].useEHF = true;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000000002237701cf4478061"); // 480
+        consensus.nMinimumChainWork = uint256S("0x00"); // 480
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x0000000000000298ab2be0093c4fe96bf8e153fce2e599e3a420a73527e5e775"); // 475
+        consensus.defaultAssumeValid = uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28"); // Genesis
 
         // AuxPoW parameters
         consensus.nAuxpowChainId = 0x0088;
@@ -225,47 +225,22 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-	unsigned char hootchain_sum =  ('h' + 'o' + 'o' + 't' + 'c' + 'h' + 'a' + 'i' + 'n') % 256;
-
-	// Utilizar la suma como base para los valores pchMessageStart
-	pchMessageStart[0] = hootchain_sum;
-	pchMessageStart[1] = hootchain_sum + 1;
-	pchMessageStart[2] = hootchain_sum + 2;
-	pchMessageStart[3] = hootchain_sum + 3;
-	nDefaultPlatformP2PPort = 20442;
+        pchMessageStart[0] = 0x68; // h
+        pchMessageStart[1] = 0x4f; // O
+        pchMessageStart[2] = 0x4f; // O
+        pchMessageStart[3] = 0x74; // t
+        nDefaultPort = 6886;
+        nDefaultPlatformP2PPort = 26886;
         nDefaultPlatformHTTPPort = 443;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1716034346, 316553, 0x1e0ffff0, 1, 1 * COIN);
+        genesis = CreateGenesisBlock(1716370777, 351910, 0x1e0ffff0, 1, 1 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-//        consensus.hashGenesisBlock = uint256S("0x00");
-//      if (true && (genesis.GetHash() != consensus.hashGenesisBlock)) {
-//         std::cout << std::string("Calculating main genesis block...\n");
-//           arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);
-//           uint256 hash;
-//           genesis.nNonce = 0;
-//           while (UintToArith256(genesis.GetHash()) > hashTarget)
-//            {
-//                ++genesis.nNonce;
-//                if (genesis.nNonce == 0)
-//                {
-//                    ++genesis.nTime;
-//                }
-//            }
-//            std::cout << "Genesis block found!\n";
-//            std::cout << "nonce: " << genesis.nNonce << "\n";
-//            std::cout << "time: " << genesis.nTime << "\n";
-//            std::cout << "blockhash: " << genesis.GetHash().ToString().c_str() << "\n";
-//            std::cout << "merklehash: " << genesis.hashMerkleRoot.ToString().c_str() << "\n";
-//        }
-
-
-
-        assert(consensus.hashGenesisBlock == uint256S("0x00000271e0877a8eb773a20518e0ec2146a587d3edb64068ca7cfe92ec1aac9e"));
-        assert(genesis.hashMerkleRoot == uint256S("0x49013c87952b98df91605e7781901d03e1c7b177406a310d0612504720283c39"));
+        assert(consensus.hashGenesisBlock == uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28"));
+        assert(genesis.hashMerkleRoot == uint256S("0xd5375534a97a8c2de938994b1e82326b753c25effd84be6cbbd3949ddd187d61"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
         // possible options.
@@ -314,15 +289,15 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        vSporkAddresses = {"hJmAamEQTQ6FSQAAq1B9u6yXxAvRr9T4NA"};
+        vSporkAddresses = {"hQyDqpZsTVMFNRhTJgQAn2kJkoUJSY4JSH"};
         nMinSporkKeys = 1;
 
-        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 39}  }; // 2'5% dev fee
+        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
         consensus.nDevfeePayment = DevfeePayment(rewardStructures, 1);
 
         checkpointData = {
             {
-                {0, uint256S("0x00000271e0877a8eb773a20518e0ec2146a587d3edb64068ca7cfe92ec1aac9e")}
+                {0, uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28")},
             }
         };
 
@@ -330,11 +305,11 @@ public:
          // TODO to be specified in a future patch.
         };
 
-        // getchaintxstats 300 503a3c4a47b30bb1ae5b651da1322b5bf4b13c86943e05f92d2d4adc1f604b7b
+        // getchaintxstats 31500 0000000000000079892d0b1bc5c00cccb8b33d1d239b1179e75c2ddef35511f2
 //        chainTxData = ChainTxData{
-//                1712674189,
-//                529,   
-//                0.0392,
+//                1715665229,
+//                87516,   
+//                0.02895,
 //        };
     }
 };
@@ -421,8 +396,8 @@ public:
         
         pchMessageStart[0] = 0x74; // t
         pchMessageStart[1] = 0x4f; // O
-        pchMessageStart[2] = 0x53; // S
-        pchMessageStart[3] = 0x4d; // M
+        pchMessageStart[2] = 0x4f; // O
+        pchMessageStart[3] = 0x74; // t
         nDefaultPort = 19969;
         nDefaultPlatformP2PPort = 22000;
         nDefaultPlatformHTTPPort = 22001;
@@ -1383,8 +1358,7 @@ void CChainParams::UpdateLLMQParams(size_t totalMnCount, int height) {
             consensus.llmqs[Consensus::LLMQ_50_60] = Consensus::llmq_10_60;
             consensus.llmqs[Consensus::LLMQ_400_60] = Consensus::llmq_20_60;
             consensus.llmqs[Consensus::LLMQ_400_85] = Consensus::llmq_20_85;
-            if (height >= 26495)
-                consensus.llmqs[Consensus::LLMQ_60_75] = Consensus::llmq_10_75;
+            consensus.llmqs[Consensus::LLMQ_60_75] = Consensus::llmq_10_75;
         } else if (totalMnCount < 600) {
             consensus.llmqs[Consensus::LLMQ_50_60] = Consensus::llmq_50_60;
             consensus.llmqs[Consensus::LLMQ_400_60] = Consensus::llmq_40_60;
@@ -1401,7 +1375,7 @@ void CChainParams::UpdateLLMQParams(size_t totalMnCount, int height) {
                 consensus.llmqs[Consensus::LLMQ_60_75] = Consensus::llmq_60_75;
         }
     } else {
-        if (height >= 26495 && totalMnCount < 80)
+        if (totalMnCount < 80)
             consensus.llmqs[Consensus::LLMQ_60_75] = Consensus::llmq_10_75;
     }
 }

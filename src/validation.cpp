@@ -1166,7 +1166,7 @@ static std::pair<CAmount, CAmount> GetBlockSubsidyHelper(int nPrevBits, int nPre
 
     if (nPrevHeight == 0) {
         nSubsidyBase = 15000;
-    } else if (nPrevHeight <= 350) {
+    } else if (nPrevHeight < 350) {
         nSubsidyBase = 0.5;
     } else {
         nSubsidyBase = 5;
@@ -1216,7 +1216,7 @@ CAmount GetBlockSubsidy(const CBlockIndex* const pindex, const Consensus::Params
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)
 {
-    CAmount ret = blockValue * 9 / 19; // 50% after superblock reduction
+    CAmount ret = blockValue * 37 / 80; // 50% after superblock reduction
     return ret;
 }
 

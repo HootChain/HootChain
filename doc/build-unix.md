@@ -74,7 +74,7 @@ Build requirements:
 
 Now, you can either build from self-compiled [depends](/depends/README.md) or install the required dependencies:
 
-    sudo apt-get libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev
+    sudo apt-get install libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev
 
 Berkeley DB is required for the wallet.
 
@@ -101,7 +101,7 @@ ZMQ dependencies (provides ZMQ API):
 
 GMP dependencies (provides platform-optimized routines):
 
-   sudo apt-get install libgmp-dev
+    sudo apt-get install libgmp-dev
 
 GUI dependencies:
 

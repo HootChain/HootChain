@@ -407,28 +407,6 @@ public:
 
         genesis = CreateGenesisBlock(1716370777, 351910, 0x1e0ffff0, 1, 1 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-//        consensus.hashGenesisBlock = uint256S("0x00");
-//
-//      if (true && (genesis.GetHash() != consensus.hashGenesisBlock)) {
-//         std::cout << std::string("Calculating main genesis block...\n");
-//           arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);
-//           uint256 hash;
-//           genesis.nNonce = 0;
-//           while (UintToArith256(genesis.GetHash()) > hashTarget)
-//            {
-//                ++genesis.nNonce;
-//                if (genesis.nNonce == 0)
-//                {
-//                    ++genesis.nTime;
-//                }
-//            }
-//            std::cout << "Genesis block found!\n";
-//            std::cout << "nonce: " << genesis.nNonce << "\n";
-//            std::cout << "time: " << genesis.nTime << "\n";
-//            std::cout << "blockhash: " << genesis.GetHash().ToString().c_str() << "\n";
-//            std::cout << "merklehash: " << genesis.hashMerkleRoot.ToString().c_str() << "\n";
-//        }
-
 
         assert(consensus.hashGenesisBlock == uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28"));
         assert(genesis.hashMerkleRoot == uint256S("0xd5375534a97a8c2de938994b1e82326b753c25effd84be6cbbd3949ddd187d61"));
@@ -478,15 +456,15 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
-        vSporkAddresses = {"thfGPkL3nqcsmh7aQoFebsdDJUYDuVStJj"};
+        vSporkAddresses = {"tfK72iaKZU5wycpdLyr9c1XizqzaXDZ8H2"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19}  }; // 5% dev fee
-        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 1, "thfGPkL3nqcsmh7aQoFebsdDJUYDuVStJj");
+        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 1, "tbsxEMp8yq57Mkhaaqr1Wevw4n2P5TmkM4");
 
         checkpointData = {
             {
-//                {0, uint256S("0x000001c18eb51d23ad275da2fd118c311bbb47b39789da2c3d394a5215173915")},
+                {0, uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28")},
             }
         };
 

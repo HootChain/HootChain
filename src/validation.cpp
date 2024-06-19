@@ -1166,8 +1166,8 @@ static std::pair<CAmount, CAmount> GetBlockSubsidyHelper(int nPrevBits, int nPre
 
     if (nPrevHeight == 0) {
         nSubsidyBase = 30000;
-    } else if (nPrevHeight < 350) {
-        nSubsidyBase = 0.5;
+    } else if (nPrevHeight < 600) {
+        nSubsidyBase = 1;
     } else {
         nSubsidyBase = 5;
     }
@@ -1175,7 +1175,7 @@ static std::pair<CAmount, CAmount> GetBlockSubsidyHelper(int nPrevBits, int nPre
     CAmount nSubsidy = nSubsidyBase * COIN;
 
     // every 3 months decline of production by ~4'54%.
-    double reductionRatio = 1 / 22;
+    double reductionRatio = 1 / 16;
     for (int i = consensusParams.nSubsidyHalvingInterval; i <= nPrevHeight; i += consensusParams.nSubsidyHalvingInterval) {
 
         nSubsidy -= nSubsidy / reductionRatio;

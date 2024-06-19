@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2020-2022 The Hootchain developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +8,9 @@
 #define BITCOIN_PRIMITIVES_BLOCK_H
 
 #include <list>
+#include <auxpow.h>
 #include <primitives/transaction.h>
+#include "primitives/pureheader.h"
 #include <serialize.h>
 #include <uint256.h>
 #include <cstddef>
@@ -20,45 +23,44 @@
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
  */
-class CBlockHeader
+class CBlockHeader : public CPureBlockHeader
 {
 public:
-    // header
-    int32_t nVersion;
-    uint256 hashPrevBlock;
-    uint256 hashMerkleRoot;
-    uint32_t nTime;
-    uint32_t nBits;
-    uint32_t nNonce;
+   // auxpow (if this is a merge-minded block)
+    std::shared_ptr<CAuxPow> auxpow;
 
     CBlockHeader()
     {
         SetNull();
     }
 
-    SERIALIZE_METHODS(CBlockHeader, obj) { READWRITE(obj.nVersion, obj.hashPrevBlock, obj.hashMerkleRoot, obj.nTime, obj.nBits, obj.nNonce); }
+    SERIALIZE_METHODS(CBlockHeader, obj)
+    {
+        READWRITEAS(CPureBlockHeader, obj);
+
+        if (obj.IsAuxpow())
+        {
+            SER_READ(obj, obj.auxpow = std::make_shared<CAuxPow>());
+            assert(obj.auxpow != nullptr);
+            READWRITE(*obj.auxpow);
+        } else
+        {
+            SER_READ(obj, obj.auxpow.reset());
+        }
+    }
 
     void SetNull()
     {
-        nVersion = 0;
-        hashPrevBlock.SetNull();
-        hashMerkleRoot.SetNull();
-        nTime = 0;
-        nBits = 0;
-        nNonce = 0;
+        CPureBlockHeader::SetNull();
+        auxpow.reset();
     }
 
-    bool IsNull() const
-    {
-        return (nBits == 0);
-    }
-
-    uint256 GetHash() const;
-
-    int64_t GetBlockTime() const
-    {
-        return (int64_t)nTime;
-    }
+    /**
+     * Set the block's auxpow (or unset it).  This takes care of updating
+     * the version accordingly.
+     * @param apow Pointer to the auxpow to use or NULL.
+     */
+    void SetAuxpow(std::unique_ptr<CAuxPow> apow);
 };
 
 class CompressedHeaderBitField
@@ -147,7 +149,7 @@ struct CompressibleBlockHeader : CBlockHeader {
 
     explicit CompressibleBlockHeader(CBlockHeader&& block_header)
     {
-        static_assert(std::is_trivially_copyable_v<CBlockHeader>, "If CBlockHeader is not trivially copyable, please consider using std::move on the next line");
+        //static_assert(std::is_trivially_copyable_v<CBlockHeader>, "If CBlockHeader is not trivially copyable, please consider using std::move on the next line");
         *static_cast<CBlockHeader*>(this) = block_header;
 
         // When we create this from a block header, mark everything as uncompressed
@@ -189,6 +191,9 @@ public:
     // network and disk
     std::vector<CTransactionRef> vtx;
 
+    // devfee payments
+    mutable CTxOut txoutDevfee; 
+
     // memory only
     mutable bool fChecked;
 
@@ -214,6 +219,7 @@ public:
         CBlockHeader::SetNull();
         vtx.clear();
         fChecked = false;
+        txoutDevfee = CTxOut();
     }
 
     CBlockHeader GetBlockHeader() const
@@ -225,10 +231,12 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
+        block.auxpow         = auxpow;
         return block;
     }
 
-    std::string ToString() const;
+    static uint256 CheckMerkleBranch(uint256 hash, const std::vector<uint256>& vMerkleBranch, int nIndex);
+    std::string ToString() const;;
 };
 
 

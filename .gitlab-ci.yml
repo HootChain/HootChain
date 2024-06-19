@@ -87,7 +87,11 @@ builder-image:
   before_script:
     - export CACHE_DIR=$CI_PROJECT_DIR/cache
     - echo BUILD_TARGET=$BUILD_TARGET
+<<<<<<< HEAD
     - source ./ci/dash/matrix.sh
+=======
+    - source ./ci/hoot/matrix.sh
+>>>>>>> temporal
 
     # Setup some environment variables
     - |
@@ -118,8 +122,13 @@ builder-image:
   variables:
     CCACHE_SIZE: "400M"
   script:
+<<<<<<< HEAD
     - ./ci/dash/build_src.sh
     - ./ci/dash/test_unittests.sh # Run unit tests in build stage to avoid creating too many parallel jobs
+=======
+    - ./ci/hoot/build_src.sh
+    - ./ci/hoot/test_unittests.sh # Run unit tests in build stage to avoid creating too many parallel jobs
+>>>>>>> temporal
   cache:
     # Let all branches share the same cache, which is ok because ccache is able to handle it
     key:
@@ -135,6 +144,7 @@ builder-image:
       - build-ci
     # Exclude some less important binaries to reduce the size of the artifacts
     exclude:
+<<<<<<< HEAD
       - build-ci/dashcore-$BUILD_TARGET/src/bench/bench_dash
       - build-ci/dashcore-$BUILD_TARGET/src/bench/bench_dash.exe
       - build-ci/dashcore-$BUILD_TARGET/src/qt/test/test_dash-qt
@@ -142,6 +152,15 @@ builder-image:
       - build-ci/dashcore-$BUILD_TARGET/src/test/test_dash
       - build-ci/dashcore-$BUILD_TARGET/src/test/test_dash.exe
       - build-ci/dashcore-$BUILD_TARGET/src/test/fuzz/*
+=======
+      - build-ci/hootcore-$BUILD_TARGET/src/bench/bench_hoot
+      - build-ci/hootcore-$BUILD_TARGET/src/bench/bench_hoot.exe
+      - build-ci/hootcore-$BUILD_TARGET/src/qt/test/test_hoot-qt
+      - build-ci/hootcore-$BUILD_TARGET/src/qt/test/test_hoot-qt.exe
+      - build-ci/hootcore-$BUILD_TARGET/src/test/test_hoot
+      - build-ci/hootcore-$BUILD_TARGET/src/test/test_hoot.exe
+      - build-ci/hootcore-$BUILD_TARGET/src/test/fuzz/*
+>>>>>>> temporal
     expire_in: 3 days
 
 .test-template:
@@ -151,7 +170,11 @@ builder-image:
     INTEGRATION_TESTS_ARGS: "--extended --exclude feature_pruning,feature_dbcrash"
   script:
     - echo "INTEGRATION_TESTS_ARGS=${INTEGRATION_TESTS_ARGS}"
+<<<<<<< HEAD
     - ./ci/dash/test_integrationtests.sh $INTEGRATION_TESTS_ARGS
+=======
+    - ./ci/hoot/test_integrationtests.sh $INTEGRATION_TESTS_ARGS
+>>>>>>> temporal
   cache:
     # Let all branches share the same cache, which is ok because get_previous_releases.py extracts release binaries in separate folders
     key:

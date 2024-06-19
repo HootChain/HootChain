@@ -848,7 +848,7 @@ void AddQuorumProbeConnections(const Consensus::LLMQParams& llmqParams, gsl::not
 template <typename CacheType>
 void InitQuorumsCache(CacheType& cache, bool limit_by_connections)
 {
-    for (const auto& llmq : Params().GetConsensus().llmqs) {
+    for (const auto& [_, llmq] : Params().GetConsensus().llmqs) {
         cache.emplace(std::piecewise_construct, std::forward_as_tuple(llmq.type),
                       std::forward_as_tuple(limit_by_connections ? llmq.keepOldConnections : llmq.keepOldKeys));
     }

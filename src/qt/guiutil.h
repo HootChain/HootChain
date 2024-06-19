@@ -44,7 +44,7 @@ class QUrl;
 class QWidget;
 QT_END_NAMESPACE
 
-/** Utility functions used by the Dash Qt UI.
+/** Utility functions used by the Hootchain Qt UI.
  */
 namespace GUIUtil
 {
@@ -54,6 +54,8 @@ namespace GUIUtil
         DEFAULT,
         /* Transaction list -- unconfirmed transaction */
         UNCONFIRMED,
+        /* Theme related primary color */
+        PRIMARY,
         /* Theme related blue color */
         BLUE,
         /* Eye-friendly orange color */
@@ -105,11 +107,13 @@ namespace GUIUtil
 
     /** Helper to get an icon colorized with the given color (replaces black) and colorAlternative (replaces white)  */
     QIcon getIcon(const QString& strIcon, ThemedColor color, ThemedColor colorAlternative, const QString& strIconPath = ICONS_PATH);
-    QIcon getIcon(const QString& strIcon, ThemedColor color = ThemedColor::BLUE, const QString& strIconPath = ICONS_PATH);
+    // QIcon getIcon(const QString& strIcon, ThemedColor color = ThemedColor::BLUE, const QString& strIconPath = ICONS_PATH);
+    QIcon getIcon(const QString& strIcon, ThemedColor color = ThemedColor::PRIMARY, const QString& strIconPath = ICONS_PATH);
 
     /** Helper to set an icon for a button with the given color (replaces black) and colorAlternative (replaces white). */
     void setIcon(QAbstractButton* button, const QString& strIcon, ThemedColor color, ThemedColor colorAlternative, const QSize& size);
-    void setIcon(QAbstractButton* button, const QString& strIcon, ThemedColor color = ThemedColor::BLUE, const QSize& size = QSize(BUTTON_ICONSIZE, BUTTON_ICONSIZE));
+    // void setIcon(QAbstractButton* button, const QString& strIcon, ThemedColor color = ThemedColor::BLUE, const QSize& size = QSize(BUTTON_ICONSIZE, BUTTON_ICONSIZE));
+    void setIcon(QAbstractButton* button, const QString& strIcon, ThemedColor color = ThemedColor::PRIMARY, const QSize& size = QSize(BUTTON_ICONSIZE, BUTTON_ICONSIZE));
 
     // Use this flags to prevent a "What's This" button in the title bar of the dialog on Windows.
     constexpr auto dialog_flags = Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint;
@@ -124,7 +128,7 @@ namespace GUIUtil
     // Setup appearance settings if not done yet
     void setupAppearance(QWidget* parent, OptionsModel* model);
 
-    // Parse "dash:" URI into recipient object, return true on successful parsing
+    // Parse "hoot:" URI into recipient object, return true on successful parsing
     bool parseBitcoinURI(const QUrl &uri, SendCoinsRecipient *out);
     bool parseBitcoinURI(QString uri, SendCoinsRecipient *out);
     bool validateBitcoinURI(const QString& uri);
@@ -212,7 +216,7 @@ namespace GUIUtil
     // Open debug.log
     void openDebugLogfile();
 
-    // Open dash.conf
+    // Open hoot.conf
     void openConfigfile();
 
     // Browse backup folder
@@ -320,7 +324,7 @@ namespace GUIUtil
     /** get font size with GUIUtil::fontScale applied */
     double getScaledFontSize(int nSize);
 
-    /** Load dash specific appliciation fonts */
+    /** Load hoot specific appliciation fonts */
     bool loadFonts();
     /** Check if the fonts have been loaded successfully */
     bool fontsLoaded();
@@ -364,8 +368,8 @@ namespace GUIUtil
     /** Return the name of the currently active theme.*/
     QString getActiveTheme();
 
-    /** Check if a dash specific theme is activated (light/dark).*/
-    bool dashThemeActive();
+    /** Check if a hoot specific theme is activated (light/dark).*/
+    bool hootThemeActive();
 
     /** Load the theme and update all UI elements according to the appearance settings. */
     void loadTheme(bool fForce = false);

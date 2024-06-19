@@ -6,6 +6,7 @@ reset-files.bash
 *.tar.gz
 
 *.exe
+<<<<<<< HEAD
 src/dash
 src/dashd
 src/dash-cli
@@ -18,6 +19,20 @@ src/test/test_dash
 src/qt/test/test_dash-qt
 src/qt/res/css/colors/*
 src/bench/bench_dash
+=======
+src/hoot
+src/hootd
+src/hoot-cli
+src/hoot-gui
+src/hoot-node
+src/hoot-tx
+src/hoot-wallet
+src/test/fuzz/fuzz
+src/test/test_hoot
+src/qt/test/test_hoot-qt
+src/qt/res/css/colors/*
+src/bench/bench_hoot
+>>>>>>> temporal
 
 # autoreconf
 Makefile.in
@@ -94,15 +109,24 @@ libconftest.dylib*
 *.qm
 Makefile
 !depends/Makefile
+<<<<<<< HEAD
 dash-qt
 Dash-Qt.app
+=======
+hoot-qt
+Hootchain-Qt.app
+>>>>>>> temporal
 
 # Qt Creator
 Makefile.am.user
 
 # Unit-tests
 Makefile.test
+<<<<<<< HEAD
 dash-qt_test
+=======
+hoot-qt_test
+>>>>>>> temporal
 
 # Resources cpp
 qrc_*.cpp
@@ -119,7 +143,11 @@ releases
 *.gcno
 *.gcda
 /*.info
+<<<<<<< HEAD
 test_dash.coverage/
+=======
+test_hoot.coverage/
+>>>>>>> temporal
 total.coverage/
 fuzz.coverage/
 coverage_percent.txt
@@ -141,6 +169,7 @@ test/.mypy_cache/
 .autotools
 /doc/doxygen/
 
+<<<<<<< HEAD
 libdashconsensus.pc
 contrib/devtools/split-debug.sh
 src/qt/dash-qt.bash
@@ -150,6 +179,17 @@ qa/pull-tester/tests-config.sh
 dash-cli
 dashd
 dash-qt
+=======
+libhootconsensus.pc
+contrib/devtools/split-debug.sh
+src/qt/hoot-qt.bash
+qa/pull-tester/tests-config.sh
+
+#development symlinks
+hoot-cli
+hootd
+hoot-qt
+>>>>>>> temporal
 make
 
 /docker/bin

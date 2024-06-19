@@ -46,11 +46,12 @@ UniValue CDeterministicMNState::ToJson(MnType nType) const
     obj.pushKV("revocationReason", nRevocationReason);
     obj.pushKV("ownerAddress", EncodeDestination(PKHash(keyIDOwner)));
     obj.pushKV("votingAddress", EncodeDestination(PKHash(keyIDVoting)));
-    if (nType == MnType::Evo) {
-        obj.pushKV("platformNodeID", platformNodeID.ToString());
-        obj.pushKV("platformP2PPort", platformP2PPort);
-        obj.pushKV("platformHTTPPort", platformHTTPPort);
-    }
+    // Disable EvoNode data
+    // if (nType == MnType::Evo) {
+    //     obj.pushKV("platformNodeID", platformNodeID.ToString());
+    //     obj.pushKV("platformP2PPort", platformP2PPort);
+    //     obj.pushKV("platformHTTPPort", platformHTTPPort);
+    // }
 
     CTxDestination dest;
     if (ExtractDestination(scriptPayout, dest)) {
@@ -115,16 +116,17 @@ UniValue CDeterministicMNStateDiff::ToJson(MnType nType) const
     if (fields & Field_pubKeyOperator) {
         obj.pushKV("pubKeyOperator", state.pubKeyOperator.ToString());
     }
-    if (nType == MnType::Evo) {
-        if (fields & Field_platformNodeID) {
-            obj.pushKV("platformNodeID", state.platformNodeID.ToString());
-        }
-        if (fields & Field_platformP2PPort) {
-            obj.pushKV("platformP2PPort", state.platformP2PPort);
-        }
-        if (fields & Field_platformHTTPPort) {
-            obj.pushKV("platformHTTPPort", state.platformHTTPPort);
-        }
-    }
+    // Disable Evonode data
+    // if (nType == MnType::Evo) {
+    //     if (fields & Field_platformNodeID) {
+    //         obj.pushKV("platformNodeID", state.platformNodeID.ToString());
+    //     }
+    //     if (fields & Field_platformP2PPort) {
+    //         obj.pushKV("platformP2PPort", state.platformP2PPort);
+    //     }
+    //     if (fields & Field_platformHTTPPort) {
+    //         obj.pushKV("platformHTTPPort", state.platformHTTPPort);
+    //     }
+    // }
     return obj;
 }

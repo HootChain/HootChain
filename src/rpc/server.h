@@ -15,7 +15,8 @@
 #include <stdint.h>
 #include <string>
 
-#include <univalue.h>
+// #include <univalue.h>
+#include <univalue/include/univalue.h>
 
 class CRPCCommand;
 

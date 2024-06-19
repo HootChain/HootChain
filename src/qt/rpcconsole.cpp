@@ -982,16 +982,20 @@ void RPCConsole::updateMasternodeCount()
     auto mnList = clientModel->getMasternodeList().first;
     size_t total_mn_count = mnList.GetAllMNsCount();
     size_t total_enabled_mn_count = mnList.GetValidMNsCount();
-    size_t total_evo_count = mnList.GetAllEvoCount();
-    size_t total_enabled_evo_count = mnList.GetValidEvoCount();
+    // Disable Evonodes
+    // size_t total_evo_count = mnList.GetAllEvoCount();
+    // size_t total_enabled_evo_count = mnList.GetValidEvoCount();
     QString strMasternodeCount = tr("Total: %1 (Enabled: %2)")
-        .arg(QString::number(total_mn_count - total_evo_count))
-        .arg(QString::number(total_enabled_mn_count - total_enabled_evo_count));
+        .arg(QString::number(total_mn_count))
+        .arg(QString::number(total_enabled_mn_count));
+        // .arg(QString::number(total_mn_count - total_evo_count))
+        // .arg(QString::number(total_enabled_mn_count - total_enabled_evo_count));
     ui->masternodeCount->setText(strMasternodeCount);
-    QString strEvoCount = tr("Total: %1 (Enabled: %2)")
-            .arg(QString::number(total_evo_count))
-            .arg(QString::number(total_enabled_evo_count));
-    ui->evoCount->setText(strEvoCount);
+    // Disable Evonodes
+    // QString strEvoCount = tr("Total: %1 (Enabled: %2)")
+    //         .arg(QString::number(total_evo_count))
+    //         .arg(QString::number(total_enabled_evo_count));
+    // ui->evoCount->setText(strEvoCount);
 }
 
 void RPCConsole::setMempoolSize(long numberOfTxs, size_t dynUsage)
@@ -1310,14 +1314,14 @@ void RPCConsole::setButtonIcons()
 {
     const QSize consoleButtonsSize(BUTTON_ICONSIZE * 0.8, BUTTON_ICONSIZE * 0.8);
     GUIUtil::setIcon(ui->clearButton, "remove", GUIUtil::ThemedColor::RED, consoleButtonsSize);
-    GUIUtil::setIcon(ui->fontBiggerButton, "fontbigger", GUIUtil::ThemedColor::BLUE, consoleButtonsSize);
-    GUIUtil::setIcon(ui->fontSmallerButton, "fontsmaller", GUIUtil::ThemedColor::BLUE, consoleButtonsSize);
+    GUIUtil::setIcon(ui->fontBiggerButton, "fontbigger", GUIUtil::ThemedColor::PRIMARY, consoleButtonsSize);
+    GUIUtil::setIcon(ui->fontSmallerButton, "fontsmaller", GUIUtil::ThemedColor::PRIMARY, consoleButtonsSize);
 }
 
 void RPCConsole::reloadThemedWidgets()
 {
     clear();
-    ui->promptLabel->setHidden(GUIUtil::dashThemeActive());
+    ui->promptLabel->setHidden(GUIUtil::hootThemeActive());
     // Adjust button icon colors on theme changes
     setButtonIcons();
 }

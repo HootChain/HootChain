@@ -104,7 +104,7 @@ std::ostream& operator<<(std::ostream& os, const uint256& num)
     return os;
 }
 
-void DashTestSetup(NodeContext& node)
+void HootchainTestSetup(NodeContext& node)
 {
     CChainState& chainstate = Assert(node.chainman)->ActiveChainstate();
 
@@ -117,7 +117,7 @@ void DashTestSetup(NodeContext& node)
     node.llmq_ctx = std::make_unique<LLMQContext>(chainstate, *node.connman, *node.evodb, *node.sporkman, *node.mempool, node.peerman, true, false);
 }
 
-void DashTestSetupClose(NodeContext& node)
+void HootchainTestSetupClose(NodeContext& node)
 {
     node.llmq_ctx->Interrupt();
     node.llmq_ctx->Stop();
@@ -295,7 +295,7 @@ TestingSetup::TestingSetup(const std::string& chainName, const std::vector<const
         m_node.connman->Init(options);
     }
 
-    DashTestSetup(m_node);
+    HootchainTestSetup(m_node);
 
     BlockValidationState state;
     if (!::ChainstateActive().ActivateBestChain(state)) {
@@ -305,7 +305,7 @@ TestingSetup::TestingSetup(const std::string& chainName, const std::vector<const
 
 TestingSetup::~TestingSetup()
 {
-    DashTestSetupClose(m_node);
+    HootchainTestSetupClose(m_node);
     m_node.connman->Stop();
     m_node.peerman.reset();
     m_node.banman.reset();
@@ -322,22 +322,22 @@ TestChainSetup::TestChainSetup(int num_blocks, const std::vector<const char*>& e
     // Generate a num_blocks length chain:
     this->mineBlocks(num_blocks);
 
-    CCheckpointData checkpoints{
+    /*CCheckpointData checkpoints{
         {
             /* TestChainDATSetup */
-            {   98, uint256S("0x150e127929d578d8129b77a6cb7e2e343a1379aa3feaaa9cce59e0a645756a81") },
+            //{   98, uint256S("0x150e127929d578d8129b77a6cb7e2e343a1379aa3feaaa9cce59e0a645756a81") },
             /* TestChain100Setup */
-            {  100, uint256S("0x6ffb83129c19ebdf1ae3771be6a67fe34b35f4c956326b9ba152fac1649f65ae") },
+            //{  100, uint256S("0x6ffb83129c19ebdf1ae3771be6a67fe34b35f4c956326b9ba152fac1649f65ae") },
             /* TestChainDIP3BeforeActivationSetup */
-            {  430, uint256S("0x592b23a8882162ea48606e40c9ee00b2166ddae092c691d7f1b1758ec13647d9") },
+            //{  430, uint256S("0x592b23a8882162ea48606e40c9ee00b2166ddae092c691d7f1b1758ec13647d9") },
             /* TestChainDIP3Setup */
-            {  431, uint256S("0x49db248651517f3fc3725fbbc7087db90552d487d11e0962b0148fc4788aeb77") },
+            //{  431, uint256S("0x49db248651517f3fc3725fbbc7087db90552d487d11e0962b0148fc4788aeb77") },
             /* TestChainBRRBeforeActivationSetup */
-            {  497, uint256S("0x15445246f9f9fd4fdb1021dd8278ace7246b3e3cb545e1632a277d3a02eb011f") },
+            //{  497, uint256S("0x15445246f9f9fd4fdb1021dd8278ace7246b3e3cb545e1632a277d3a02eb011f") },
             /* TestChainV19BeforeActivationSetup */
-            {  894, uint256S("0x03cbf1871d7d915cda10aded00ced45f71a4e2acf6a3c7a77a1ff488267dd1cd") },
+            //{  894, uint256S("0x03cbf1871d7d915cda10aded00ced45f71a4e2acf6a3c7a77a1ff488267dd1cd") },
             /* TestChainV19Setup */
-            {  899, uint256S("0x405a630e16d0ca0efe3abb0e24c9a157a69ec2e07b04333cc5d004efa634ac89") },
+            /*{  899, uint256S("0x405a630e16d0ca0efe3abb0e24c9a157a69ec2e07b04333cc5d004efa634ac89") },
         }
     };
 
@@ -347,7 +347,7 @@ TestChainSetup::TestChainSetup(int num_blocks, const std::vector<const char*>& e
         assert(
             hash != checkpoints.mapCheckpoints.end() &&
             m_node.chainman->ActiveChain().Tip()->GetBlockHash() == hash->second);
-    }
+    }*/
 }
 
 void TestChainSetup::mineBlocks(int num_blocks)

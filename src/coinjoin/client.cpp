@@ -1477,7 +1477,7 @@ bool CCoinJoinClientSession::MakeCollateralAmounts(const CBlockPolicyEstimator& 
         // Note, here we first add a zero amount output to get the remainder after all fees and then assign it
         CTransactionBuilderOutput* out = txBuilder.AddOutput();
         CAmount nAmountLeft = txBuilder.GetAmountLeft();
-        // If remainder is denominated add one duff to the fee
+        // If remainder is denominated add one muff to the fee
         out->UpdateAmount(CoinJoin::IsDenominatedAmount(nAmountLeft) ? nAmountLeft - 1 : nAmountLeft);
 
     } else if (txBuilder.CouldAddOutputs({CoinJoin::GetCollateralAmount(), CoinJoin::GetCollateralAmount()})) {
@@ -1490,7 +1490,7 @@ bool CCoinJoinClientSession::MakeCollateralAmounts(const CBlockPolicyEstimator& 
         CTransactionBuilderOutput* out1 = txBuilder.AddOutput();
         CTransactionBuilderOutput* out2 = txBuilder.AddOutput();
 
-        // Create two equal outputs from the available value. This adds one duff to the fee if txBuilder.GetAmountLeft() is odd.
+        // Create two equal outputs from the available value. This adds one muff to the fee if txBuilder.GetAmountLeft() is odd.
         CAmount nAmountOutputs = txBuilder.GetAmountLeft() / 2;
 
         assert(CoinJoin::IsCollateralAmount(nAmountOutputs));

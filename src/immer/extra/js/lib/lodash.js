@@ -1322,7 +1322,7 @@
     var objectToString = objectProto.toString;
 
     /** Used to restore the original `_` reference in `_.noConflict`. */
-    var oldDash = root._;
+    var oldHootchain = root._;
 
     /** Used to detect if a method is native. */
     var reIsNative = RegExp('^' +
@@ -15235,7 +15235,7 @@
      */
     function noConflict() {
       if (root._ === this) {
-        root._ = oldDash;
+        root._ = oldHootchain;
       }
       return this;
     }

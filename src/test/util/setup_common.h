@@ -73,9 +73,9 @@ static inline bool InsecureRandBool() { return g_insecure_rand_ctx.randbool(); }
 
 static constexpr CAmount CENT{1000000};
 
-/* Initialize Dash-specific components after chainstate initialization */
-void DashTestSetup(NodeContext& node);
-void DashTestSetupClose(NodeContext& node);
+/* Initialize Hootchain-specific components after chainstate initialization */
+void HootchainTestSetup(NodeContext& node);
+void HootchainTestSetupClose(NodeContext& node);
 
 /** Basic testing setup.
  * This just configures logging, data dir and chain parameters.
@@ -250,6 +250,11 @@ public:
 private:
     const std::string m_reason;
 };
+
+/* This is defined in merkle_tests.cpp, but also used by auxpow_tests.cpp.  */
+namespace merkle_tests {
+std::vector<uint256> BlockMerkleBranch(const CBlock& block, uint32_t position);
+}
 
 // define an implicit conversion here so that uint256 may be used directly in BOOST_CHECK_*
 std::ostream& operator<<(std::ostream& os, const uint256& num);

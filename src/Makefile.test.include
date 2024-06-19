@@ -8,11 +8,11 @@ noinst_PROGRAMS += test/fuzz/fuzz
 endif
 
 if !ENABLE_FUZZ
-bin_PROGRAMS += test/test_dash
+bin_PROGRAMS += test/test_hoot
 endif
 
 TEST_SRCDIR = test
-TEST_BINARY=test/test_dash$(EXEEXT)
+TEST_BINARY=test/test_hoot$(EXEEXT)
 FUZZ_BINARY=test/fuzz/fuzz$(EXEEXT)
 
 JSON_TEST_FILES = \
@@ -40,15 +40,15 @@ BITCOIN_TEST_SUITE = \
   $(TEST_UTIL_H)
 
 FUZZ_SUITE_LD_COMMON = \
- $(LIBBITCOIN_SERVER) \
- $(LIBBITCOIN_COMMON) \
- $(LIBBITCOIN_UTIL) \
+ $(LIBHOOT_SERVER) \
+ $(LIBHOOT_COMMON) \
+ $(LIBHOOT_UTIL) \
  $(LIBTEST_FUZZ) \
  $(LIBTEST_UTIL) \
- $(LIBBITCOIN_CONSENSUS) \
- $(LIBBITCOIN_CRYPTO) \
- $(LIBBITCOIN_WALLET) \
- $(LIBBITCOIN_CLI) \
+ $(LIBHOOT_CONSENSUS) \
+ $(LIBHOOT_CRYPTO) \
+ $(LIBHOOT_WALLET) \
+ $(LIBHOOT_CLI) \
  $(LIBDASHBLS) \
  $(BDB_LIBS) \
  $(SQLITE_LIBS) \
@@ -71,13 +71,14 @@ if USE_NATPMP
 FUZZ_SUITE_LD_COMMON += $(NATPMP_LIBS)
 endif
 
-# test_dash binary #
+# test_hoot binary #
 BITCOIN_TESTS =\
   test/arith_uint256_tests.cpp \
   test/scriptnum10.h \
   test/addrman_tests.cpp \
   test/amount_tests.cpp \
   test/allocator_tests.cpp \
+  test/auxpow_tests.cpp \
   test/base32_tests.cpp \
   test/base58_tests.cpp \
   test/base64_tests.cpp \
@@ -192,7 +193,7 @@ BITCOIN_TESTS += \
   wallet/test/scriptpubkeyman_tests.cpp
 
 FUZZ_SUITE_LD_COMMON +=\
- $(LIBBITCOIN_WALLET) \
+ $(LIBHOOT_WALLET) \
  $(SQLITE_LIBS) \
  $(BDB_LIBS)
 
@@ -208,22 +209,22 @@ BITCOIN_TEST_SUITE += \
   wallet/test/init_test_fixture.h
 endif
 
-test_test_dash_SOURCES = $(BITCOIN_TEST_SUITE) $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
-test_test_dash_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(TESTDEFS) $(EVENT_CFLAGS)
-test_test_dash_LDADD = $(LIBTEST_UTIL)
+test_test_hoot_SOURCES = $(BITCOIN_TEST_SUITE) $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
+test_test_hoot_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(TESTDEFS) $(EVENT_CFLAGS)
+test_test_hoot_LDADD = $(LIBTEST_UTIL)
 if ENABLE_WALLET
-test_test_dash_LDADD += $(LIBBITCOIN_WALLET)
+test_test_hoot_LDADD += $(LIBHOOT_WALLET)
 endif
-test_test_dash_LDADD += $(LIBBITCOIN_SERVER) $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CONSENSUS) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) \
+test_test_hoot_LDADD += $(LIBHOOT_SERVER) $(LIBHOOT_CLI) $(LIBHOOT_COMMON) $(LIBHOOT_UTIL) $(LIBHOOT_CONSENSUS) $(LIBHOOT_CRYPTO) $(LIBUNIVALUE) \
   $(LIBDASHBLS) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) $(BACKTRACE_LIB) $(BOOST_LIBS) $(BOOST_UNIT_TEST_FRAMEWORK_LIB) $(LIBSECP256K1) $(EVENT_LIBS) $(EVENT_PTHREADS_LIBS)
-test_test_dash_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+test_test_hoot_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
-test_test_dash_LDADD += $(BDB_LIBS) $(MINIUPNPC_LIBS) $(SQLITE_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(GMP_LIBS)
-test_test_dash_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS) -static
+test_test_hoot_LDADD += $(BDB_LIBS) $(MINIUPNPC_LIBS) $(SQLITE_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(GMP_LIBS)
+test_test_hoot_LDFLAGS = $(LDFLAGS_WRAP_EXCEPTIONS) $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS) -static
 
 if ENABLE_ZMQ
-test_test_dash_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
-FUZZ_SUITE_LD_COMMON += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
+test_test_hoot_LDADD += $(LIBHOOT_ZMQ) $(ZMQ_LIBS)
+FUZZ_SUITE_LD_COMMON += $(LIBHOOT_ZMQ) $(ZMQ_LIBS)
 endif
 
 FUZZ_SUITE_LDFLAGS_COMMON = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(LDFLAGS_WRAP_EXCEPTIONS) $(PTHREAD_FLAGS)
@@ -333,7 +334,7 @@ test_fuzz_fuzz_SOURCES = \
   test/fuzz/versionbits.cpp
 endif # ENABLE_FUZZ_BINARY
 
-nodist_test_test_dash_SOURCES = $(GENERATED_TEST_FILES)
+nodist_test_test_hoot_SOURCES = $(GENERATED_TEST_FILES)
 
 $(BITCOIN_TESTS): $(GENERATED_TEST_FILES)
 
@@ -342,20 +343,20 @@ CLEAN_BITCOIN_TEST = test/*.gcda test/*.gcno test/fuzz/*.gcda test/fuzz/*.gcno t
 CLEANFILES += $(CLEAN_BITCOIN_TEST)
 
 if TARGET_WINDOWS
-dash_test: $(TEST_BINARY)
+hoot_test: $(TEST_BINARY)
 else
 if ENABLE_BENCH
-dash_test: $(TEST_BINARY) $(BENCH_BINARY)
+hoot_test: $(TEST_BINARY) $(BENCH_BINARY)
 else
-dash_test: $(TEST_BINARY)
+hoot_test: $(TEST_BINARY)
 endif
 endif
 
-dash_test_check: $(TEST_BINARY) FORCE
+hoot_test_check: $(TEST_BINARY) FORCE
 	$(MAKE) check-TESTS TESTS=$^
 
-dash_test_clean : FORCE
-	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_dash_OBJECTS) $(TEST_BINARY)
+hoot_test_clean : FORCE
+	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_hoot_OBJECTS) $(TEST_BINARY)
 
 check-local: $(BITCOIN_TESTS:.cpp=.cpp.test)
 if BUILD_BITCOIN_TX
@@ -367,8 +368,8 @@ endif
 if TARGET_WINDOWS
 else
 if ENABLE_BENCH
-# Disabled because benchmarks are too heavy in Dash
-#	@echo "Running bench/bench_dash"
+# Disabled because benchmarks are too heavy in Hootchain
+#	@echo "Running bench/bench_hoot"
 #	$(BENCH_BINARY)
 endif
 endif

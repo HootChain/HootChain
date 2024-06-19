@@ -45,8 +45,8 @@ UniValue CDeterministicMN::ToJson() const
 {
     UniValue obj;
     obj.setObject();
-
-    obj.pushKV("type", std::string(GetMnType(nType).description));
+    // Disable Node type display
+    // obj.pushKV("type", std::string(GetMnType(nType).description));
     obj.pushKV("proTxHash", proTxHash.ToString());
     obj.pushKV("collateralHash", collateralOutpoint.hash.ToString());
     obj.pushKV("collateralIndex", (int)collateralOutpoint.n);
@@ -195,9 +195,10 @@ CDeterministicMNCPtr CDeterministicMNList::GetMNPayee(gsl::not_null<const CBlock
             if (dmn->pdmnState->nLastPaidHeight == nHeight) {
                 // We found the last MN Payee.
                 // If the last payee is an EvoNode, we need to check its consecutive payments and pay him again if needed
-                if (dmn->nType == MnType::Evo && dmn->pdmnState->nConsecutivePayments < dmn_types::Evo.voting_weight) {
-                    best = dmn;
-                }
+                // Disable Evonodes
+                // if (dmn->nType == MnType::Evo && dmn->pdmnState->nConsecutivePayments < dmn_types::Evo.voting_weight) {
+                //     best = dmn;
+                // }
             }
         });
 
@@ -235,13 +236,14 @@ std::vector<CDeterministicMNCPtr> CDeterministicMNList::GetProjectedMNPayees(gsl
             if (dmn->pdmnState->nLastPaidHeight == nHeight) {
                 // We found the last MN Payee.
                 // If the last payee is an EvoNode, we need to check its consecutive payments and pay him again if needed
-                if (dmn->nType == MnType::Evo && dmn->pdmnState->nConsecutivePayments < dmn_types::Evo.voting_weight) {
-                    remaining_evo_payments = dmn_types::Evo.voting_weight - dmn->pdmnState->nConsecutivePayments;
-                    for ([[maybe_unused]] auto _ : irange::range(remaining_evo_payments)) {
-                        result.emplace_back(dmn);
-                        evo_to_be_skipped = dmn;
-                    }
-                }
+                // Disable Evonodes
+                // if (dmn->nType == MnType::Evo && dmn->pdmnState->nConsecutivePayments < dmn_types::Evo.voting_weight) {
+                //     remaining_evo_payments = dmn_types::Evo.voting_weight - dmn->pdmnState->nConsecutivePayments;
+                //     for ([[maybe_unused]] auto _ : irange::range(remaining_evo_payments)) {
+                //         result.emplace_back(dmn);
+                //         evo_to_be_skipped = dmn;
+                //     }
+                // }
             }
         });
     }
@@ -301,10 +303,11 @@ std::vector<std::pair<arith_uint256, CDeterministicMNCPtr>> CDeterministicMNList
             // future quorums
             return;
         }
-        if (onlyEvoNodes) {
-            if (dmn->nType != MnType::Evo)
-                return;
-        }
+        // Disable Evonodes
+        // if (onlyEvoNodes) {
+        //     if (dmn->nType != MnType::Evo)
+        //         return;
+        // }
         // calculate sha256(sha256(proTxHash, confirmedHash), modifier) per MN
         // Please note that this is not a double-sha256 but a single-sha256
         // The first part is already precalculated (confirmedHashWithProRegTxHash)
@@ -483,13 +486,14 @@ void CDeterministicMNList::AddMN(const CDeterministicMNCPtr& dmn, bool fBumpTota
                 dmn->proTxHash.ToString(), dmn->pdmnState->pubKeyOperator.ToString())));
     }
 
-    if (dmn->nType == MnType::Evo) {
-        if (dmn->pdmnState->platformNodeID != uint160() && !AddUniqueProperty(*dmn, dmn->pdmnState->platformNodeID)) {
-            mnUniquePropertyMap = mnUniquePropertyMapSaved;
-            throw(std::runtime_error(strprintf("%s: Can't add a masternode %s with a duplicate platformNodeID=%s", __func__,
-                                               dmn->proTxHash.ToString(), dmn->pdmnState->platformNodeID.ToString())));
-        }
-    }
+    // Disable Evonodes
+    // if (dmn->nType == MnType::Evo) {
+    //     if (dmn->pdmnState->platformNodeID != uint160() && !AddUniqueProperty(*dmn, dmn->pdmnState->platformNodeID)) {
+    //         mnUniquePropertyMap = mnUniquePropertyMapSaved;
+    //         throw(std::runtime_error(strprintf("%s: Can't add a masternode %s with a duplicate platformNodeID=%s", __func__,
+    //                                            dmn->proTxHash.ToString(), dmn->pdmnState->platformNodeID.ToString())));
+    //     }
+    // }
 
     mnMap = mnMap.set(dmn->proTxHash, dmn);
     mnInternalIdMap = mnInternalIdMap.set(dmn->GetInternalId(), dmn->proTxHash);
@@ -523,13 +527,14 @@ void CDeterministicMNList::UpdateMN(const CDeterministicMN& oldDmn, const std::s
         throw(std::runtime_error(strprintf("%s: Can't update a masternode %s with a duplicate pubKeyOperator=%s", __func__,
                 oldDmn.proTxHash.ToString(), pdmnState->pubKeyOperator.ToString())));
     }
-    if (dmn->nType == MnType::Evo) {
-        if (!UpdateUniqueProperty(*dmn, oldState->platformNodeID, pdmnState->platformNodeID)) {
-            mnUniquePropertyMap = mnUniquePropertyMapSaved;
-            throw(std::runtime_error(strprintf("%s: Can't update a masternode %s with a duplicate platformNodeID=%s", __func__,
-                                               oldDmn.proTxHash.ToString(), pdmnState->platformNodeID.ToString())));
-        }
-    }
+    // Disable Evonodes
+    // if (dmn->nType == MnType::Evo) {
+    //     if (!UpdateUniqueProperty(*dmn, oldState->platformNodeID, pdmnState->platformNodeID)) {
+    //         mnUniquePropertyMap = mnUniquePropertyMapSaved;
+    //         throw(std::runtime_error(strprintf("%s: Can't update a masternode %s with a duplicate platformNodeID=%s", __func__,
+    //                                            oldDmn.proTxHash.ToString(), pdmnState->platformNodeID.ToString())));
+    //     }
+    // }
 
     dmn->pdmnState = pdmnState;
     mnMap = mnMap.set(oldDmn.proTxHash, dmn);
@@ -584,13 +589,14 @@ void CDeterministicMNList::RemoveMN(const uint256& proTxHash)
                 proTxHash.ToString(), dmn->pdmnState->pubKeyOperator.ToString())));
     }
 
-    if (dmn->nType == MnType::Evo) {
-        if (dmn->pdmnState->platformNodeID != uint160() && !DeleteUniqueProperty(*dmn, dmn->pdmnState->platformNodeID)) {
-            mnUniquePropertyMap = mnUniquePropertyMapSaved;
-            throw(std::runtime_error(strprintf("%s: Can't delete a masternode %s with a duplicate platformNodeID=%s", __func__,
-                                               dmn->proTxHash.ToString(), dmn->pdmnState->platformNodeID.ToString())));
-        }
-    }
+    // Disable Evonodes
+    // if (dmn->nType == MnType::Evo) {
+    //     if (dmn->pdmnState->platformNodeID != uint160() && !DeleteUniqueProperty(*dmn, dmn->pdmnState->platformNodeID)) {
+    //         mnUniquePropertyMap = mnUniquePropertyMapSaved;
+    //         throw(std::runtime_error(strprintf("%s: Can't delete a masternode %s with a duplicate platformNodeID=%s", __func__,
+    //                                            dmn->proTxHash.ToString(), dmn->pdmnState->platformNodeID.ToString())));
+    //     }
+    // }
 
     mnMap = mnMap.erase(proTxHash);
     mnInternalIdMap = mnInternalIdMap.erase(dmn->GetInternalId());
@@ -751,9 +757,10 @@ bool CDeterministicMNManager::BuildNewListFromBlock(const CBlock& block, gsl::no
             }
             auto& proTx = *opt_proTx;
 
-            if (proTx.nType == MnType::Evo && !isV19Active) {
-                return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-protx-payload");
-            }
+            // Disable Evonodes
+            // if (proTx.nType == MnType::Evo && !isV19Active) {
+            //     return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-protx-payload");
+            // }
 
             auto dmn = std::make_shared<CDeterministicMN>(newList.GetTotalRegisteredCount(), proTx.nType);
             dmn->proTxHash = tx.GetHash();
@@ -814,9 +821,10 @@ bool CDeterministicMNManager::BuildNewListFromBlock(const CBlock& block, gsl::no
                 return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-protx-payload");
             }
 
-            if (opt_proTx->nType == MnType::Evo && !DeploymentActiveAfter(pindexPrev, Params().GetConsensus(), Consensus::DEPLOYMENT_V19)) {
-                return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-protx-payload");
-            }
+            // Disable Evonodes
+            // if (opt_proTx->nType == MnType::Evo && !DeploymentActiveAfter(pindexPrev, Params().GetConsensus(), Consensus::DEPLOYMENT_V19)) {
+            //     return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-protx-payload");
+            // }
 
             if (newList.HasUniqueProperty(opt_proTx->addr) && newList.GetUniquePropertyMN(opt_proTx->addr)->proTxHash != opt_proTx->proTxHash) {
                 return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-protx-dup-addr");
@@ -836,11 +844,12 @@ bool CDeterministicMNManager::BuildNewListFromBlock(const CBlock& block, gsl::no
             auto newState = std::make_shared<CDeterministicMNState>(*dmn->pdmnState);
             newState->addr = opt_proTx->addr;
             newState->scriptOperatorPayout = opt_proTx->scriptOperatorPayout;
-            if (opt_proTx->nType == MnType::Evo) {
-                newState->platformNodeID = opt_proTx->platformNodeID;
-                newState->platformP2PPort = opt_proTx->platformP2PPort;
-                newState->platformHTTPPort = opt_proTx->platformHTTPPort;
-            }
+            // Disable Evonodes
+            // if (opt_proTx->nType == MnType::Evo) {
+            //     newState->platformNodeID = opt_proTx->platformNodeID;
+            //     newState->platformP2PPort = opt_proTx->platformP2PPort;
+            //     newState->platformHTTPPort = opt_proTx->platformHTTPPort;
+            // }
             if (newState->IsBanned()) {
                 // only revive when all keys are set
                 if (newState->pubKeyOperator.Get().IsValid() && !newState->keyIDVoting.IsNull() && !newState->keyIDOwner.IsNull()) {
@@ -956,13 +965,14 @@ bool CDeterministicMNManager::BuildNewListFromBlock(const CBlock& block, gsl::no
         // Starting from v19 and until MNRewardReallocation, EvoNodes will be paid 4 blocks in a row
         // No need to check if v19 is active, since EvoNode ProRegTxes are allowed only after v19 activation
         // Note: If the payee wasn't found in the current block that's fine
-        if (dmn->nType == MnType::Evo && !isMNRewardReallocation) {
-            ++newState->nConsecutivePayments;
-            if (debugLogs) {
-                LogPrint(BCLog::MNPAYMENTS, "CDeterministicMNManager::%s -- MN %s is an EvoNode, bumping nConsecutivePayments to %d\n",
-                          __func__, dmn->proTxHash.ToString(), newState->nConsecutivePayments);
-            }
-        }
+        // Disable Evonodes
+        // if (dmn->nType == MnType::Evo && !isMNRewardReallocation) {
+        //     ++newState->nConsecutivePayments;
+        //     if (debugLogs) {
+        //         LogPrint(BCLog::MNPAYMENTS, "CDeterministicMNManager::%s -- MN %s is an EvoNode, bumping nConsecutivePayments to %d\n",
+        //                   __func__, dmn->proTxHash.ToString(), newState->nConsecutivePayments);
+        //     }
+        // }
         newList.UpdateMN(payee->proTxHash, newState);
         if (debugLogs) {
             dmn = newList.GetMN(payee->proTxHash);
@@ -988,6 +998,7 @@ bool CDeterministicMNManager::BuildNewListFromBlock(const CBlock& block, gsl::no
 
     mnListRet = std::move(newList);
 
+    UpdateLLMQParams(mnListRet.GetAllMNsCount(), nHeight);
     return true;
 }
 
@@ -1071,7 +1082,8 @@ CDeterministicMNList CDeterministicMNManager::GetListForBlockInternal(gsl::not_n
             mnListsCache.emplace(snapshot.GetBlockHash(), snapshot);
         } else {
             // keep snapshots for yet alive quorums
-            if (ranges::any_of(Params().GetConsensus().llmqs, [&snapshot, this](const auto& params){
+            if (ranges::any_of(Params().GetConsensus().llmqs, [&snapshot, this](const auto& p_llmq){
+                const auto &[_, params] = p_llmq;
                 AssertLockHeld(cs);
                 return (snapshot.GetHeight() % params.dkgInterval == 0) &&
                 (snapshot.GetHeight() + params.dkgInterval * (params.keepOldConnections + 1) >= tipIndex->nHeight);
@@ -1082,6 +1094,9 @@ CDeterministicMNList CDeterministicMNManager::GetListForBlockInternal(gsl::not_n
     }
 
     assert(snapshot.GetHeight() != -1);
+    // is this needed?
+    UpdateLLMQParams(snapshot.GetAllMNsCount(), snapshot.GetHeight());
+    
     return snapshot;
 }
 
@@ -1135,7 +1150,8 @@ void CDeterministicMNManager::CleanupCache(int nHeight)
             // it's a snapshot for the tip, keep it
             continue;
         }
-        bool fQuorumCache = ranges::any_of(Params().GetConsensus().llmqs, [&nHeight, &p](const auto& params){
+        bool fQuorumCache = ranges::any_of(Params().GetConsensus().llmqs, [&nHeight, &p](const auto& p_llmq){
+            const auto &[_, params] = p_llmq;
             return (p.second.GetHeight() % params.dkgInterval == 0) &&
                    (p.second.GetHeight() + params.dkgInterval * (params.keepOldConnections + 1) >= nHeight);
         });
@@ -1540,11 +1556,12 @@ bool CheckProRegTx(const CTransaction& tx, gsl::not_null<const CBlockIndex*> pin
         return false;
     }
 
-    if (opt_ptx->nType == MnType::Evo) {
-        if (!CheckPlatformFields(*opt_ptx, state)) {
-            return false;
-        }
-    }
+    // Disable Evonodes
+    // if (opt_ptx->nType == MnType::Evo) {
+    //     if (!CheckPlatformFields(*opt_ptx, state)) {
+    //         return false;
+    //     }
+    // }
 
     CTxDestination collateralTxDest;
     const PKHash *keyForPayloadSig = nullptr;
@@ -1605,11 +1622,12 @@ bool CheckProRegTx(const CTransaction& tx, gsl::not_null<const CBlockIndex*> pin
         }
 
         // never allow duplicate platformNodeIds for EvoNodes
-        if (opt_ptx->nType == MnType::Evo) {
-            if (mnList.HasUniqueProperty(opt_ptx->platformNodeID)) {
-                return state.Invalid(TxValidationResult::TX_BAD_SPECIAL, "bad-protx-dup-platformnodeid");
-            }
-        }
+        // Disable Evonodes
+        // if (opt_ptx->nType == MnType::Evo) {
+        //     if (mnList.HasUniqueProperty(opt_ptx->platformNodeID)) {
+        //         return state.Invalid(TxValidationResult::TX_BAD_SPECIAL, "bad-protx-dup-platformnodeid");
+        //     }
+        // }
 
         if (!DeploymentDIP0003Enforced(pindexPrev->nHeight, Params().GetConsensus())) {
             if (opt_ptx->keyIDOwner != opt_ptx->keyIDVoting) {
@@ -1652,11 +1670,12 @@ bool CheckProUpServTx(const CTransaction& tx, gsl::not_null<const CBlockIndex*> 
         return false;
     }
 
-    if (opt_ptx->nType == MnType::Evo) {
-        if (!CheckPlatformFields(*opt_ptx, state)) {
-            return false;
-        }
-    }
+    // Disable Evonodes
+    // if (opt_ptx->nType == MnType::Evo) {
+    //     if (!CheckPlatformFields(*opt_ptx, state)) {
+    //         return false;
+    //     }
+    // }
 
     auto mnList = deterministicMNManager->GetListForBlock(pindexPrev);
     auto mn = mnList.GetMN(opt_ptx->proTxHash);

@@ -10,9 +10,9 @@ bip32 = []
 use_serde = ["serde"]
 dash_helpers = ["rand"]
 default = [ "legacy", "bip32", "dash_helpers", "use_serde"]
-apple = ["bls-dash-sys/apple"]
+apple = ["bls-hoot-sys/apple"]
 
 [dependencies]
-bls-dash-sys = { path = "../bls-dash-sys" }
+bls-hoot-sys = { path = "../bls-hoot-sys" }
 serde = { version= "1.0.160", features = ["derive"], optional = true}
 rand = { version= "0.8.5", optional = true}

@@ -81,10 +81,11 @@ public:
         }
         if (obj.nVersion == BASIC_BLS_VERSION) {
             READWRITE(obj.nType);
-            if (obj.nType == MnType::Evo) {
-                READWRITE(obj.platformHTTPPort);
-                READWRITE(obj.platformNodeID);
-            }
+            // Disable EvoNodes
+            // if (obj.nType == MnType::Evo) {
+            //     READWRITE(obj.platformHTTPPort);
+            //     READWRITE(obj.platformNodeID);
+            // }
         }
     }
 

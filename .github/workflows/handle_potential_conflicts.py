@@ -25,7 +25,11 @@ import requests
 import hjson
 
 def get_label(pr_num):
+<<<<<<< HEAD
     return requests.get(f'https://api.github.com/repos/dashpay/dash/pulls/{pr_num}').json()['head']['label']
+=======
+    return requests.get(f'https://api.github.com/repos/hoot-labs/hoot/pulls/{pr_num}').json()['head']['label']
+>>>>>>> temporal
 
 def main():
     if len(sys.argv) != 2:
@@ -49,7 +53,11 @@ def main():
         this_pr_num = conflict['number']
         print(this_pr_num)
 
+<<<<<<< HEAD
         r = requests.get(f'https://api.github.com/repos/dashpay/dash/pulls/{this_pr_num}')
+=======
+        r = requests.get(f'https://api.github.com/repos/hoot-labs/hoot/pulls/{this_pr_num}')
+>>>>>>> temporal
         print(r.json()['head']['label'])
 
         mergable_state = r.json()['mergeable_state']
@@ -57,7 +65,11 @@ def main():
             print(f'{this_pr_num} needs rebase. Skipping conflict check')
             continue
 
+<<<<<<< HEAD
         r = requests.get(f'https://github.com/dashpay/dash/branches/pre_mergeable/{our_pr_label}...{get_label(this_pr_num)}')
+=======
+        r = requests.get(f'https://github.com/hoot-labs/hoot/branches/pre_mergeable/{our_pr_label}...{get_label(this_pr_num)}')
+>>>>>>> temporal
         if "These branches can be automatically merged." in r.text:
             good.append(this_pr_num)
         elif "Can’t automatically merge" in r.text:

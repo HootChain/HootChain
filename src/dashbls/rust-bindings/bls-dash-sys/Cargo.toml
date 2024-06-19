@@ -1,5 +1,5 @@
 [package]
-name = "bls-dash-sys"
+name = "bls-hoot-sys"
 description = ""
 version = "1.2.5"
 build = "build.rs"

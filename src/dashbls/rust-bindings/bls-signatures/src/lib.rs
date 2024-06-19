@@ -61,7 +61,7 @@ mod tests {
             .g1_element()
             .expect("unable to get public key");
 
-        let message = b"Evgeny owns 1337 dash no cap";
+        let message = b"Evgeny owns 1337 hoot no cap";
 
         let signature = scheme.sign(&private_key, message);
         let verify = scheme.verify(&public_key, message, &signature);

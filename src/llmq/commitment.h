@@ -36,7 +36,7 @@ public:
     static constexpr uint16_t BASIC_BLS_INDEXED_QUORUM_VERSION = 4;
 
     uint16_t nVersion{LEGACY_BLS_NON_INDEXED_QUORUM_VERSION};
-    Consensus::LLMQType llmqType{Consensus::LLMQType::LLMQ_NONE};
+    Consensus::LLMQType llmqType{Consensus::LLMQ_NONE};
     uint256 quorumHash;
     int16_t quorumIndex{0};
     std::vector<bool> signers;

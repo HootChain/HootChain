@@ -46,7 +46,7 @@ static RPCArg GetRpcArg(const std::string& strParamName)
     static const std::map<std::string, RPCArg> mapParamHelp = {
         {"collateralAddress",
             {"collateralAddress", RPCArg::Type::STR, RPCArg::Optional::NO,
-                "The Dash address to send the collateral to."}
+                "The Hootchain address to send the collateral to."}
         },
         {"collateralHash",
             {"collateralHash", RPCArg::Type::STR, RPCArg::Optional::NO,
@@ -117,17 +117,17 @@ static RPCArg GetRpcArg(const std::string& strParamName)
         },
         {"ownerAddress",
             {"ownerAddress", RPCArg::Type::STR, RPCArg::Optional::NO,
-                "The Dash address to use for payee updates and proposal voting.\n"
+                "The Hootchain address to use for payee updates and proposal voting.\n"
                 "The corresponding private key does not have to be known by your wallet.\n"
                 "The address must be unused and must differ from the collateralAddress."}
         },
         {"payoutAddress_register",
             {"payoutAddress", RPCArg::Type::STR, RPCArg::Optional::NO,
-                "The Dash address to use for masternode reward payments."}
+                "The Hootchain address to use for masternode reward payments."}
         },
         {"payoutAddress_update",
             {"payoutAddress", RPCArg::Type::STR, RPCArg::Optional::NO,
-                "The Dash address to use for masternode reward payments.\n"
+                "The Hootchain address to use for masternode reward payments.\n"
                 "If set to an empty string, the currently active payout address is reused."}
         },
         {"proTxHash",
@@ -160,7 +160,7 @@ static RPCArg GetRpcArg(const std::string& strParamName)
         },
         {"platformP2PPort",
             {"platformP2PPort", RPCArg::Type::NUM, RPCArg::Optional::NO,
-                "TCP port of Dash Platform peer-to-peer communication between nodes (network byte order)."}
+                "TCP port of Hootchain Platform peer-to-peer communication between nodes (network byte order)."}
         },
         {"platformHTTPPort",
             {"platformHTTPPort", RPCArg::Type::NUM, RPCArg::Optional::NO,
@@ -360,7 +360,7 @@ static void protx_register_fund_help(const JSONRPCRequest& request, bool legacy)
     std::string pubkey_operator = legacy ? "\"0532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"" : "\"8532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"";
     std::string rpc_example = rpc_name.append(" \"" + EXAMPLE_ADDRESS[0] + "\" \"1.2.3.4:1234\" \"" + EXAMPLE_ADDRESS[1] + "\" ").append(pubkey_operator).append(" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"");
     RPCHelpMan{rpc_full_name,
-        "\nCreates, funds and sends a ProTx to the network. The resulting transaction will move 1000 Dash\n"
+        "\nCreates, funds and sends a ProTx to the network. The resulting transaction will move 1000 Hootchain\n"
         "to the address specified by collateralAddress and will then function as the collateral of your\n"
         "masternode.\n"
         "A few of the limitations you see in the arguments are temporary and might be lifted after DIP3\n"
@@ -482,7 +482,7 @@ static void protx_register_fund_evo_help(const JSONRPCRequest& request)
 {
     RPCHelpMan{
         "protx register_fund_evo",
-        "\nCreates, funds and sends a ProTx to the network. The resulting transaction will move 4000 Dash\n"
+        "\nCreates, funds and sends a ProTx to the network. The resulting transaction will move 4000 Hootchain\n"
         "to the address specified by collateralAddress and will then function as the collateral of your\n"
         "EvoNode.\n"
         "A few of the limitations you see in the arguments are temporary and might be lifted after DIP3\n"
@@ -588,13 +588,15 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
 {
     const bool isEvoRequested = mnType == MnType::Evo;
     if (isEvoRequested) {
-        if (isFundRegister && (request.fHelp || (request.params.size() < 10 || request.params.size() > 12))) {
-            protx_register_fund_evo_help(request);
-        } else if (isExternalRegister && (request.fHelp || (request.params.size() < 11 || request.params.size() > 13))) {
-            protx_register_evo_help(request);
-        } else if (isPrepareRegister && (request.fHelp || (request.params.size() != 11 && request.params.size() != 12))) {
-            protx_register_prepare_evo_help(request);
-        }
+      // Disable Evonodes
+      throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
+        // if (isFundRegister && (request.fHelp || (request.params.size() < 10 || request.params.size() > 12))) {
+        //     protx_register_fund_evo_help(request);
+        // } else if (isExternalRegister && (request.fHelp || (request.params.size() < 11 || request.params.size() > 13))) {
+        //     protx_register_evo_help(request);
+        // } else if (isPrepareRegister && (request.fHelp || (request.params.size() != 11 && request.params.size() != 12))) {
+        //     protx_register_prepare_evo_help(request);
+        // }
     } else {
         if (isFundRegister && (request.fHelp || (request.params.size() < 7 || request.params.size() > 9))) {
             protx_register_fund_help(request, specific_legacy_bls_scheme);
@@ -683,24 +685,26 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
     }
 
     if (isEvoRequested) {
-        if (!IsHex(request.params[paramIdx + 6].get_str())) {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "platformNodeID must be hexadecimal string");
-        }
-        ptx.platformNodeID.SetHex(request.params[paramIdx + 6].get_str());
+        // Disable Evonodes
+        throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
+        // if (!IsHex(request.params[paramIdx + 6].get_str())) {
+        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformNodeID must be hexadecimal string");
+        // }
+        // ptx.platformNodeID.SetHex(request.params[paramIdx + 6].get_str());
 
-        int32_t requestedPlatformP2PPort = ParseInt32V(request.params[paramIdx + 7], "platformP2PPort");
-        if (!ValidatePlatformPort(requestedPlatformP2PPort)) {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "platformP2PPort must be a valid port [1-65535]");
-        }
-        ptx.platformP2PPort = static_cast<uint16_t>(requestedPlatformP2PPort);
+        // int32_t requestedPlatformP2PPort = ParseInt32V(request.params[paramIdx + 7], "platformP2PPort");
+        // if (!ValidatePlatformPort(requestedPlatformP2PPort)) {
+        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformP2PPort must be a valid port [1-65535]");
+        // }
+        // ptx.platformP2PPort = static_cast<uint16_t>(requestedPlatformP2PPort);
 
-        int32_t requestedPlatformHTTPPort = ParseInt32V(request.params[paramIdx + 8], "platformHTTPPort");
-        if (!ValidatePlatformPort(requestedPlatformHTTPPort)) {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "platformHTTPPort must be a valid port [1-65535]");
-        }
-        ptx.platformHTTPPort = static_cast<uint16_t>(requestedPlatformHTTPPort);
+        // int32_t requestedPlatformHTTPPort = ParseInt32V(request.params[paramIdx + 8], "platformHTTPPort");
+        // if (!ValidatePlatformPort(requestedPlatformHTTPPort)) {
+        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformHTTPPort must be a valid port [1-65535]");
+        // }
+        // ptx.platformHTTPPort = static_cast<uint16_t>(requestedPlatformHTTPPort);
 
-        paramIdx += 3;
+        // paramIdx += 3;
     }
 
     ptx.keyIDVoting = keyIDVoting;
@@ -715,7 +719,7 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
     if (!request.params[paramIdx + 6].isNull()) {
         fundDest = DecodeDestination(request.params[paramIdx + 6].get_str());
         if (!IsValidDestination(fundDest))
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Dash address: ") + request.params[paramIdx + 6].get_str());
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Hootchain address: ") + request.params[paramIdx + 6].get_str());
     }
 
     bool fSubmit{true};
@@ -923,7 +927,9 @@ static UniValue protx_update_service_common_wrapper(const JSONRPCRequest& reques
 
     const bool isEvoRequested = mnType == MnType::Evo;
     if (isEvoRequested) {
-        protx_update_service_evo_help(request);
+        // Disable Evonodes
+        throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
+        // protx_update_service_evo_help(request);
     } else {
         protx_update_service_help(request);
     }
@@ -953,24 +959,26 @@ static UniValue protx_update_service_common_wrapper(const JSONRPCRequest& reques
 
     size_t paramIdx = 3;
     if (isEvoRequested) {
-        if (!IsHex(request.params[paramIdx].get_str())) {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "platformNodeID must be hexadecimal string");
-        }
-        ptx.platformNodeID.SetHex(request.params[paramIdx].get_str());
+        // Disable Evonodes
+        throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
+        // if (!IsHex(request.params[paramIdx].get_str())) {
+        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformNodeID must be hexadecimal string");
+        // }
+        // ptx.platformNodeID.SetHex(request.params[paramIdx].get_str());
 
-        int32_t requestedPlatformP2PPort = ParseInt32V(request.params[paramIdx + 1], "platformP2PPort");
-        if (!ValidatePlatformPort(requestedPlatformP2PPort)) {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "platformP2PPort must be a valid port [1-65535]");
-        }
-        ptx.platformP2PPort = static_cast<uint16_t>(requestedPlatformP2PPort);
+        // int32_t requestedPlatformP2PPort = ParseInt32V(request.params[paramIdx + 1], "platformP2PPort");
+        // if (!ValidatePlatformPort(requestedPlatformP2PPort)) {
+        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformP2PPort must be a valid port [1-65535]");
+        // }
+        // ptx.platformP2PPort = static_cast<uint16_t>(requestedPlatformP2PPort);
 
-        int32_t requestedPlatformHTTPPort = ParseInt32V(request.params[paramIdx + 2], "platformHTTPPort");
-        if (!ValidatePlatformPort(requestedPlatformHTTPPort)) {
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "platformHTTPPort must be a valid port [1-65535]");
-        }
-        ptx.platformHTTPPort = static_cast<uint16_t>(requestedPlatformHTTPPort);
+        // int32_t requestedPlatformHTTPPort = ParseInt32V(request.params[paramIdx + 2], "platformHTTPPort");
+        // if (!ValidatePlatformPort(requestedPlatformHTTPPort)) {
+        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformHTTPPort must be a valid port [1-65535]");
+        // }
+        // ptx.platformHTTPPort = static_cast<uint16_t>(requestedPlatformHTTPPort);
 
-        paramIdx += 3;
+        // paramIdx += 3;
     }
 
     auto dmn = node.dmnman->GetListAtChainTip().GetMN(ptx.proTxHash);
@@ -1011,7 +1019,7 @@ static UniValue protx_update_service_common_wrapper(const JSONRPCRequest& reques
     if (!request.params[paramIdx + 1].isNull()) {
         feeSource = DecodeDestination(request.params[paramIdx + 1].get_str());
         if (!IsValidDestination(feeSource))
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Dash address: ") + request.params[paramIdx + 1].get_str());
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Hootchain address: ") + request.params[paramIdx + 1].get_str());
     } else {
         if (ptx.scriptOperatorPayout != CScript()) {
             // use operator reward address as default source for fees
@@ -1127,7 +1135,7 @@ static UniValue protx_update_registrar_wrapper(const JSONRPCRequest& request, co
     if (!request.params[4].isNull()) {
         feeSourceDest = DecodeDestination(request.params[4].get_str());
         if (!IsValidDestination(feeSourceDest))
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Dash address: ") + request.params[4].get_str());
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Hootchain address: ") + request.params[4].get_str());
     }
 
     FundSpecialTx(wallet.get(), tx, ptx, feeSourceDest);
@@ -1213,7 +1221,7 @@ static UniValue protx_revoke(const JSONRPCRequest& request, const ChainstateMana
     if (!request.params[3].isNull()) {
         CTxDestination feeSourceDest = DecodeDestination(request.params[3].get_str());
         if (!IsValidDestination(feeSourceDest))
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Dash address: ") + request.params[3].get_str());
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Hootchain address: ") + request.params[3].get_str());
         FundSpecialTx(wallet.get(), tx, ptx, feeSourceDest);
     } else if (dmn->pdmnState->scriptOperatorPayout != CScript()) {
         // Using funds from previousely specified operator payout address
@@ -1643,9 +1651,10 @@ static UniValue protx_listdiff(const JSONRPCRequest& request, const ChainstateMa
         "  register                 - Create and send ProTx to network\n"
         "  register_fund            - Fund, create and send ProTx to network\n"
         "  register_prepare         - Create an unsigned ProTx\n"
-        "  register_evo             - Create and send ProTx to network for an EvoNode\n"
-        "  register_fund_evo        - Fund, create and send ProTx to network for an EvoNode\n"
-        "  register_prepare_evo     - Create an unsigned ProTx for an EvoNode\n"
+        // Disable Evonodes
+        // "  register_evo             - Create and send ProTx to network for an EvoNode\n"
+        // "  register_fund_evo        - Fund, create and send ProTx to network for an EvoNode\n"
+        // "  register_prepare_evo     - Create an unsigned ProTx for an EvoNode\n"
         "  register_legacy          - Create a ProTx by parsing BLS using the legacy scheme and send it to network\n"
         "  register_fund_legacy     - Fund and create a ProTx by parsing BLS using the legacy scheme, then send it to network\n"
         "  register_prepare_legacy  - Create an unsigned ProTx by parsing BLS using the legacy scheme\n"
@@ -1655,7 +1664,8 @@ static UniValue protx_listdiff(const JSONRPCRequest& request, const ChainstateMa
         "  info                     - Return information about a ProTx\n"
 #ifdef ENABLE_WALLET
         "  update_service           - Create and send ProUpServTx to network\n"
-        "  update_service_evo       - Create and send ProUpServTx to network for an EvoNode\n"
+        // Disable Evonodes
+        // "  update_service_evo       - Create and send ProUpServTx to network for an EvoNode\n"
         "  update_registrar         - Create and send ProUpRegTx to network\n"
         "  update_registrar_legacy  - Create ProUpRegTx by parsing BLS using the legacy scheme, then send it to network\n"
         "  revoke                   - Create and send ProUpRevTx to network\n"
@@ -1680,16 +1690,16 @@ static UniValue protx(const JSONRPCRequest& request)
 #ifdef ENABLE_WALLET
     if (command == "protxregister" || command == "protxregister_fund" || command == "protxregister_prepare") {
         return protx_register(new_request, chainman);
-    } else if (command == "protxregister_evo" || command == "protxregister_fund_evo" || command == "protxregister_prepare_evo" || command == "protxregister_hpmn" || command == "protxregister_fund_hpmn" || command == "protxregister_prepare_hpmn") {
-        return protx_register_evo(new_request, chainman);
+    // } else if (command == "protxregister_evo" || command == "protxregister_fund_evo" || command == "protxregister_prepare_evo" || command == "protxregister_hpmn" || command == "protxregister_fund_hpmn" || command == "protxregister_prepare_hpmn") {
+    //     return protx_register_evo(new_request, chainman);
     } else if (command == "protxregister_legacy" || command == "protxregister_fund_legacy" || command == "protxregister_prepare_legacy") {
         return protx_register_legacy(new_request, chainman);
     } else if (command == "protxregister_submit") {
         return protx_register_submit(new_request, chainman);
     } else if (command == "protxupdate_service") {
         return protx_update_service_common_wrapper(new_request, chainman, MnType::Regular);
-    } else if (command == "protxupdate_service_evo" || command == "protxupdate_service_hpmn") {
-        return protx_update_service_common_wrapper(new_request, chainman, MnType::Evo);
+    // } else if (command == "protxupdate_service_evo" || command == "protxupdate_service_hpmn") {
+    //     return protx_update_service_common_wrapper(new_request, chainman, MnType::Evo);
     } else if (command == "protxupdate_registrar") {
         return protx_update_registrar(new_request, chainman);
     } else if (command == "protxupdate_registrar_legacy") {

@@ -153,7 +153,7 @@ static constexpr std::chrono::seconds AVG_ADDRESS_BROADCAST_INTERVAL{30};
 static const unsigned int INVENTORY_BROADCAST_INTERVAL = 5;
 /** Maximum rate of inventory items to send per second.
  *  Limits the impact of low-fee transaction floods.
- *  We have 4 times smaller block times in Dash, so we need to push 4 times more invs per 1MB. */
+ *  We have 4 times smaller block times in Hootchain, so we need to push 4 times more invs per 1MB. */
 static constexpr unsigned int INVENTORY_BROADCAST_PER_SECOND = 7;
 /** Maximum number of inventory items to send per transmission. */
 static constexpr unsigned int INVENTORY_BROADCAST_MAX_PER_1MB_BLOCK = 4 * INVENTORY_BROADCAST_PER_SECOND * INVENTORY_BROADCAST_INTERVAL;
@@ -1873,7 +1873,7 @@ bool PeerManagerImpl::AlreadyHave(const CInv& inv)
         }
 
     /*
-        Dash Related Inventory Messages
+        Hootchain Related Inventory Messages
 
         --
 
@@ -3560,7 +3560,7 @@ void PeerManagerImpl::ProcessMessage(
         const auto send_headers = [this /* for m_connman */, &hashStop, &pindex, &nodestate, &pfrom, &msgMaker](auto msg_type, auto& v_headers, auto callback) {
             int nLimit = MAX_HEADERS_RESULTS;
             for (; pindex; pindex = m_chainman.ActiveChain().Next(pindex)) {
-                v_headers.push_back(callback(pindex));
+                v_headers.push_back(callback(pindex, m_chainparams));
 
                 if (--nLimit <= 0 || pindex->GetBlockHash() == hashStop)
                     break;
@@ -3585,14 +3585,14 @@ void PeerManagerImpl::ProcessMessage(
         if (msg_type == NetMsgType::GETHEADERS) {
             // we must use CBlocks, as CBlockHeaders won't include the 0x00 nTx count at the end
             std::vector<CBlock> v_headers;
-            send_headers(NetMsgType::HEADERS, v_headers, [](const auto block_pindex) { return block_pindex->GetBlockHeader(); });
+            send_headers(NetMsgType::HEADERS, v_headers, [](const auto block_pindex, const auto m_chainparams) { return block_pindex->GetBlockHeader(m_chainparams.GetConsensus()); });
         } else if (msg_type == NetMsgType::GETHEADERS2) {
             // Keeps track of the last 7 unique version blocks
             std::list<int32_t> last_unique_versions;
             std::vector<CompressibleBlockHeader> v_headers;
 
-            send_headers(NetMsgType::HEADERS2, v_headers, [&v_headers, &last_unique_versions](const auto block_pindex) {
-                CompressibleBlockHeader compressible_header{block_pindex->GetBlockHeader()};
+            send_headers(NetMsgType::HEADERS2, v_headers, [&v_headers, &last_unique_versions](const auto block_pindex, const auto m_chainparams) {
+                CompressibleBlockHeader compressible_header{block_pindex->GetBlockHeader(m_chainparams.GetConsensus())};
                 if (!v_headers.empty()) compressible_header.Compress(v_headers, last_unique_versions); // first block is always uncompressed
                 return compressible_header;
             });
@@ -4946,14 +4946,14 @@ bool PeerManagerImpl::SendMessages(CNode* pto)
                     }
                     if (fFoundStartingHeader) {
                         // add this to the headers message
-                        vHeaders.push_back(pindex->GetBlockHeader());
+                        vHeaders.push_back(pindex->GetBlockHeader(consensusParams));
                     } else if (PeerHasHeader(&state, pindex)) {
                         continue; // keep looking for the first new block
                     } else if (pindex->pprev == nullptr || PeerHasHeader(&state, pindex->pprev) || isPrevDevnetGenesisBlock) {
                         // Peer doesn't have this header but they do have the prior one.
                         // Start sending headers.
                         fFoundStartingHeader = true;
-                        vHeaders.push_back(pindex->GetBlockHeader());
+                        vHeaders.push_back(pindex->GetBlockHeader(consensusParams));
                     } else {
                         // Peer doesn't have this header or the prior one -- nothing will
                         // connect, so bail out.
@@ -5324,7 +5324,7 @@ bool PeerManagerImpl::SendMessages(CNode* pto)
             state.m_object_download.m_check_expiry_timer = current_time + GetObjectExpiryInterval(MSG_TX)/2 + GetRandMicros(GetObjectExpiryInterval(MSG_TX));
         }
 
-        // DASH this code also handles non-TXs (Dash specific messages)
+        // HOOT this code also handles non-TXs (Hootchain specific messages)
         auto& object_process_time = state.m_object_download.m_object_process_time;
         while (!object_process_time.empty() && object_process_time.begin()->first <= current_time && state.m_object_download.m_object_in_flight.size() < MAX_PEER_OBJECT_IN_FLIGHT) {
             const CInv inv = object_process_time.begin()->second;

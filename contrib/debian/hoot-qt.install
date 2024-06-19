@@ -1,0 +1,6 @@
+usr/local/bin/hoot-qt usr/bin
+share/pixmaps/hoot32.xpm usr/share/pixmaps
+share/pixmaps/hoot16.xpm usr/share/pixmaps
+share/pixmaps/hoot128.png usr/share/pixmaps
+debian/hoot-qt.desktop usr/share/applications
+debian/hoot-qt.protocol usr/share/kde4/services/

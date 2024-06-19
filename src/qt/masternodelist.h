@@ -42,7 +42,8 @@ public:
 
     enum {
         COLUMN_SERVICE,
-        COLUMN_TYPE,
+        // Disable EvoNodes
+        // COLUMN_TYPE,
         COLUMN_STATUS,
         COLUMN_POSE,
         COLUMN_REGISTERED,

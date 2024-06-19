@@ -5,7 +5,7 @@ file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 ---------------------------------------------------------------------
 
-This file contains color changes for the dash theme "Light".
+This file contains color changes for the hoot theme "Light".
 
 NOTE: This file gets appended to the general.css while its
 getting loaded in GUIUtil::loadStyleSheet(). Thus changes made in
@@ -22,7 +22,7 @@ Loaded in GUIUtil::loadStyleSheet() in guitil.cpp.
 #00000000
 #555
 #008de4
-#0f75b5
+#0fb55c
 #a7a7a7
 #c7c7c7
 #d2d2d2
@@ -76,7 +76,7 @@ QComboBox,
 QPlainTextEdit,
 QLineEdit {
     background-color: #eaeaec;
-    border-color: #008de4;
+    border-color: #00e472;
     color: #555;
 }
 
@@ -86,7 +86,7 @@ QComboBox:hover:!focus,
 QPlainTextEdit:hover:!focus,
 QLineEdit:hover:!focus {
     background-color: #eaeaec;
-    border-color: #0f75b5;
+    border-color: #0fb55c;
 }
 
 
@@ -97,7 +97,7 @@ QComboBox:focus,
 QPlainTextEdit:focus,
 QLineEdit:focus {
     background-color: #d2d2d2;
-    border-color: #0f75b5;
+    border-color: #0fb55c;
 }
 
 BitcoinAmountField:disabled,
@@ -277,13 +277,13 @@ QHeaderView
 ******************************************************/
 
 QHeaderView::section { /* Table Header Sections */
-    background-color: #008de4;
+    background-color: #00e472;
     border-color: #f2f2f4;
     color: #f2f2f4;
 }
 
 QHeaderView::section:hover { /* Table Header Sections */
-    background-color: #0f75b5;
+    background-color: #0fb55c;
     color: #f2f2f4;
 }
 
@@ -337,7 +337,7 @@ QProgressBar {
 }
 
 QProgressBar::chunk {
-    background-color: #008de4;
+    background-color: #00e472;
 }
 
 /******************************************************
@@ -353,16 +353,16 @@ QPushButton
 ******************************************************/
 
 QPushButton {
-    background-color: #008de4;
+    background-color: #00e472;
     color: #f2f2f4;
 }
 
 QPushButton:hover {
-    background-color: #0f75b5;
+    background-color: #0fb55c;
 }
 
 QPushButton:pressed {
-    background-color: #008de4;
+    background-color: #00e472;
 }
 
 QPushButton:disabled {
@@ -464,7 +464,7 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage,
 #btnVerifyMessage {
-    border-color: #008de4;
+    border-color: #00e472;
     color: #a7a7a7;
 }
 
@@ -504,7 +504,7 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage:hover:!checked,
 #btnVerifyMessage:hover:!checked {
-    border-color: #0f75b5;
+    border-color: #0fb55c;
     color: #555;
 }
 
@@ -574,10 +574,10 @@ QSlider
 ******************************************************/
 
 QSlider::handle:horizontal {
-	background-color: #008de4;
+	background-color: #00e472;
 }
 QSlider::handle:horizontal:hover {
-	background-color: #0f75b5;
+	background-color: #0fb55c;
 }
 QSlider::sub-page:horizontal {
 	background-color: #c7c7c7;
@@ -647,26 +647,32 @@ QToolBar / QToolButton
 ******************************************************/
 
 QToolBar {
-    background-color: #008de4;
+    background-color: #ffffff;
 }
 
 QToolBar > QToolButton {
-    background-color: #00000000;
-    color: #f2f2f4;
+    background-color: #ffffff;
+    color: #1E1E1E;
 }
 
 QToolBar > QToolButton:hover:!checked {
-    background-color: #0f75b5;
-    color: #dcdcdc;
+    background-color: #ffffff;
+    color: #76b384;
 }
 
 QToolBar > QToolButton:checked {
-    background-color: #f2f2f4;
-    color: #555;
+    background-color: #ffffff;
+    color: #76b384;
 }
 
 QToolBar > QToolButton:disabled {
     color: #a7a7a7;
+}
+
+QToolBar QLabel#lblToolbarLogo {
+  padding: 12px;
+  image: url(':/images/hoot_logo_toolbar_light');
+  height: 2.5em;
 }
 
 /******************************************************

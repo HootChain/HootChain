@@ -1,11 +1,11 @@
 /**
-Copyright (c) 2020 The Dash Core developers
+Copyright (c) 2024 HootChain Core developers
 Distributed under the MIT/X11 software license, see the accompanying
 file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 ---------------------------------------------------------------------
 
-This file contains all changes for the dash theme "Traditional".
+This file contains all changes for the hoot theme "Traditional".
 
 NOTE: This file gets not appended to the general.css. The Traditional
 theme is a standalone theme which just fixes some bugs in the OS default
@@ -37,7 +37,7 @@ QToolBar / QToolButton
 
 QToolBar QLabel#lblToolbarLogo {
     padding: 12px;
-    image: url(':/images/dash_logo_toolbar_blue');
+    image: url(':/images/hoot_logo_toolbar_blue');
     height: 2.5em;
 }
 
@@ -66,7 +66,7 @@ QPushButton - Special case, tabbar replacement buttons
     border-bottom: 3px solid red;
     padding-bottom: 5px;
     background-color: #00000000;
-    border-color: #008de4;
+    border-color: #00e472;
 }
 
 /* Debug window buttons */
@@ -145,7 +145,7 @@ ModalOverlay
 QWidget#bgWidget { /* The frame overlaying the overview-page */
     padding-left: 10px;
     padding-right: 10px;
-    background-color: #ccfafafa;
+    background-color: #ccfaebfa;
 }
 
 QWidget#contentWidget { /* The actual content with the text/buttons/etc... */

@@ -1,6 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2020 The Bitcoin Core developers
 // Copyright (c) 2014-2024 The Dash Core developers
+// Copyright (c) 2020-2024 The Raptoreum developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -25,6 +26,7 @@
 #include <policy/fees.h>
 #include <pow.h>
 #include <rpc/blockchain.h>
+#include <rpc/auxpow_miner.h>
 #include <rpc/mining.h>
 #include <rpc/server.h>
 #include <rpc/util.h>
@@ -47,6 +49,11 @@
 #include <governance/classes.h>
 #include <governance/governance.h>
 #include <masternode/sync.h>
+
+#ifdef ENABLE_WALLET
+#include <wallet/rpcwallet.h>
+#include <wallet/wallet.h>
+#endif//ENABLE_WALLET
 
 #include <memory>
 #include <stdint.h>
@@ -130,14 +137,15 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
 
     CChainParams chainparams(Params());
 
-    while (max_tries > 0 && block.nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(block.GetHash(), block.nBits, chainparams.GetConsensus()) && !ShutdownRequested()) {
-        ++block.nNonce;
+    auto& miningHeader = CAuxPow::initAuxPow(block);
+    while (max_tries > 0 && miningHeader.nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(miningHeader.GetPoWHash(), block.nBits, chainparams.GetConsensus()) && !ShutdownRequested()) {
+        ++miningHeader.nNonce;
         --max_tries;
     }
     if (max_tries == 0 || ShutdownRequested()) {
         return false;
     }
-    if (block.nNonce == std::numeric_limits<uint32_t>::max()) {
+    if (miningHeader.nNonce == std::numeric_limits<uint32_t>::max()) {
         return true;
     }
 
@@ -473,7 +481,7 @@ static UniValue prioritisetransaction(const JSONRPCRequest& request)
         "Accepts the transaction into mined blocks at a higher (or lower) priority\n",
         {
             {"txid", RPCArg::Type::STR_HEX, RPCArg::Optional::NO, "The transaction id."},
-            {"fee_delta", RPCArg::Type::NUM, RPCArg::Optional::NO, "The fee value (in duffs) to add (or subtract, if negative).\n"
+            {"fee_delta", RPCArg::Type::NUM, RPCArg::Optional::NO, "The fee value (in muffs) to add (or subtract, if negative).\n"
     "                  Note, that this value is not a fee rate. It is a value to modify absolute fee of the TX.\n"
     "                  The fee is not actually paid, only the algorithm for selecting transactions into a block\n"
     "                  considers the transaction as it would have paid a higher (or lower) fee."},
@@ -579,7 +587,7 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
                                     {
                                         {RPCResult::Type::NUM, "", "transactions before this one (by 1-based index in 'transactions' list) that must be present in the final block if this one is"},
                                     }},
-                                {RPCResult::Type::NUM, "fee", "difference in value between transaction inputs and outputs (in duffs); for coinbase transactions, this is a negative Number of the total collected block fees (ie, not including the block subsidy); if key is not present, fee is unknown and clients MUST NOT assume there isn't one"},
+                                {RPCResult::Type::NUM, "fee", "difference in value between transaction inputs and outputs (in muffs); for coinbase transactions, this is a negative Number of the total collected block fees (ie, not including the block subsidy); if key is not present, fee is unknown and clients MUST NOT assume there isn't one"},
                                 {RPCResult::Type::NUM, "sigops", "total number of SigOps, as counted for purposes of block limits; if key is not present, sigop count is unknown and clients MUST NOT assume there aren't any"},
                             }},
                     }},
@@ -587,7 +595,7 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
                 {
                     {RPCResult::Type::STR_HEX, "key", "values must be in the coinbase (keys may be ignored)"},
                 }},
-                {RPCResult::Type::NUM, "coinbasevalue", "maximum allowable input to coinbase transaction, including the generation award and transaction fees (in duffs)"},
+                {RPCResult::Type::NUM, "coinbasevalue", "maximum allowable input to coinbase transaction, including the generation award and transaction fees (in muffs)"},
                 {RPCResult::Type::STR, "longpollid", "an id to include with a request to longpoll on an update to this template"},
                 {RPCResult::Type::STR, "target", "The hash target"},
                 {RPCResult::Type::NUM_TIME, "mintime", "The minimum timestamp appropriate for the next block time, expressed in " + UNIX_EPOCH_TIME},
@@ -955,6 +963,19 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
     result.pushKV("superblocks_started", pindexPrev->nHeight + 1 > consensusParams.nSuperblockStartBlock);
     result.pushKV("superblocks_enabled", AreSuperblocksEnabled(*node.sporkman));
 
+    UniValue devfeeObj(UniValue::VOBJ);
+    DevfeePayment devfeePayment = consensusParams.nDevfeePayment;
+    // DevfeePayment devfeePayment = Params().GetConsensus().nDevfeePayment;
+    if(pblock->txoutDevfee != CTxOut()) {
+        CTxDestination devfee_addr;
+        ExtractDestination(pblock->txoutDevfee.scriptPubKey, devfee_addr);
+        devfeeObj.pushKV("payee", EncodeDestination(devfee_addr).c_str());
+        devfeeObj.pushKV("script", HexStr(pblock->txoutDevfee.scriptPubKey));
+        devfeeObj.pushKV("amount", pblock->txoutDevfee.nValue);
+    }
+    result.pushKV("devfee", devfeeObj);
+    result.pushKV("devfee_payments_started", pindexPrev->nHeight + 1 > devfeePayment.getStartBlock());
+    
     result.pushKV("coinbase_payload", HexStr(pblock->vtx[0]->vExtraPayload));
 
     return result;
@@ -1069,6 +1090,253 @@ static UniValue submitheader(const JSONRPCRequest& request)
         throw JSONRPCError(RPC_VERIFY_ERROR, state.ToString());
     }
     throw JSONRPCError(RPC_VERIFY_ERROR, state.GetRejectReason());
+}
+
+namespace
+{
+
+/**
+ * Helper class that keeps track of reserved keys that are used for mining
+ * coinbases.  We also keep track of the block hash(es) that have been
+ * constructed based on the key, so that we can mark it as keep and get a
+ * fresh one when one of those blocks is submitted.
+ */
+class ReservedKeysForMining
+{
+
+private:
+
+  /**
+   * The per-wallet data that we store.
+   */
+  struct PerWallet
+  {
+
+    /**
+     * The current coinbase script.  This has been taken out of the wallet
+     * already (and marked as "keep"), but is reused until a block actually
+     * using it is submitted successfully.
+     */
+    CScript coinbaseScript;
+
+    /** All block hashes (in hex) that are based on the current script.  */
+    std::set<std::string> blockHashes;
+
+    explicit PerWallet (const CScript& scr)
+      : coinbaseScript(scr)
+    {}
+
+    PerWallet (PerWallet&&) = default;
+
+  };
+
+  /**
+   * Data for each wallet that we have.  This is keyed by CWallet::GetName,
+   * which is not perfect; but it will likely work in most cases, and even
+   * when two different wallets are loaded with the same name (after each
+   * other), the worst that can happen is that we mine to an address from
+   * the other wallet.
+   */
+  std::map<std::string, PerWallet> data;
+
+  /** Lock for this instance.  */
+  mutable RecursiveMutex cs;
+
+public:
+
+  ReservedKeysForMining () = default;
+
+  /**
+   * Retrieves the key to use for mining at the moment.
+   */
+  CScript
+  GetCoinbaseScript (CWallet* pwallet)
+  {
+    LOCK2 (cs, pwallet->cs_wallet);
+
+    const auto mit = data.find (pwallet->GetName ());
+    if (mit != data.end ())
+      return mit->second.coinbaseScript;
+
+    ReserveDestination rdest(pwallet);
+    CTxDestination dest;
+    if (!rdest.GetReservedDestination (dest, false))
+      throw JSONRPCError (RPC_WALLET_KEYPOOL_RAN_OUT, "Failed to generate mining address");
+    rdest.KeepDestination ();
+
+    const CScript res = GetScriptForDestination (dest);
+    data.emplace (pwallet->GetName (), PerWallet (res));
+    return res;
+  }
+
+  /**
+   * Adds the block hash (given as hex string) of a newly constructed block
+   * to the set of blocks for the current key.
+   */
+  void
+  AddBlockHash (const CWallet* pwallet, const std::string& hashHex)
+  {
+    LOCK (cs);
+
+    const auto mit = data.find (pwallet->GetName ());
+    assert (mit != data.end ());
+    mit->second.blockHashes.insert (hashHex);
+  }
+
+  /**
+   * Marks a block as submitted, releasing the key for it (if any).
+   */
+  void
+  MarkBlockSubmitted (const CWallet* pwallet, const std::string& hashHex)
+  {
+    LOCK (cs);
+
+    const auto mit = data.find (pwallet->GetName ());
+    if (mit == data.end ())
+      return;
+
+    if (mit->second.blockHashes.count (hashHex) > 0)
+      data.erase (mit);
+  }
+
+};
+
+ReservedKeysForMining g_mining_keys;
+
+} // anonymous namespace
+
+UniValue getauxblock(const JSONRPCRequest& request)
+{
+    RPCHelpMan{"getauxblock",
+                "\nCreates or submits a merge-mined block.\n"
+                "\nWithout arguments, creates a new block and returns information\n"
+                "required to merge-mine it.  With arguments, submits a solved\n"
+                "auxpow for a previously returned block.\n",
+                {
+                    {"hash", RPCArg::Type::STR_HEX, RPCArg::Optional::OMITTED_NAMED_ARG, "Hash of the block to submit"},
+                    {"auxpow", RPCArg::Type::STR_HEX, RPCArg::Optional::OMITTED_NAMED_ARG, "Serialised auxpow found"},
+                },
+                {
+                  RPCResult{"without arguments",
+                      RPCResult::Type::OBJ, "", "",
+                      {
+                          {RPCResult::Type::STR_HEX, "hash", "hash of the created block"},
+                          {RPCResult::Type::NUM, "chainid", "chain ID for this block"},
+                          {RPCResult::Type::STR_HEX, "previousblockhash", "hash of the previous block"},
+                          {RPCResult::Type::NUM, "coinbasevalue", "value of the block's coinbase"},
+                          {RPCResult::Type::STR_HEX, "bits", "compressed target of the block"},
+                          {RPCResult::Type::NUM, "height", "height of the block"},
+                          {RPCResult::Type::STR_HEX, "_target", "target in reversed byte order, deprecated"},
+                      },
+                  },
+                  {"with arguments",
+                      RPCResult::Type::BOOL, "", "whether the submitted block was correct"
+                  },
+                },
+                RPCExamples{
+                    HelpExampleCli("getauxblock", "")
+                    + HelpExampleCli("getauxblock", "\"hash\" \"serialised auxpow\"")
+                    + HelpExampleRpc("getauxblock", "")
+                },
+    }.Check(request);
+
+    std::shared_ptr<CWallet> const wallet = GetWalletForJSONRPCRequest(request);
+    if (!wallet) return NullUniValue;
+    CWallet* const pwallet = wallet.get();
+
+    if (pwallet->IsWalletFlagSet(WALLET_FLAG_DISABLE_PRIVATE_KEYS)) {
+        throw JSONRPCError(RPC_WALLET_ERROR, "Error: Private keys are disabled for this wallet");
+    }
+
+    /* Return if incorrect parameter count */
+    if (request.params.size() != 0 && request.params.size() != 2) {
+        throw JSONRPCError(RPC_WALLET_ERROR, "Error: Incorrect number of arguments");
+    }
+
+    /* Create a new block */
+    if (request.params.size() == 0)
+    {
+        const CScript coinbaseScript = g_mining_keys.GetCoinbaseScript(pwallet);
+        const UniValue res = AuxpowMiner::get().createAuxBlock(request, coinbaseScript);
+        g_mining_keys.AddBlockHash(pwallet, res["hash"].get_str ());
+        return res;
+    }
+
+    /* Submit a block instead.  */
+    if (request.params.size() == 2)
+    {
+        // assert(request.params.size() == 2);
+        const std::string& hash = request.params[0].get_str();
+
+        const bool fAccepted = AuxpowMiner::get().submitAuxBlock(request, hash, request.params[1].get_str());
+        if (fAccepted)
+            g_mining_keys.MarkBlockSubmitted(pwallet, hash);
+
+        return fAccepted;
+    }
+
+    return NullUniValue;
+}
+
+static UniValue createauxblock(const JSONRPCRequest& request)
+{
+    RPCHelpMan{"createauxblock",
+        "\nCreates a new block and returns information required to"
+        " merge-mine it.\n",
+        {
+            {"address", RPCArg::Type::STR, RPCArg::Optional::NO, "Payout address for the coinbase transaction"},
+        },
+        RPCResult{
+            RPCResult::Type::OBJ, "", "",
+            {
+                {RPCResult::Type::STR_HEX, "hash", "hash of the created block"},
+                {RPCResult::Type::NUM, "chainid", "chain ID for this block"},
+                {RPCResult::Type::STR_HEX, "previousblockhash", "hash of the previous block"},
+                {RPCResult::Type::NUM, "coinbasevalue", "value of the block's coinbase"},
+                {RPCResult::Type::STR_HEX, "bits", "compressed target of the block"},
+                {RPCResult::Type::NUM, "height", "height of the block"},
+                {RPCResult::Type::STR_HEX, "_target", "target in reversed byte order, deprecated"},
+            },
+        },
+        RPCExamples{
+          HelpExampleCli("createauxblock", "\"address\"") +
+          HelpExampleRpc("createauxblock", "\"address\"")
+        },
+    }.Check(request);
+    
+    // Check coinbase payout address
+    const CTxDestination coinbaseScript
+      = DecodeDestination(request.params[0].get_str());
+    if (!IsValidDestination(coinbaseScript)) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY,
+                           "Error: Invalid coinbase payout address");
+    }
+    const CScript scriptPubKey = GetScriptForDestination(coinbaseScript);
+
+    return AuxpowMiner::get().createAuxBlock(request, scriptPubKey);
+}
+
+static UniValue submitauxblock(const JSONRPCRequest& request)
+{
+    RPCHelpMan{"submitauxblock",
+        "\nSubmits a solved auxpow for a block that was previously"
+        " created by 'createauxblock'.\n",
+        {
+            {"hash", RPCArg::Type::STR_HEX, RPCArg::Optional::NO, "Hash of the block to submit"},
+            {"auxpow", RPCArg::Type::STR_HEX, RPCArg::Optional::NO, "Serialised auxpow found"},
+        },
+        RPCResult{
+            RPCResult::Type::BOOL, "", "whether the submitted block was correct"
+        },
+        RPCExamples{
+            HelpExampleCli("submitauxblock", "\"hash\" \"serialised auxpow\"") +
+            HelpExampleRpc("submitauxblock", "\"hash\" \"serialised auxpow\"")
+        },
+    }.Check(request);
+    
+    return AuxpowMiner::get().submitAuxBlock(request,
+                                              request.params[0].get_str(),
+                                              request.params[1].get_str());
 }
 
 static UniValue estimatesmartfee(const JSONRPCRequest& request)
@@ -1266,6 +1534,9 @@ static const CRPCCommand commands[] =
     { "mining",             "getblocktemplate",       &getblocktemplate,       {"template_request"} },
     { "mining",             "submitblock",            &submitblock,            {"hexdata","dummy"} },
     { "mining",             "submitheader",           &submitheader,           {"hexdata"} },
+    { "mining",             "getauxblock",            &getauxblock,            {"hash", "auxpow"} },
+    { "mining",             "createauxblock",         &createauxblock,         {"address"} },
+    { "mining",             "submitauxblock",         &submitauxblock,         {"hash", "auxpow"} },
 
 #if ENABLE_MINER
     { "generating",         "generatetoaddress",      &generatetoaddress,      {"nblocks","address","maxtries"} },

@@ -7,11 +7,19 @@ assignees: ''
 
 ---
 
+<<<<<<< HEAD
 <!-- This issue tracker is only for technical issues related to Dash Core.
 
 General dash questions and/or support requests are best directed to the Dash Forum at https://www.dash.org/forum/
 
 For reporting security issues, please read instructions at https://www.dash.org/bug-bounty/
+=======
+<!-- This issue tracker is only for technical issues related to Hootchain Core.
+
+General hoot questions and/or support requests are best directed to the Hootchain Forum at https://www.hoot.org/forum/
+
+For reporting security issues, please read instructions at https://www.hoot.org/bug-bounty/
+>>>>>>> temporal
 
 If the node is "stuck" during sync or giving "block checksum mismatch" errors, please ensure your hardware is stable by running memtest and observe CPU temperature with a load-test tool such as linpack before creating an issue! -->
 
@@ -31,7 +39,11 @@ If the node is "stuck" during sync or giving "block checksum mismatch" errors, p
 
 **System information**
 
+<<<<<<< HEAD
 <!-- What version of Dash Core are you using, where did you get it (website, self-compiled, etc)? -->
+=======
+<!-- What version of Hootchain Core are you using, where did you get it (website, self-compiled, etc)? -->
+>>>>>>> temporal
 
 <!-- What type of machine are you observing the error on (OS/CPU and disk type)? -->
 

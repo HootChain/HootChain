@@ -555,16 +555,6 @@ public:
     }
 };
 
-
-constexpr int llmq_max_blocks() {
-    int max_blocks{0};
-    for (const auto& llmq : Consensus::available_llmqs) {
-        int blocks = (llmq.useRotation ? 1 : llmq.signingActiveQuorumCount) * llmq.dkgInterval;
-        max_blocks = std::max(max_blocks, blocks);
-    }
-    return max_blocks;
-}
-
 struct MNListUpdates
 {
     CDeterministicMNList old_list;
@@ -576,7 +566,7 @@ class CDeterministicMNManager
 {
     static constexpr int DISK_SNAPSHOT_PERIOD = 576; // once per day
     // keep cache for enough disk snapshots to have all active quourms covered
-    static constexpr int DISK_SNAPSHOTS = llmq_max_blocks() / DISK_SNAPSHOT_PERIOD + 1;
+    static constexpr int DISK_SNAPSHOTS = 2304 / DISK_SNAPSHOT_PERIOD + 1;
     static constexpr int LIST_DIFFS_CACHE_SIZE = DISK_SNAPSHOT_PERIOD * DISK_SNAPSHOTS;
 
 private:

@@ -49,7 +49,11 @@ jobs:
       id: docker_meta
       uses: docker/metadata-action@v4
       with:
+<<<<<<< HEAD
         images: dashpay/dashd
+=======
+        images: hoot-labs/hoot
+>>>>>>> temporal
         tags: |
           type=match,pattern=v(\d+),group=1
           type=match,pattern=v(\d+.\d+),group=1

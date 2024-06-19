@@ -81,7 +81,7 @@ public:
     };
 
 private:
-    Consensus::LLMQType llmqType{Consensus::LLMQType::LLMQ_NONE};
+    Consensus::LLMQType llmqType{Consensus::LLMQ_NONE};
     uint256 quorumHash;
     uint16_t nDataMask{0};
     uint256 proTxHash;
@@ -167,7 +167,7 @@ class CQuorum
 {
     friend class CQuorumManager;
 public:
-    const Consensus::LLMQParams params;
+    const Consensus::LLMQParams& params;
     CFinalCommitmentPtr qc;
     const CBlockIndex* m_quorum_base_block_index{nullptr};
     uint256 minedBlockHash;

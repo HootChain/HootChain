@@ -33,20 +33,35 @@ stages:
 builddepends: &builddepends
   stage: build depends
   script:
+<<<<<<< HEAD
     - $DOCKER_RUN_IN_BUILDER ./ci/dash/build_depends.sh
+=======
+    - $DOCKER_RUN_IN_BUILDER ./ci/hoot/build_depends.sh
+>>>>>>> temporal
 
 buildsrc: &buildsrc
   stage: build src
   script:
+<<<<<<< HEAD
     - $DOCKER_RUN_IN_BUILDER ./ci/dash/build_depends.sh
     - $DOCKER_RUN_IN_BUILDER ./ci/dash/build_src.sh
+=======
+    - $DOCKER_RUN_IN_BUILDER ./ci/hoot/build_depends.sh
+    - $DOCKER_RUN_IN_BUILDER ./ci/hoot/build_src.sh
+>>>>>>> temporal
 
 runtests: &runtests
   stage: run tests
   script:
+<<<<<<< HEAD
     - $DOCKER_RUN_IN_BUILDER ./ci/dash/build_depends.sh
     - $DOCKER_RUN_IN_BUILDER ./ci/dash/build_src.sh
     - $DOCKER_RUN_IN_BUILDER ./ci/dash/test_unittests.sh
+=======
+    - $DOCKER_RUN_IN_BUILDER ./ci/hoot/build_depends.sh
+    - $DOCKER_RUN_IN_BUILDER ./ci/hoot/build_src.sh
+    - $DOCKER_RUN_IN_BUILDER ./ci/hoot/test_unittests.sh
+>>>>>>> temporal
     - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then extended="--extended --exclude feature_pruning,feature_dbcrash"; fi
     - $DOCKER_RUN_IN_BUILDER ./ci/test_integrationtests.sh --quiet --jobs=3 ${extended}
 
@@ -54,7 +69,11 @@ builddocker: &builddocker
   stage: build docker
   script:
     # no need to run tests again here
+<<<<<<< HEAD
     - if [ "$DOCKER_BUILD" = "true" ]; then $DOCKER_RUN_IN_BUILDER ./ci/dash/build_depends.sh && $DOCKER_RUN_IN_BUILDER ./ci/dash/build_src.sh && BUILD_DIR=build-ci/dashcore-$BUILD_TARGET ./ci/dash/build-docker.sh; fi
+=======
+    - if [ "$DOCKER_BUILD" = "true" ]; then $DOCKER_RUN_IN_BUILDER ./ci/hoot/build_depends.sh && $DOCKER_RUN_IN_BUILDER ./ci/hoot/build_src.sh && BUILD_DIR=build-ci/hootcore-$BUILD_TARGET ./ci/hoot/build-docker.sh; fi
+>>>>>>> temporal
     - CI_RETRY_EXE="travis_retry"
     - CACHE_ERR_MSG="Error! Initial build successful, but not enough time remains to run later build stages and tests. See https://docs.travis-ci.com/user/customizing-the-build#build-timeouts . Please manually re-run this job by using the travis restart button. The next run should not time out because the build cache has been saved."
 before_install:
@@ -138,7 +157,11 @@ jobs:
 
 before_cache:
   # Save builder image
+<<<<<<< HEAD
   - docker save dash-builder-$BUILD_TARGET-$TRAVIS_JOB_NUMBER $(docker history -q dash-builder-$BUILD_TARGET-$TRAVIS_JOB_NUMBER | grep -v \<missing\>) | gzip -2 > $HOME/cache/docker/dash-builder-$BUILD_TARGET.tar.gz
+=======
+  - docker save hoot-builder-$BUILD_TARGET-$TRAVIS_JOB_NUMBER $(docker history -q hoot-builder-$BUILD_TARGET-$TRAVIS_JOB_NUMBER | grep -v \<missing\>) | gzip -2 > $HOME/cache/docker/hoot-builder-$BUILD_TARGET.tar.gz
+>>>>>>> temporal
 
 install:
     # Fix annoying Travis bug: a branch with a single commit has an empty TRAVIS_COMMIT_RANGE sometimes
@@ -155,7 +178,11 @@ install:
     # Keep this as it makes caching related debugging easier
     - ls -lah $HOST_CACHE_DIR && ls -lah $HOST_CACHE_DIR/depends && ls -lah $HOST_CACHE_DIR/ccache && ls -lah $HOST_CACHE_DIR/docker
     # Load cached builder image
+<<<<<<< HEAD
     - if [ -f $HOST_CACHE_DIR/docker/dash-builder-$BUILD_TARGET.tar.gz ]; then zcat $HOST_CACHE_DIR/docker/dash-builder-$BUILD_TARGET.tar.gz | docker load || true; fi
+=======
+    - if [ -f $HOST_CACHE_DIR/docker/hoot-builder-$BUILD_TARGET.tar.gz ]; then zcat $HOST_CACHE_DIR/docker/hoot-builder-$BUILD_TARGET.tar.gz | docker load || true; fi
+>>>>>>> temporal
     - travis_retry docker pull ubuntu:focal
     - travis_retry docker build -t $BUILDER_IMAGE_NAME --build-arg=USER_ID=$UID --build-arg=GROUP_ID=$UID --build-arg=BUILD_TARGET=$BUILD_TARGET -f contrib/containers/ci/Dockerfile ci
 before_script:
@@ -163,15 +190,26 @@ before_script:
     # See https://github.com/travis-ci/travis-ci/issues/4704. If this gets fixed, this line can also be removed.
     - python3 -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); fcntl.fcntl(sys.stdout, fcntl.F_SETFL, flags&~os.O_NONBLOCK);'
     # Build docker image only for develop branch of the main repo
+<<<<<<< HEAD
     - if [ "$TRAVIS_REPO_SLUG" != "dashpay/dash" -o "$TRAVIS_BRANCH" != "develop" -o "$TRAVIS_PULL_REQUEST" != "false" ]; then export DOCKER_BUILD="false"; echo DOCKER_BUILD=$DOCKER_BUILD; fi
     # TODO(ignore if don't use travis): Check keys and signed commits
     #- if [ "$TRAVIS_REPO_SLUG" = "dashpay/dash" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then travis_retry gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys $(<contrib/verify-commits/trusted-keys); fi
     #- if [ "$TRAVIS_REPO_SLUG" = "dashpay/dash" -a "$TRAVIS_EVENT_TYPE" = "cron" ]; then travis_wait 30 contrib/verify-commits/verify-commits.py; fi
+=======
+    - if [ "$TRAVIS_REPO_SLUG" != "hoot-labs/hoot" -o "$TRAVIS_BRANCH" != "develop" -o "$TRAVIS_PULL_REQUEST" != "false" ]; then export DOCKER_BUILD="false"; echo DOCKER_BUILD=$DOCKER_BUILD; fi
+    # TODO(ignore if don't use travis): Check keys and signed commits
+    #- if [ "$TRAVIS_REPO_SLUG" = "hoot-labs/hoot" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then travis_retry gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys $(<contrib/verify-commits/trusted-keys); fi
+    #- if [ "$TRAVIS_REPO_SLUG" = "hoot-labs/hoot" -a "$TRAVIS_EVENT_TYPE" = "cron" ]; then travis_wait 30 contrib/verify-commits/verify-commits.py; fi
+>>>>>>> temporal
 after_script:
     - echo $TRAVIS_COMMIT_RANGE
     - echo $TRAVIS_COMMIT_LOG
 after_success:
+<<<<<<< HEAD
     - if [ "$DOCKER_BUILD" = "true" ]; then docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD && ./ci/dash/push-docker.sh; fi
+=======
+    - if [ "$DOCKER_BUILD" = "true" ]; then docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD && ./ci/hoot/push-docker.sh; fi
+>>>>>>> temporal
     - stage: lint
       name: 'lint'
       env:

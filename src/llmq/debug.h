@@ -50,7 +50,7 @@ public:
 class CDKGDebugSessionStatus
 {
 public:
-    Consensus::LLMQType llmqType{Consensus::LLMQType::LLMQ_NONE};
+    Consensus::LLMQType llmqType{Consensus::LLMQ_NONE};
     uint256 quorumHash;
     uint32_t quorumHeight{0};
     QuorumPhase phase{0};

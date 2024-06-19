@@ -2,7 +2,7 @@ Release Process
 ====================
 
 * [ ] Update translations, see [translation_process.md](https://github.com/dashpay/dash/blob/master/doc/translation_process.md#synchronising-translations).
-* [ ] Update manpages, see [gen-manpages.sh](https://github.com/dashpay/dash/blob/master/contrib/devtools/README.md#gen-manpagessh).
+* [ ] Update manpages, see [gen-manpages.sh](https://github.com/hoot-labs/hoot/blob/master/contrib/devtools/README.md#gen-manpagessh).
 
 Before every minor and major release:
 
@@ -40,10 +40,10 @@ Check out the source code in the following directory hierarchy.
 cd /path/to/your/toplevel/build
 git clone https://github.com/dashpay/guix.sigs.git
 git clone https://github.com/dashpay/dash-detached-sigs.git
-git clone https://github.com/dashpay/dash.git
+git clone https://github.com/hoot/hoot.git
 ```
 
-### Dash Core maintainers/release engineers, suggestion for writing release notes
+### Hootchain Core maintainers/release engineers, suggestion for writing release notes
 
 Write release notes. git shortlog helps a lot, for example:
 
@@ -65,10 +65,10 @@ git tag -s v(new version, e.g. 20.0.0)
 
 ### Setup and perform Guix builds
 
-Checkout the Dash Core version you'd like to build:
+Checkout the Hootchain Core version you'd like to build:
 
 ```sh
-pushd ./dash
+pushd ./hoot
 export SIGNER='(your builder key, ie udjinm6, pasta, etc)'
 export VERSION='(new version, e.g. 20.0.0)'
 git fetch "v${VERSION}"
@@ -85,7 +85,7 @@ git -C ./guix.sigs pull
 
 ### Create the macOS SDK tarball: (first time, or when SDK version changes)
 
-_Note: this step can be skipped if [our CI](https://github.com/dashpay/dash/blob/master/ci/test/00_setup_env.sh#L64) still uses bitcoin's SDK package (see SDK_URL)_
+_Note: this step can be skipped if [our CI](https://github.com/hoot-labs/hoot/blob/master/ci/test/00_setup_env.sh#L64) still uses bitcoin's SDK package (see SDK_URL)_
 
 Create the macOS SDK tarball, see the [macOS build
 instructions](build-osx.md#deterministic-macos-dmg-notes) for
@@ -99,7 +99,7 @@ Follow the relevant Guix README.md sections:
 
 ### Verify other builders' signatures to your own. (Optional)
 
-Add other builders keys to your gpg keyring, and/or refresh keys: See `../dash/contrib/builder-keys/README.md`.
+Add other builders keys to your gpg keyring, and/or refresh keys: See `../hoot/contrib/builder-keys/README.md`.
 
 Follow the relevant Guix README.md sections:
 - [Verifying build output attestations](/contrib/guix/README.md#verifying-build-output-attestations)
@@ -122,11 +122,11 @@ Codesigner only: Create Windows/macOS detached signatures:
 
 Codesigner only: Sign the macOS binary:
 
-* Transfer `dashcore-osx-unsigned.tar.gz` to macOS for signing
+* Transfer `hootcore-osx-unsigned.tar.gz` to macOS for signing
 * Extract and sign:
 
     ```sh
-    tar xf dashcore-osx-unsigned.tar.gz
+    tar xf hootcore-osx-unsigned.tar.gz
     ./detached-sig-create.sh -s "Key ID" -o runtime
     ```
 
@@ -138,7 +138,7 @@ Codesigner only: Sign the windows binaries:
 * Extract and sign:
 
     ```sh
-    tar xf dashcore-win-unsigned.tar.gz
+    tar xf hootcore-win-unsigned.tar.gz
     ./detached-sig-create.sh -key /path/to/codesign.key
     ```
 
@@ -151,7 +151,7 @@ However if this is done, once the release has been tagged in the bitcoin-detache
 Codesigner only: Commit the detached codesign payloads:
 
 ```sh
-pushd ~/dashcore-detached-sigs
+pushd ~/hootcore-detached-sigs
 # checkout the appropriate branch for this release series
 git checkout "v${VERSION}"
 rm -rf *
@@ -166,7 +166,7 @@ popd
 Non-codesigners: wait for Windows/macOS detached signatures:
 
 - Once the Windows/macOS builds each have 3 matching signatures, they will be signed with their respective release keys.
-- Detached signatures will then be committed to the [dash-detached-sigs](https://github.com/dashpay/dash-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+- Detached signatures will then be committed to the [hoot-detached-sigs](https://github.com/hoot-labs/hoot-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
 
 Create (and optionally verify) the codesigned outputs:
 - [Codesigning](/contrib/guix/README.md#codesigning)
@@ -189,7 +189,7 @@ popd
     ```
 * [ ] GPG sign each download / binary
 * [ ] Upload zips and installers, as well as `SHA256SUMS.asc` from last step, to GitHub as GitHub draft release.
-    1. The contents of each `./dash/guix-build-${VERSION}/output/${HOST}/` directory, except for
+    1. The contents of each `./hoot/guix-build-${VERSION}/output/${HOST}/` directory, except for
        `*-debug*` files.
 
        Guix will output all of the results into host subdirectories, but the `SHA256SUMS`
@@ -201,10 +201,10 @@ popd
        for troubleshooting by developers. It is assumed that anyone that is
        interested in debugging can run guix to generate the files for
        themselves. To avoid end-user confusion about which file to pick, as well
-       as save storage space *do not upload these to the dash.org server*.
+       as save storage space *do not upload these to the hoot.org server*.
 
        ```sh
-       find guix-build-${VERSION}/output/ -maxdepth 2 -type f -not -name "SHA256SUMS.part" -and -not -name "*debug*" -exec scp {} user@dash.org:/var/www/bin/dash-core-${VERSION} \;
+       find guix-build-${VERSION}/output/ -maxdepth 2 -type f -not -name "SHA256SUMS.part" -and -not -name "*debug*" -exec scp {} user@hoot.org:/var/www/bin/hoot-core-${VERSION} \;
        ```
 
     2. The `SHA256SUMS` file
@@ -214,11 +214,11 @@ popd
 * [ ] Notarize macOS binaries
 * [ ] Publish release on GitHub
 * [ ] Fast-forward `master` branch on GitHub
-* [ ] Update the dash.org download links
+* [ ] Update the hoot.org download links
 * [ ] Ensure that docker hub images are up to date
 
 ### Announce the release:
-* [ ] Release on Dash forum: https://www.dash.org/forum/topic/official-announcements.54/ (necessary so we have a permalink to use on twitter, reddit, etc.)
+* [ ] Release on Hootchain forum: https://www.hoot.org/forum/topic/official-announcements.54/ (necessary so we have a permalink to use on twitter, reddit, etc.)
 * [ ] Prepare product brief (major versions only)
 * [ ] Prepare a release announcement tweet
 * [ ] Follow-up tweets with any important block heights for consensus changes
@@ -227,8 +227,8 @@ popd
 
 ### After the release:
 * [ ] Submit patches to BTCPay to ensure they use latest / compatible version see https://github.com/dashpay/dash/issues/4211#issuecomment-966608207
-* [ ] Update Core and User docs (docs.dash.org)
-* [ ] Test Docker build runs without error in Dashmate
+* [ ] Update Core and User docs (docs.hoot.org)
+* [ ] Test Docker build runs without error in Hootchainmate
 * [ ] Add new Release Process items to repo [Release Process](release-process.md) document
 * [ ] Merge `master` branch back into `develop` so that `master` could be fast-forwarded on next release again
 
@@ -249,7 +249,7 @@ Open Terminal, and navigate to the location of the .dmg file.
 Then, run the following command to notarize the .dmg file:
 
 ```sh
-xcrun notarytool submit dashcore-{version}-{x86_64, arm64}-apple-darwin.dmg --keychain-profile "AC_PASSWORD" --wait
+xcrun notarytool submit hootcore-{version}-{x86_64, arm64}-apple-darwin.dmg --keychain-profile "AC_PASSWORD" --wait
 ```
 
 Replace `{version}` with the version you are notarizing. This command uploads the .dmg file to Apple's notary service.
@@ -260,14 +260,14 @@ If the notarization process is successful, the notary service generates a log fi
 
 #### Notarization Validation
 
-After successfully notarizing the .dmg file, extract `Dash-Qt.app` from the .dmg.
+After successfully notarizing the .dmg file, extract `Hootchain-Qt.app` from the .dmg.
 To verify that the notarization process was successful, run the following command:
 
 ```sh
-spctl -a -vv -t install Dash-Qt.app
+spctl -a -vv -t install Hootchain-Qt.app
 ```
 
-Replace `Dash-Qt.app` with the path to your .app file. This command checks whether your .app file passes Gatekeeper’s
+Replace `Hootchain-Qt.app` with the path to your .app file. This command checks whether your .app file passes Gatekeeper’s
 checks. If the app is successfully notarized, the command line will include a line stating `source=<Notarized Developer ID>`.
 
 ### Additional information

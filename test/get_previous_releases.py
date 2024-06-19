@@ -120,9 +120,9 @@ def download_binary(tag, args) -> int:
     platform = args.platform
     if tag < "v20" and platform in ["x86_64-apple-darwin", "aarch64-apple-darwin"]:
         platform = "osx64"
-    tarball = 'dashcore-{tag}-{platform}.tar.gz'.format(
+    tarball = 'hootcore-{tag}-{platform}.tar.gz'.format(
         tag=tag[1:], platform=platform)
-    tarballUrl = 'https://github.com/dashpay/dash/{bin_path}/{tarball}'.format(
+    tarballUrl = 'https://github.com/hoot-labs/hoot/{bin_path}/{tarball}'.format(
         bin_path=bin_path, tarball=tarball)
 
     print('Fetching: {tarballUrl}'.format(tarballUrl=tarballUrl))
@@ -161,7 +161,7 @@ def download_binary(tag, args) -> int:
     filename = tag[1:-2] if tag[1:3] == "0." else tag[1:]
     ret = subprocess.run(['tar', '-zxf', tarball, '-C', tag,
                           '--strip-components=1',
-                          'dashcore-{tag}'.format(tag=filename, platform=args.platform)]).returncode
+                          'hootcore-{tag}'.format(tag=filename, platform=args.platform)]).returncode
     if ret != 0:
         print(f"Failed to extract the {tag} tarball")
         return ret
@@ -199,7 +199,7 @@ def download_binary(tag, args) -> int:
 
 
 def build_release(tag, args) -> int:
-    githubUrl = "https://github.com/dashpay/dash"
+    githubUrl = "https://github.com/hoot-labs/hoot"
     if args.remove_dir:
         if Path(tag).is_dir():
             shutil.rmtree(tag)
@@ -243,7 +243,7 @@ def build_release(tag, args) -> int:
         # Move binaries, so they're in the same place as in the
         # release download
         Path('bin').mkdir(exist_ok=True)
-        files = ['dashd', 'dash-cli', 'dash-tx']
+        files = ['hootd', 'hoot-cli', 'hoot-tx']
         for f in files:
             Path('src/'+f).rename('bin/'+f)
     return 0

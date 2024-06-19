@@ -122,7 +122,7 @@ private:
     CDKGDebugManager& dkgDebugManager;
     CDKGSessionManager& dkgManager;
     CQuorumBlockProcessor& quorumBlockProcessor;
-    const Consensus::LLMQParams params;
+    const Consensus::LLMQParams& params;
     const int quorumIndex;
 
     QuorumPhase phase GUARDED_BY(cs) {QuorumPhase::Idle};

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=Hootchain Core
+Comment=Hootchain P2P Cryptocurrency
+Comment[de]=Verbinde mit dem Hootchain peer-to-peer Netzwerk
+Comment[fr]=Hootchain, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Hootchain, eşten eşe kriptografik sanal para birimi
+Exec=hoot-qt %u
+Terminal=false
+Type=Application
+Icon=hoot128
+MimeType=x-scheme-handler/hoot;
+Categories=Office;Finance;P2P;Network;Qt;
+StartupWMClass=Hootchain-qt

@@ -19,4 +19,8 @@ assignees: ''
 
 #### Want to work on this issue?
 
+<<<<<<< HEAD
 For guidance on contributing, please read [CONTRIBUTING.md](https://github.com/dashpay/dash/blob/master/CONTRIBUTING.md) before opening your pull request.
+=======
+For guidance on contributing, please read [CONTRIBUTING.md](https://github.com/hoot-labs/hoot/blob/master/CONTRIBUTING.md) before opening your pull request.
+>>>>>>> temporal

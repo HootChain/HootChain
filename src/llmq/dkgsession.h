@@ -85,7 +85,7 @@ public:
 class CDKGComplaint
 {
 public:
-    Consensus::LLMQType llmqType{Consensus::LLMQType::LLMQ_NONE};
+    Consensus::LLMQType llmqType{Consensus::LLMQ_NONE};
     uint256 quorumHash;
     uint256 proTxHash;
     std::vector<bool> badMembers;
@@ -155,7 +155,7 @@ public:
 class CDKGPrematureCommitment
 {
 public:
-    Consensus::LLMQType llmqType{Consensus::LLMQType::LLMQ_NONE};
+    Consensus::LLMQType llmqType{Consensus::LLMQ_NONE};
     uint256 quorumHash;
     uint256 proTxHash;
     std::vector<bool> validMembers;
@@ -265,7 +265,7 @@ class CDKGSession
     friend class CDKGLogger;
 
 private:
-    const Consensus::LLMQParams params;
+    const Consensus::LLMQParams& params;
 
     CBLSWorker& blsWorker;
     CBLSWorkerCache cache;

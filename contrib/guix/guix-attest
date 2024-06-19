@@ -3,7 +3,7 @@ export LC_ALL=C
 set -e -o pipefail
 
 # Source the common prelude, which:
-#   1. Checks if we're at the top directory of the Dash Core repository
+#   1. Checks if we're at the top directory of the Hootchain Core repository
 #   2. Defines a few common functions and variables
 #
 # shellcheck source=libexec/prelude.bash
@@ -192,7 +192,6 @@ mkdir -p "$outsigdir"
 
     if (( ${#noncodesigned_fragments[@]} )); then
         cat "${noncodesigned_fragments[@]}" \
-            | grep -v apple-darwin-debug.tar \
             | sort -u \
             | sort -k2 \
             | basenameify_SHA256SUMS \
@@ -221,7 +220,6 @@ mkdir -p "$outsigdir"
         # Note: all.SHA256SUMS attests to all of $sha256sum_fragments, but is
         #       not needed if there are no $codesigned_fragments
         cat "${sha256sum_fragments[@]}" \
-            | grep -v apple-darwin-debug.tar \
             | sort -u \
             | sort -k2 \
             | basenameify_SHA256SUMS \

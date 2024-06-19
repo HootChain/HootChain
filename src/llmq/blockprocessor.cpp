@@ -624,7 +624,7 @@ std::map<Consensus::LLMQType, std::vector<const CBlockIndex*>> CQuorumBlockProce
 {
     std::map<Consensus::LLMQType, std::vector<const CBlockIndex*>> ret;
 
-    for (const auto& params : Params().GetConsensus().llmqs) {
+    for (const auto& [_, params] : Params().GetConsensus().llmqs) {
         auto& v = ret[params.type];
         v.reserve(params.signingActiveQuorumCount);
         if (IsQuorumRotationEnabled(params, pindex)) {

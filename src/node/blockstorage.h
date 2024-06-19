@@ -13,6 +13,7 @@
 
 class ArgsManager;
 class CBlock;
+class CBlockHeader;
 class CBlockIndex;
 class CBlockUndo;
 class CChain;
@@ -29,6 +30,7 @@ static constexpr bool DEFAULT_STOPAFTERBLOCKIMPORT{false};
 /** Functions for disk access for blocks */
 bool ReadBlockFromDisk(CBlock& block, const FlatFilePos& pos, const Consensus::Params& consensusParams);
 bool ReadBlockFromDisk(CBlock& block, const CBlockIndex* pindex, const Consensus::Params& consensusParams);
+bool ReadBlockHeaderFromDisk(CBlockHeader& block, const CBlockIndex* pindex, const Consensus::Params& consensusParams);
 
 bool UndoReadFromDisk(CBlockUndo& blockundo, const CBlockIndex* pindex);
 

@@ -633,6 +633,8 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage,
 #btnVerifyMessage {
+    min-height: 70px;
+    max-height: 70px;
     background: none;
     border-radius: 0px;
     color: red;
@@ -656,6 +658,8 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage:hover:checked,
 #btnVerifyMessage:hover:checked {
+    min-height: 70px;
+    max-height: 70px;
     border: none;
     color: red;
     border-radius: 0px;
@@ -679,6 +683,8 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage:hover:!checked,
 #btnVerifyMessage:hover:!checked {
+    min-height: 70px;
+    max-height: 70px;  
     border: none;
     color: red;
     border-radius: 0px;
@@ -702,6 +708,8 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage:checked,
 #btnVerifyMessage:checked {
+    min-height: 70px;
+    max-height: 70px;  
     border: none;
     color: red;
     border-radius: 0px;
@@ -724,6 +732,8 @@ QPushButton - Special case, tabbar replacement buttons
 /* Sign/Verify dialog buttons */
 #btnSignMessage:hover:pressed,
 #btnVerifyMessage:hover:pressed {
+    min-height: 70px;
+    max-height: 70px;
     border: none;
     border-radius: 0px;
     border-bottom: 2px solid red;
@@ -873,21 +883,23 @@ QToolBar / QToolButton
 QToolBar {
     background-color: red;
     border: none;
+    border-bottom: 2px solid #76b384;
     width: 100%;
     padding: 0;
     margin: 0;
     spacing: 0;
-    min-height: 50px;
-    max-height: 50px;
+    min-height: 70px;
+    max-height: 70px;
 }
 
 QToolBar > QToolButton {
     background-color: #00000000;
     border: none;
-    min-height: 50px;
-    max-height: 50px;
+    border-bottom: 2px solid #76b384;
+    min-height: 70px;
+    max-height: 70px;
     width: 100%;
-    padding: 1px;
+    padding: 0px;
     text-align: center;
 }
 
@@ -898,12 +910,6 @@ QToolBar > QToolButton:hover:!checked {
 
 QToolBar > QToolButton:disabled {
     color: red;
-}
-
-QToolBar QLabel#lblToolbarLogo {
-    padding: 12px;
-    image: url(':/images/dash_logo_toolbar');
-    height: 2.5em;
 }
 
 /******************************************************
@@ -991,11 +997,11 @@ AboutDialog
 
 QDialog#AboutDialog QLabel#label,
 QDialog#AboutDialog QLabel#copyrightLabel,
-QDialog#AboutDialog QLabel#label_2 { /* About Dash Contents */
+QDialog#AboutDialog QLabel#label_2 { /* About Hootchain Contents */
     margin-left: 10px;
 }
 
-QDialog#AboutDialog QLabel#label_2 { /* Margin for About Dash text */
+QDialog#AboutDialog QLabel#label_2 { /* Margin for About Hootchain text */
     margin-right: 10px;
 }
 
@@ -1288,7 +1294,7 @@ QDialog#OptionsDialog QLabel#label_3 { /* Translations Missing? Label */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
     padding-left: 8px;
     min-height: 60px;
-    color: #c79304;
+    color: #76b384;
 }
 
 QDialog#OptionsDialog #line,
@@ -1310,8 +1316,8 @@ QDialog#OptionsDialog QLabel#overriddenByCommandLineInfoLabel {
  ******************************************************/
 
 QWidget#OverviewPage QLabel#labelAlerts {
-     background-color: #c79304;
-     color: #222222;
+     background-color: #76b384;
+     color: #ffffff;
      border-radius: 5px;
      padding: 5px;
  }
@@ -1340,7 +1346,7 @@ QWidget .QFrame#frame .QLabel#label_5 { /* Wallet Label */
 
 QWidget .QFrame#frame .QLabel#labelWalletStatus { /* Wallet Sync Status */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
-    color: #a84832;
+    color: #76b384;
 }
 
 QWidget .QFrame#frame .QLabel#labelSpendable { /* Spendable Header */
@@ -1451,7 +1457,7 @@ QWidget .QFrame#frameCoinJoin .QLabel#labelCoinJoinHeader { /* CoinJoin Header *
 
 QWidget .QFrame#frameCoinJoin .QLabel#labelCoinJoinSyncStatus { /* CoinJoin Sync Status */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
-    color: #a84832;
+    color: #76b384;
 }
 
 QWidget .QFrame#frameCoinJoin  .QLabel#labelCoinJoinEnabledText { /* CoinJoin Enabled Status Label */
@@ -1539,7 +1545,7 @@ QWidget .QFrame#frame_2 .QLabel#label_4 { /* Recent Transactions Label */
 
 QWidget .QFrame#frame_2 .QLabel#labelTransactionsStatus { /* Recent Transactions Sync Status */
     qproperty-alignment: 'AlignVCenter | AlignLeft';
-    color: #a84832;
+    color: #76b384;
 }
 
 QWidget .QFrame#frame_2 QListView { /* Transaction List */
@@ -1591,8 +1597,8 @@ QWidget#RPCConsole QLabel#banHeading {
 }
 
 QWidget#RPCConsole QLabel#label_alerts {
-    background-color: #c79304;
-    color: #222222;
+    background-color: #76b384;
+    color: #ffffff;
     border-radius: 5px;
     padding: 5px;
 }
@@ -1639,7 +1645,7 @@ QWidget#RPCConsole .QGroupBox #line { /* Network In Line */
 }
 
 QWidget#RPCConsole .QGroupBox #line_2 { /* Network Out Line */
-    background-color: #a84832;
+    background-color: #76b384;
 }
 
 #rpcAutoCompleter {
@@ -1691,7 +1697,7 @@ QDialog#SendCoinsDialog .QFrame#frameCoinControl .QLabel#labelCoinControlChangeL
 }
 
 QDialog#SendCoinsDialog .QFrame#frameCoinControl .QLabel#labelCoinControlInsuffFunds { /* Insufficient Funds Label */
-    color: #a84832;
+    color: #DC1919;
 }
 
 QDialog#SendCoinsDialog .QScrollArea#scrollArea .QWidget#scrollAreaWidgetContents { /* Send To Widget */

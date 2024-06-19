@@ -78,10 +78,11 @@ UniValue CSimplifiedMNListEntry::ToJson(bool extended) const
     obj.pushKV("pubKeyOperator", pubKeyOperator.ToString());
     obj.pushKV("votingAddress", EncodeDestination(PKHash(keyIDVoting)));
     obj.pushKV("isValid", isValid);
-    if (nType == MnType::Evo) {
-        obj.pushKV("platformHTTPPort", platformHTTPPort);
-        obj.pushKV("platformNodeID", platformNodeID.ToString());
-    }
+    // Disable EvoNodes
+    // if (nType == MnType::Evo) {
+    //     obj.pushKV("platformHTTPPort", platformHTTPPort);
+    //     obj.pushKV("platformNodeID", platformNodeID.ToString());
+    // }
 
     if (extended) {
         CTxDestination dest;

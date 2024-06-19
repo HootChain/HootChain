@@ -22,10 +22,10 @@ BitcoinUnits::BitcoinUnits(QObject *parent):
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(DASH);
-    unitlist.append(mDASH);
-    unitlist.append(uDASH);
-    unitlist.append(duffs);
+    unitlist.append(HOOT);
+    unitlist.append(mHOOT);
+    unitlist.append(uHOOT);
+    unitlist.append(muffs);
     return unitlist;
 }
 
@@ -33,10 +33,10 @@ bool BitcoinUnits::valid(int unit)
 {
     switch(unit)
     {
-    case DASH:
-    case mDASH:
-    case uDASH:
-    case duffs:
+    case HOOT:
+    case mHOOT:
+    case uHOOT:
+    case muffs:
         return true;
     default:
         return false;
@@ -49,10 +49,10 @@ QString BitcoinUnits::name(int unit)
     {
         switch(unit)
         {
-            case DASH: return QString("DASH");
-            case mDASH: return QString("mDASH");
-            case uDASH: return QString::fromUtf8("μDASH");
-            case duffs: return QString("duffs");
+            case HOOT: return QString("HOOT");
+            case mHOOT: return QString("mHOOT");
+            case uHOOT: return QString::fromUtf8("μHOOT");
+            case muffs: return QString("muffs");
             default: return QString("???");
         }
     }
@@ -60,10 +60,10 @@ QString BitcoinUnits::name(int unit)
     {
         switch(unit)
         {
-            case DASH: return QString("tDASH");
-            case mDASH: return QString("mtDASH");
-            case uDASH: return QString::fromUtf8("μtDASH");
-            case duffs: return QString("tduffs");
+            case HOOT: return QString("tHOOT");
+            case mHOOT: return QString("mtHOOT");
+            case uHOOT: return QString::fromUtf8("μtHOOT");
+            case muffs: return QString("tmuffs");
             default: return QString("???");
         }
     }
@@ -75,10 +75,10 @@ QString BitcoinUnits::description(int unit)
     {
         switch(unit)
         {
-            case DASH: return QString("Dash");
-            case mDASH: return QString("Milli-Dash (1 / 1" THIN_SP_UTF8 "000)");
-            case uDASH: return QString("Micro-Dash (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            case duffs: return QString("Ten Nano-Dash (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case HOOT: return QString("Hootchain");
+            case mHOOT: return QString("Milli-Hootchain (1 / 1" THIN_SP_UTF8 "000)");
+            case uHOOT: return QString("Micro-Hootchain (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case muffs: return QString("Ten Nano-Hootchain (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
             default: return QString("???");
         }
     }
@@ -86,10 +86,10 @@ QString BitcoinUnits::description(int unit)
     {
         switch(unit)
         {
-            case DASH: return QString("TestDashs");
-            case mDASH: return QString("Milli-TestDash (1 / 1" THIN_SP_UTF8 "000)");
-            case uDASH: return QString("Micro-TestDash (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-            case duffs: return QString("Ten Nano-TestDash (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case HOOT: return QString("TestHootchains");
+            case mHOOT: return QString("Milli-TestHootchain (1 / 1" THIN_SP_UTF8 "000)");
+            case uHOOT: return QString("Micro-TestHootchain (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            case muffs: return QString("Ten Nano-TestHootchain (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
             default: return QString("???");
         }
     }
@@ -99,10 +99,10 @@ qint64 BitcoinUnits::factor(int unit)
 {
     switch(unit)
     {
-    case DASH:  return 100000000;
-    case mDASH: return 100000;
-    case uDASH: return 100;
-    case duffs: return 1;
+    case HOOT:  return 100000000;
+    case mHOOT: return 100000;
+    case uHOOT: return 100;
+    case muffs: return 1;
     default:   return 100000000;
     }
 }
@@ -111,10 +111,10 @@ int BitcoinUnits::decimals(int unit)
 {
     switch(unit)
     {
-    case DASH: return 8;
-    case mDASH: return 5;
-    case uDASH: return 2;
-    case duffs: return 0;
+    case HOOT: return 8;
+    case mHOOT: return 5;
+    case uHOOT: return 2;
+    case muffs: return 0;
     default: return 0;
     }
 }

@@ -15,7 +15,8 @@
 #include <script/sign.h>
 #include <script/signingprovider.h>
 #include <script/standard.h>
-#include <univalue.h>
+// #include <univalue.h>
+#include <univalue/include/univalue.h>
 #include <util/check.h>
 #include <util/strencodings.h>
 
@@ -30,7 +31,7 @@
 extern const std::string UNIX_EPOCH_TIME;
 
 /**
- * Example Dash addresses for the RPCExamples help documentation. They are intentionally
+ * Example Hootchain addresses for the RPCExamples help documentation. They are intentionally
  * invalid to prevent accidental transactions by users.
  */
 extern const std::string EXAMPLE_ADDRESS[2];

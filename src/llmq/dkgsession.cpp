@@ -57,7 +57,7 @@ double GetSimulatedErrorRate(DKGError::type type)
 
 bool CDKGSession::ShouldSimulateError(DKGError::type type) const
 {
-    if (params.type != Consensus::LLMQType::LLMQ_TEST) {
+    if (params.type != Consensus::LLMQ_TEST) {
         return false;
     }
     double rate = GetSimulatedErrorRate(type);

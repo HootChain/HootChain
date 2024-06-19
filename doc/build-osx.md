@@ -26,7 +26,7 @@ If you run into issues, check [Homebrew's troubleshooting page](https://docs.bre
 See [dependencies.md](dependencies.md) for a complete overview.
 
 The wallet support requires one or both of the dependencies ([*SQLite*](#sqlite) and [*Berkeley DB*](#berkeley-db)) in the sections below.
-To build Dash Core without wallet, see [*Disable-wallet mode*](#disable-wallet-mode).
+To build Hootchain Core without wallet, see [*Disable-wallet mode*](#disable-wallet-mode).
 
 #### SQLite
 
@@ -63,17 +63,17 @@ Also, the Homebrew package could be installed:
 brew install berkeley-db4
 ```
 
-## Build Dash Core
+## Build Hootchain Core
 
-1. Clone the Dash Core source code:
+1. Clone the Hootchain Core source code:
     ```shell
-    git clone https://github.com/dashpay/dash
-    cd dash
+    git clone https://github.com/hoot-labs/hoot
+    cd hoot
     ```
 
-2.  Build Dash Core:
+2.  Build Hootchain Core:
 
-    Configure and build the headless Dash Core binaries as well as the GUI (if Qt is found).
+    Configure and build the headless Hootchain Core binaries as well as the GUI (if Qt is found).
 
     You can disable the GUI build by passing `--without-gui` to configure.
     ```shell
@@ -93,7 +93,7 @@ brew install berkeley-db4
     ```
 
 ## Disable-wallet mode
-When the intention is to run only a P2P node without a wallet, Dash Core may be
+When the intention is to run only a P2P node without a wallet, Hootchain Core may be
 compiled in disable-wallet mode with:
 ```shell
 ./configure --disable-wallet
@@ -105,30 +105,30 @@ Mining is also possible in disable-wallet mode using the `getblocktemplate` RPC 
 
 ## Running
 
-Dash Core is now available at `./src/dashd`
+Hootchain Core is now available at `./src/hootd`
 
 Before running, you may create an empty configuration file:
 ```shell
-mkdir -p "/Users/${USER}/Library/Application Support/DashCore"
+mkdir -p "/Users/${USER}/Library/Application Support/HootchainCore"
 
-touch "/Users/${USER}/Library/Application Support/DashCore/dash.conf"
+touch "/Users/${USER}/Library/Application Support/HootchainCore/hoot.conf"
 
-chmod 600 "/Users/${USER}/Library/Application Support/DashCore/dash.conf"
+chmod 600 "/Users/${USER}/Library/Application Support/HootchainCore/hoot.conf"
 ```
 
-The first time you run dashd, it will start downloading the blockchain. This process could take many hours, or even days on slower than average systems.
+The first time you run hootd, it will start downloading the blockchain. This process could take many hours, or even days on slower than average systems.
 
 You can monitor the download process by looking at the debug.log file:
 ```shell
-tail -f $HOME/Library/Application\ Support/DashCore/debug.log
+tail -f $HOME/Library/Application\ Support/HootchainCore/debug.log
 ```
 
 ## Other commands:
 
 ```shell
-./src/dashd -daemon      # Starts the dash daemon.
-./src/dash-cli --help    # Outputs a list of command-line options.
-./src/dash-cli help      # Outputs a list of RPC commands when the daemon is running.
+./src/hootd -daemon      # Starts the hoot daemon.
+./src/hoot-cli --help    # Outputs a list of command-line options.
+./src/hoot-cli help      # Outputs a list of RPC commands when the daemon is running.
 ```
 
 ## Notes

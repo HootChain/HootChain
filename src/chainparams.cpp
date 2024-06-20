@@ -247,7 +247,9 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("dnsseed.hootchain.org");
+        vSeeds.emplace_back("seed1.hootchain.org",false);
+        vSeeds.emplace_back("seed2.hootchain.org",false);
+        vSeeds.emplace_back("seed3.hootchain.org",false);
 
         // Hootchain addresses start with 'h'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,100);

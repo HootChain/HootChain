@@ -25,7 +25,7 @@ Development Process
 -------------------
 
 The `master` branch is meant to be stable. Development is normally done in separate branches.
-[Tags](https://github.com/hoot-labs/hoot/tags) are created to indicate new official,
+[Tags](https://github.com/hootchain/tags) are created to indicate new official,
 stable release versions of Hootchain Core.
 
 The `develop` branch is regularly built (see doc/build-*.md for instructions) and tested, but is not guaranteed to be

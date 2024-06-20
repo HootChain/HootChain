@@ -4,12 +4,9 @@ This is a mandatory fix mainnet release of Osmuim Core.
 
 Please report bugs using the issue tracker at GitHub:
 
-  <https://github.com/hoot-labs/hoot/issues>
+  <https://github.com/HootChain/issues>
 
 
 # Credits
 
-Thanks to everyone who directly contributed to this release:
-
-- mancini
-- nando
+Thanks to everyone who directly contributed to this release.

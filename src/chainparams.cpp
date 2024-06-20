@@ -331,7 +331,7 @@ public:
         consensus.nBudgetPaymentsStartBlock = 250;
         consensus.nBudgetPaymentsCycleBlocks = 50;
         consensus.nBudgetPaymentsWindowBlocks = 10;
-        consensus.nSuperblockStartBlock = 1;
+        consensus.nSuperblockStartBlock = 0;
         consensus.nSuperblockStartHash = uint256();
         consensus.nSuperblockCycle = 120; // Superblocks in 2h on testnet
         consensus.nSuperblockMaturityWindow = 8;

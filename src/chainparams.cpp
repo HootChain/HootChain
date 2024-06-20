@@ -452,7 +452,7 @@ public:
         nLLMQConnectionRetryTimeout = 60;
         m_is_mockable_chain = false;
 
-        nPoolMinParticipants = 2;
+        nPoolMinParticipants = 1;
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 

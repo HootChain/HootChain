@@ -773,7 +773,7 @@ public:
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.nPowTargetTimespan = 24 * 60 * 60; // Hootchain: 1 day
-        consensus.nPowTargetSpacing = 1.5 * 60; // Hootchain: 2.5 minutes
+        consensus.nPowTargetSpacing = 1 * 60; // Hootchain: 1 minutes
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
         consensus.nPowDGWHeight = 60; // same as mainnet
@@ -858,19 +858,19 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x2658412300003637e34e050350c090ffb1a7896578b8b30031e943dd04f4f099")},
+//                {0, uint256S("0x2658412300003637e34e050350c090ffb1a7896578b8b30031e943dd04f4f099")},
             }
         };
 
         m_assumeutxo_data = MapAssumeutxo{
-            {
-                110,
-                {AssumeutxoHash{uint256S("0x9b2a277a3e3b979f1a539d57e949495d7f8247312dbc32bce6619128c192b44b")}, 110},
-            },
-            {
-                210,
-                {AssumeutxoHash{uint256S("0xd4c97d32882583b057efc3dce673e44204851435e6ffcef20346e69cddc7c91e")}, 210},
-            },
+//            {
+//                110,
+//                {AssumeutxoHash{uint256S("0x9b2a277a3e3b979f1a539d57e949495d7f8247312dbc32bce6619128c192b44b")}, 110},
+//            },
+//            {
+//                210,
+//                {AssumeutxoHash{uint256S("0xd4c97d32882583b057efc3dce673e44204851435e6ffcef20346e69cddc7c91e")}, 210},
+//            },
         };
 
         chainTxData = ChainTxData{

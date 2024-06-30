@@ -461,7 +461,7 @@ public:
         vSporkAddresses = {"tfK72iaKZU5wycpdLyr9c1XizqzaXDZ8H2"};
         nMinSporkKeys = 1;
 
-        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19}  }; // 5% dev fee
+        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
         consensus.nDevfeePayment = DevfeePayment(rewardStructures, 1, "tbsxEMp8yq57Mkhaaqr1Wevw4n2P5TmkM4");
 
         checkpointData = {
@@ -564,8 +564,9 @@ public:
 
         pchMessageStart[0] = 0x64; // d
         pchMessageStart[1] = 0x4f; // O
-        pchMessageStart[2] = 0x53; // S
-        pchMessageStart[3] = 0x4d; // M
+        pchMessageStart[2] = 0x4f; // O
+        pchMessageStart[3] = 0x74; // t
+
         nDefaultPort = 19769;
         nDefaultPlatformP2PPort = 22100;
         nDefaultPlatformHTTPPort = 22101;
@@ -586,8 +587,8 @@ public:
         vSeeds.clear();
         //vSeeds.push_back(CDNSSeedData("devnet.hootchain.org"));
 
-        // Devnet Hootchain addresses start with 's'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,125);
+        // Devnet Hootchain addresses start with 't'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,128);
         // Devnet Hootchain script addresses start with '5' or '6'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,12);
         // Devnet private keys start with '9' or 'c' (Bitcoin defaults)
@@ -635,12 +636,12 @@ public:
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
         // privKey: cTpdxkCSW8vMMxpeWBtB51nm3VcGzEeDrDNvp2DvhQPy7VsFBroe
-        vSporkAddresses = {"sX3W6nh4imKkmdfy1qitonq8pdL8BQP2qf"};
+        vSporkAddresses = {"tfK72iaKZU5wycpdLyr9c1XizqzaXDZ8H2"};
         nMinSporkKeys = 1;
 
         // privKey: cN5rSgw6EfYcobq7ZkM8UcooKcSLJPMYkwmjsMdqqPvrfx35gUah
-        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19}  }; // 5% dev fee
-        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 200, "sZmtmzxjw7cfsy7SC5CmUHKREH2UYnYnuu");
+        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
+        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 200, "tbsxEMp8yq57Mkhaaqr1Wevw4n2P5TmkM4");
 
         checkpointData = (CCheckpointData) {
             {
@@ -811,8 +812,8 @@ public:
 
         pchMessageStart[0] = 0x72; // r
         pchMessageStart[1] = 0x4f; // O
-        pchMessageStart[2] = 0x53; // S
-        pchMessageStart[3] = 0x4d; // M
+        pchMessageStart[2] = 0x4f; // O
+        pchMessageStart[3] = 0x74; // t
         nDefaultPort = 19869;
         nDefaultPlatformP2PPort = 22200;
         nDefaultPlatformHTTPPort = 22201;
@@ -847,12 +848,12 @@ public:
         nPoolMinParticipants = 2;
         nPoolMaxParticipants = 20;
 
-        // privKey: cTpdxkCSW8vMMxpeWBtB51nm3VcGzEeDrDNvp2DvhQPy7VsFBroe
+        // privKey: 
         vSporkAddresses = {"sX3W6nh4imKkmdfy1qitonq8pdL8BQP2qf"};
         nMinSporkKeys = 1;
 
-        // privKey: cN5rSgw6EfYcobq7ZkM8UcooKcSLJPMYkwmjsMdqqPvrfx35gUah
-        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19}  }; // 5% dev fee
+        // privKey: 
+        std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
         consensus.nDevfeePayment = DevfeePayment(rewardStructures, 50, "sZmtmzxjw7cfsy7SC5CmUHKREH2UYnYnuu");
 
         checkpointData = {
@@ -878,8 +879,8 @@ public:
             0
         };
 
-        // Regtest Hootchain addresses start with 's'
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,125);
+        // Regtest Hootchain addresses start with 't'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,128);
         // Regtest Hootchain script addresses start with '5' or '6'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,12);
         // Regtest private keys start with '9' or 'c' (Bitcoin defaults)

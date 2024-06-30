@@ -4,7 +4,7 @@ This is the first mainnet release of Hootchain Core, forked directly from Dash v
 
 Please report bugs using the issue tracker at GitHub:
 
-  <https://github.com/Hootchain/issues>
+  <https://github.com/Hootchain/HootChain/issues>
 
 
 # Credits

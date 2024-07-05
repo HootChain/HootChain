@@ -1213,11 +1213,38 @@ CAmount GetBlockSubsidy(const CBlockIndex* const pindex, const Consensus::Params
     const bool isV20Active{DeploymentActiveAt(*pindex, consensusParams, Consensus::DEPLOYMENT_V20)};
     return GetBlockSubsidyInner(pindex->pprev->nBits, pindex->pprev->nHeight, consensusParams, isV20Active);
 }
+struct MasternodePayment {
+    int startHeight;
+    int endHeight;
+    double percentage;
+};
+
+const std::vector<MasternodePayment> masternodePayments = {
+    {601, 43800, 36.95},
+    {43801, 87000, 40.42},
+    {87001, 130200, 43.72},
+    {130201, 173400, 47.02},
+    {173401, 216600, 50.32},
+    {216601, 259800, 53.62},
+    {259801, INT_MAX, 56.92}
+};
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)
 {
-    CAmount ret = blockValue * 23125 / 48750; // 50% after superblock reduction
-    return ret;
+    if (nHeight <= 600) {
+        return 0;
+    }
+
+    double masternodePercentage = 0.0;
+
+    for (const auto& payment : masternodePayments) {
+        if (nHeight >= payment.startHeight && nHeight <= payment.endHeight) {
+            masternodePercentage = payment.percentage;
+            break;
+        }
+    }
+
+    return static_cast<CAmount>(blockValue * masternodePercentage / 100);
 }
 
 CoinsViews::CoinsViews(

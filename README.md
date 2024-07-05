@@ -10,7 +10,7 @@ Further information about Hootchain Core is available in the [doc folder](/doc).
 What is HootChain?
 -------------
 
-HootChain is on a mission transform decenterlized finance as most of the people know about it today. We believe that everyone, not just a select few, should have access to a truly decentralized blockchain. Our platform breaks down barriers by making participation accessible for all. But that doesn't mean anonymity reigns supreme. This balance ensures user privacy while preventing the blockchain from becoming a haven for illegal activities. We believe this fosters trust – a cornerstone for widespread cryptocurrency adoption.
+Hootchain is on a mission transform decenterlized finance as most of the people know about it today. We believe that everyone, not just a select few, should have access to a truly decentralized blockchain. Our platform breaks down barriers by making participation accessible for all. But that doesn't mean anonymity reigns supreme. This balance ensures user privacy while preventing the blockchain from becoming a haven for illegal activities. We believe this fosters trust – a cornerstone for widespread cryptocurrency adoption.
 
 Imagine an ecosystem that empowers everyone to participate in the future of finance using our platform. That's the future HootChain is building. We're innovating DeFi to make it more approachable and trustworthy, paving the way for a more inclusive and secure financial landscape.
 

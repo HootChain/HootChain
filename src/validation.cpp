@@ -1246,7 +1246,7 @@ CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)
         masternodePercentage = 55.5;
     }
 
-    return static_cast<CAmount>(blockValue * masternodePercentage);
+    return static_cast<CAmount>(blockValue * masternodePercentage / 100);
 }
 
 

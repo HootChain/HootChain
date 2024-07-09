@@ -1219,36 +1219,23 @@ CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)
     double masternodePercentage = 0.0;
 
     if (nHeight <= 43200) {
-        masternodePercentage = 31.5;
+        masternodePercentage = 36.95;
     } else if (nHeight <= 86400) { // 2 * 43200
-        masternodePercentage = 33.5;
+        masternodePercentage = 40.42;
     } else if (nHeight <= 129600) { // 3 * 43200
-        masternodePercentage = 35.5;
+        masternodePercentage = 43.72;
     } else if (nHeight <= 172800) { // 4 * 43200
-        masternodePercentage = 37.5;
+        masternodePercentage = 47.02;
     } else if (nHeight <= 216000) { // 5 * 43200
-        masternodePercentage = 39.5;
+        masternodePercentage = 50.32;
     } else if (nHeight <= 259200) { // 6 * 43200
-        masternodePercentage = 41.5;
-    } else if (nHeight <= 302400) { // 7 * 43200
-        masternodePercentage = 43.5;
-    } else if (nHeight <= 345600) { // 8 * 43200
-        masternodePercentage = 45.5;
-    } else if (nHeight <= 388800) { // 9 * 43200
-        masternodePercentage = 47.5;
-    } else if (nHeight <= 432000) { // 10 * 43200
-        masternodePercentage = 49.5;
-    } else if (nHeight <= 475200) { // 11 * 43200
-        masternodePercentage = 51.5;
-    } else if (nHeight <= 518400) { // 12 * 43200
-        masternodePercentage = 53.5;
+        masternodePercentage = 53.62;
     } else {
-        masternodePercentage = 55.5;
+        masternodePercentage = 56.92;
     }
 
     return static_cast<CAmount>(blockValue * masternodePercentage / 100);
 }
-
 
 CoinsViews::CoinsViews(
     std::string ldb_name,

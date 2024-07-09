@@ -1213,25 +1213,35 @@ CAmount GetBlockSubsidy(const CBlockIndex* const pindex, const Consensus::Params
     const bool isV20Active{DeploymentActiveAt(*pindex, consensusParams, Consensus::DEPLOYMENT_V20)};
     return GetBlockSubsidyInner(pindex->pprev->nBits, pindex->pprev->nHeight, consensusParams, isV20Active);
 }
+struct MasternodePayment {
+    int startHeight;
+    int endHeight;
+    double percentage;
+};
+
+const std::vector<MasternodePayment> masternodePayments = {
+    {601, 43800, 36.95},
+    {43801, 87000, 40.42},
+    {87001, 130200, 43.72},
+    {130201, 173400, 47.02},
+    {173401, 216600, 50.32},
+    {216601, 259800, 53.62},
+    {259801, INT_MAX, 56.92}
+};
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)
 {
+    if (nHeight <= 600) {
+        return 0;
+    }
+
     double masternodePercentage = 0.0;
 
-    if (nHeight <= 43200) {
-        masternodePercentage = 36.95;
-    } else if (nHeight <= 86400) { // 2 * 43200
-        masternodePercentage = 40.42;
-    } else if (nHeight <= 129600) { // 3 * 43200
-        masternodePercentage = 43.72;
-    } else if (nHeight <= 172800) { // 4 * 43200
-        masternodePercentage = 47.02;
-    } else if (nHeight <= 216000) { // 5 * 43200
-        masternodePercentage = 50.32;
-    } else if (nHeight <= 259200) { // 6 * 43200
-        masternodePercentage = 53.62;
-    } else {
-        masternodePercentage = 56.92;
+    for (const auto& payment : masternodePayments) {
+        if (nHeight >= payment.startHeight && nHeight <= payment.endHeight) {
+            masternodePercentage = payment.percentage;
+            break;
+        }
     }
 
     return static_cast<CAmount>(blockValue * masternodePercentage / 100);

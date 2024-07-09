@@ -156,7 +156,7 @@ public:
         consensus.nBudgetPaymentsStartBlock = 250;
         consensus.nBudgetPaymentsCycleBlocks = 250;
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nSuperblockStartBlock = 0;
+        consensus.nSuperblockStartBlock = 599;
         consensus.nSuperblockStartHash = uint256();
         consensus.nSuperblockCycle = 1440 * 60 ; // ~ two months
         consensus.nSuperblockMaturityWindow = 1440 * 3 ; // ~3 days before actual Superblock is emitted
@@ -247,9 +247,8 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("seed1.hootchain.org",false);
-        vSeeds.emplace_back("seed2.hootchain.org",false);
-        vSeeds.emplace_back("seed3.hootchain.org",false);
+        vSeeds.emplace_back("seeder.hootchain.org");
+
 
         // Hootchain addresses start with 'h'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,100);
@@ -333,7 +332,7 @@ public:
         consensus.nBudgetPaymentsStartBlock = 250;
         consensus.nBudgetPaymentsCycleBlocks = 50;
         consensus.nBudgetPaymentsWindowBlocks = 10;
-        consensus.nSuperblockStartBlock = 0;
+        consensus.nSuperblockStartBlock = 599;
         consensus.nSuperblockStartHash = uint256();
         consensus.nSuperblockCycle = 120; // Superblocks in 2h on testnet
         consensus.nSuperblockMaturityWindow = 8;
@@ -418,7 +417,7 @@ public:
 
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("testnet.hootchain.org"); // Just a static list of stable node(s), only supports x9
+        vSeeds.emplace_back("seeder.hootchain.org"); // Just a static list of stable node(s), only supports x9
 
         // Testnet Hootchain addresses start with 't'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,128);
@@ -458,11 +457,11 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
-        vSporkAddresses = {"tfK72iaKZU5wycpdLyr9c1XizqzaXDZ8H2"};
+        vSporkAddresses = {"tgjmRnPUUMVHttBEpexuRzUF1vhW5LAqSG"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
-        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 1, "tsDTjNY2GpMVPKNFFwFJFkfe16VGaBicJm");
+        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600, "tuCveqFcTUgeS2fKUhFseybkB5S3oRbSgk");
 
         checkpointData = {
             {

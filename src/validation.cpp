@@ -1218,17 +1218,17 @@ CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)
 {
     double masternodePercentage = 0.0;
 
-    if (nHeight <= 43200) {
+    if (nHeight <= 660) {
         masternodePercentage = 36.95;
-    } else if (nHeight <= 86400) { // 2 * 43200
+    } else if (nHeight <= 780) { // 2 * 43200
         masternodePercentage = 40.42;
-    } else if (nHeight <= 129600) { // 3 * 43200
+    } else if (nHeight <= 900) { // 3 * 43200
         masternodePercentage = 43.72;
-    } else if (nHeight <= 172800) { // 4 * 43200
+    } else if (nHeight <= 1020) { // 4 * 43200
         masternodePercentage = 47.02;
-    } else if (nHeight <= 216000) { // 5 * 43200
+    } else if (nHeight <= 1140) { // 5 * 43200
         masternodePercentage = 50.32;
-    } else if (nHeight <= 259200) { // 6 * 43200
+    } else if (nHeight <= 1260) { // 6 * 43200
         masternodePercentage = 53.62;
     } else {
         masternodePercentage = 56.92;

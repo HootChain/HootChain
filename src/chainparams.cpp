@@ -156,7 +156,7 @@ public:
         consensus.nBudgetPaymentsStartBlock = 250;
         consensus.nBudgetPaymentsCycleBlocks = 250;
         consensus.nBudgetPaymentsWindowBlocks = 100;
-        consensus.nSuperblockStartBlock = 0;
+        consensus.nSuperblockStartBlock = 599;
         consensus.nSuperblockStartHash = uint256();
         consensus.nSuperblockCycle = 1440 * 60 ; // ~ two months
         consensus.nSuperblockMaturityWindow = 1440 * 3 ; // ~3 days before actual Superblock is emitted
@@ -333,7 +333,7 @@ public:
         consensus.nBudgetPaymentsStartBlock = 250;
         consensus.nBudgetPaymentsCycleBlocks = 50;
         consensus.nBudgetPaymentsWindowBlocks = 10;
-        consensus.nSuperblockStartBlock = 0;
+        consensus.nSuperblockStartBlock = 599;
         consensus.nSuperblockStartHash = uint256();
         consensus.nSuperblockCycle = 120; // Superblocks in 2h on testnet
         consensus.nSuperblockMaturityWindow = 8;
@@ -458,11 +458,11 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
-        vSporkAddresses = {"tfK72iaKZU5wycpdLyr9c1XizqzaXDZ8H2"};
+        vSporkAddresses = {"tjpqC76ySUr1ZoX837RG6HDeCJHeowTLFb"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
-        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600, "tjU8iXcQzkmijiKnNp8yt9vcocqjkvK4mR");
+        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600, "tkSZG4EmkrrAqMv7yfkowz3jEbmiUuatrQ");
 
         checkpointData = {
             {

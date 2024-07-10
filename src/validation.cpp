@@ -1218,7 +1218,7 @@ CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)
 {
     double masternodePercentage = 0.0;
 
-    if (nHeight <= 660) {
+    if (nHeight >= 601 && nHeight <= 660) {
         masternodePercentage = 36.95;
     } else if (nHeight <= 780) { // 2 * 43200
         masternodePercentage = 40.42;

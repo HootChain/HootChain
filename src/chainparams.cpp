@@ -458,11 +458,11 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
-        vSporkAddresses = {"tjpqC76ySUr1ZoX837RG6HDeCJHeowTLFb"};
+        vSporkAddresses = {"tYjnUyGSLpSFBXaiNB7waTZ7qENfm7HZPr"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
-        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600, "tkSZG4EmkrrAqMv7yfkowz3jEbmiUuatrQ");
+        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600, "teFQriXcAkc6eovsSj96TPEi1pX7MEXSdW");
 
         checkpointData = {
             {

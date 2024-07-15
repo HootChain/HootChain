@@ -247,7 +247,7 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        vSeeds.emplace_back("seeder.hootchain.org",false);
+        vSeeds.emplace_back("seeder.hootchain.org");
 
 
         // Hootchain addresses start with 'h'
@@ -417,7 +417,7 @@ public:
 
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("seeder.hootchain.org",false); // Just a static list of stable node(s), only supports x9
+        vSeeds.emplace_back("seeder.hootchain.org"); // Just a static list of stable node(s), only supports x9
 
         // Testnet Hootchain addresses start with 't'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,128);
@@ -457,11 +457,11 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 5*60; // fulfilled requests expire in 5 minutes
 
-        vSporkAddresses = {"tn4HbQuryzXhCxXHvRUPcLYPevf63otwhU"};
+        vSporkAddresses = {"tgjmRnPUUMVHttBEpexuRzUF1vhW5LAqSG"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
-        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600, "tWgMMC3AnphAvNJ4duCrYh9Cyec2GaUvmw");
+        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600, "tuCveqFcTUgeS2fKUhFseybkB5S3oRbSgk");
 
         checkpointData = {
             {

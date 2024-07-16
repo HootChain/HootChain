@@ -159,7 +159,7 @@ public:
         consensus.nSuperblockStartBlock = 599;
         consensus.nSuperblockStartHash = uint256();
         consensus.nSuperblockCycle = 1440 * 60 ; // ~ two months
-        consensus.nSuperblockMaturityWindow = 1440 * 3 ; // ~3 days before actual Superblock is emitted
+        consensus.nSuperblockMaturityWindow = 1440 * 2 ; // ~2 days before actual Superblock is emitted
         consensus.nGovernanceMinQuorum = 10;
         consensus.nGovernanceFilterElements = 5000;
         consensus.nMasternodeMinimumConfirmations = 15;
@@ -290,7 +290,7 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        vSporkAddresses = {"hMQWbediJH1P7DWAGSvc9acM9L32RPDdcy"};
+        vSporkAddresses = {"hGjxKUBvjUnEhk6srAqe5NpyXD83eEFqMd"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee

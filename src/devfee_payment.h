@@ -12,7 +12,7 @@
 #include <primitives/transaction.h>
 #include <vector>
 
-static const std::string DEFAULT_DEVFEE_ADDRESS = "hUvbN1wzHAqJ6MtXSJnfz1gMy8V8uLcdbW";
+static const std::string DEFAULT_DEVFEE_ADDRESS = "hZeK8D8q2KXzuCvA3okS1rB2PhkKVnukzb";
 
 struct DevfeeRewardStructure {
 	  int blockHeight;

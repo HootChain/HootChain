@@ -290,7 +290,7 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        vSporkAddresses = {"hGjxKUBvjUnEhk6srAqe5NpyXD83eEFqMd"};
+        vSporkAddresses = {"hJyo4S2qHRvRvhSouH1NSxVjXKMddX4WkJ"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee

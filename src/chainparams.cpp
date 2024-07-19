@@ -294,7 +294,7 @@ public:
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
-        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 1);
+        consensus.nDevfeePayment = DevfeePayment(rewardStructures, 600);
 
         checkpointData = {
             {

@@ -211,10 +211,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_MN_RR].useEHF = true;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x00"); // 480
+        consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28"); // Genesis
+        consensus.defaultAssumeValid = uint256S("0x00000907bc907712414d529cdd161e07f456239bfde49af17f448f1a4e7d5016"); // Genesis
 
         // AuxPoW parameters
         consensus.nAuxpowChainId = 0x0088;
@@ -236,10 +236,10 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1716370777, 351910, 0x1e0ffff0, 1, 1 * COIN);
+        genesis = CreateGenesisBlock(1721395828, 1795381, 0x1e0ffff0, 1, 1 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        assert(consensus.hashGenesisBlock == uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28"));
+        assert(consensus.hashGenesisBlock == uint256S("0x00000907bc907712414d529cdd161e07f456239bfde49af17f448f1a4e7d5016"));
         assert(genesis.hashMerkleRoot == uint256S("0xd5375534a97a8c2de938994b1e82326b753c25effd84be6cbbd3949ddd187d61"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -290,7 +290,7 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        vSporkAddresses = {"hJyo4S2qHRvRvhSouH1NSxVjXKMddX4WkJ"};
+        vSporkAddresses = {"haZb7aGhzS4VL5mAQ6Bw3pNk36dGui5SRL"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
@@ -298,7 +298,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x0000056784d906efab29e4d07d68828e5c9203782690a70acddc5b5d19077d28")},
+                {0, uint256S("0x00000907bc907712414d529cdd161e07f456239bfde49af17f448f1a4e7d5016")},
             }
         };
 

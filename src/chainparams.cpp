@@ -236,10 +236,10 @@ public:
         m_assumed_blockchain_size = 1;
         m_assumed_chain_state_size = 1;
 
-        genesis = CreateGenesisBlock(1721395828, 1795381, 0x1e0ffff0, 1, 1 * COIN);
+        genesis = CreateGenesisBlock(1721454882, 2093605, 0x1e0ffff0, 1, 1 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
 
-        assert(consensus.hashGenesisBlock == uint256S("0x00000907bc907712414d529cdd161e07f456239bfde49af17f448f1a4e7d5016"));
+        assert(consensus.hashGenesisBlock == uint256S("0x00000d36a5b312d982f7132cecc96ddb01cf218453c02376d31bb4adc9ffcfc3"));
         assert(genesis.hashMerkleRoot == uint256S("0xd5375534a97a8c2de938994b1e82326b753c25effd84be6cbbd3949ddd187d61"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -290,7 +290,7 @@ public:
         nPoolMaxParticipants = 20;
         nFulfilledRequestExpireTime = 60*60; // fulfilled requests expire in 1 hour
 
-        vSporkAddresses = {"haZb7aGhzS4VL5mAQ6Bw3pNk36dGui5SRL"};
+        vSporkAddresses = {"hFJ56nUAspCVNbJm6ha4FfvPMW93SLTmYV"};
         nMinSporkKeys = 1;
 
         std::vector<DevfeeRewardStructure> rewardStructures = {  {INT_MAX, 19.5}  }; // 5% dev fee
@@ -298,7 +298,7 @@ public:
 
         checkpointData = {
             {
-                {0, uint256S("0x00000907bc907712414d529cdd161e07f456239bfde49af17f448f1a4e7d5016")},
+                {0, uint256S("0x00000d36a5b312d982f7132cecc96ddb01cf218453c02376d31bb4adc9ffcfc3")},
             }
         };
 

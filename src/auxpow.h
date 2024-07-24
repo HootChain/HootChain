@@ -33,10 +33,10 @@ class CAuxPowForTest;
 
 /** Header for merge-mining data in the coinbase.  */
 static const unsigned char pchMergedMiningHeader[] = {
+    0x68, // h
     0x4f, // O
-    0x53, // S
-    0x4d, // M
-    0x41  // A
+    0x4f, // O
+    0x6d  // m
 };
 
 /**

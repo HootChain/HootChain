@@ -1220,13 +1220,13 @@ struct MasternodePayment {
 };
 
 const std::vector<MasternodePayment> masternodePayments = {
-    {601, 43800, 36.95},
-    {43801, 87000, 40.42},
-    {87001, 130200, 43.72},
-    {130201, 173400, 47.02},
-    {173401, 216600, 50.32},
-    {216601, 259800, 53.62},
-    {259801, INT_MAX, 56.92}
+    {601, 12000, 36.95},
+    {12001, 43800, 64.75},
+    {43801, 87000, 66.60},
+    {87001, 130200, 68.45},
+    {130201, 173400, 70.30},
+    {173401, 216600, 72.15},
+    {216601, INT_MAX, 74},
 };
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)

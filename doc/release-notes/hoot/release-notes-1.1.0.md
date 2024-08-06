@@ -1,4 +1,4 @@
-# Hootchain Core version v1.0.0
+# Hootchain Core version v1.1.0
 
 This is a mandatory release of HootChain Core for both mainnet and testnet. 
 This release adjusts block reward split between miners and masternodes at block 12000.

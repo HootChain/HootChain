@@ -1178,7 +1178,7 @@ static std::pair<CAmount, CAmount> GetBlockSubsidyHelper(int nPrevBits, int nPre
     double reductionRatio = 0.9375;
     for (int i = consensusParams.nSubsidyHalvingInterval; i <= nPrevHeight; i += consensusParams.nSubsidyHalvingInterval) {
 
-        nSubsidy -= nSubsidy / reductionRatio;
+        nSubsidy *= reductionRatio;;
     }
 
     if (nPrevHeight > 0 && nPrevHeight < consensusParams.nHighSubsidyBlocks) {

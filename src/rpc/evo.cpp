@@ -154,18 +154,6 @@ static RPCArg GetRpcArg(const std::string& strParamName)
                 "It has to match the private key which is later used when voting on proposals.\n"
                 "If set to an empty string, the currently active voting key address is reused."}
         },
-        {"platformNodeID",
-            {"platformNodeID", RPCArg::Type::STR, RPCArg::Optional::NO,
-                "Platform P2P node ID, derived from P2P public key."}
-        },
-        {"platformP2PPort",
-            {"platformP2PPort", RPCArg::Type::NUM, RPCArg::Optional::NO,
-                "TCP port of Hootchain Platform peer-to-peer communication between nodes (network byte order)."}
-        },
-        {"platformHTTPPort",
-            {"platformHTTPPort", RPCArg::Type::NUM, RPCArg::Optional::NO,
-                "TCP port of Platform HTTP/API interface (network byte order)."}
-        },
     };
 
     auto it = mapParamHelp.find(strParamName);
@@ -202,11 +190,6 @@ static CBLSSecretKey ParseBLSSecretKey(const std::string& hexKey, const std::str
         throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("%s must be a valid BLS secret key", paramName));
     }
     return secKey;
-}
-
-static bool ValidatePlatformPort(const int32_t port)
-{
-    return port >= 1 && port <= std::numeric_limits<uint16_t>::max();
 }
 
 #ifdef ENABLE_WALLET
@@ -358,7 +341,7 @@ static void protx_register_fund_help(const JSONRPCRequest& request, bool legacy)
     std::string rpc_name = legacy ? "register_fund_legacy" : "register_fund";
     std::string rpc_full_name = std::string("protx ").append(rpc_name);
     std::string pubkey_operator = legacy ? "\"0532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"" : "\"8532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"";
-    std::string rpc_example = rpc_name.append(" \"" + EXAMPLE_ADDRESS[0] + "\" \"1.2.3.4:1234\" \"" + EXAMPLE_ADDRESS[1] + "\" ").append(pubkey_operator).append(" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"");
+    std::string rpc_example = rpc_name.append(" \"" + EXAMPLE_ADDRESS[0] + "\" \"1.2.3.4:6887\" \"" + EXAMPLE_ADDRESS[1] + "\" ").append(pubkey_operator).append(" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"");
     RPCHelpMan{rpc_full_name,
         "\nCreates, funds and sends a ProTx to the network. The resulting transaction will move 1000 Hootchain\n"
         "to the address specified by collateralAddress and will then function as the collateral of your\n"
@@ -394,7 +377,7 @@ static void protx_register_help(const JSONRPCRequest& request, bool legacy)
     std::string rpc_name = legacy ? "register_legacy" : "register";
     std::string rpc_full_name = std::string("protx ").append(rpc_name);
     std::string pubkey_operator = legacy ? "\"0532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"" : "\"8532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"";
-    std::string rpc_example = rpc_name.append(" \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:1234\" \"" + EXAMPLE_ADDRESS[1] + "\" ").append(pubkey_operator).append(" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"");
+    std::string rpc_example = rpc_name.append(" \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:6887\" \"" + EXAMPLE_ADDRESS[1] + "\" ").append(pubkey_operator).append(" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"");
     RPCHelpMan{rpc_full_name,
         "\nSame as \"protx register_fund\", but with an externally referenced collateral.\n"
         "The collateral is specified through \"collateralHash\" and \"collateralIndex\" and must be an unspent\n"
@@ -429,7 +412,7 @@ static void protx_register_prepare_help(const JSONRPCRequest& request, bool lega
     std::string rpc_name = legacy ? "register_prepare_legacy" : "register_prepare";
     std::string rpc_full_name = std::string("protx ").append(rpc_name);
     std::string pubkey_operator = legacy ? "\"0532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"" : "\"8532646990082f4fd639f90387b1551f2c7c39d37392cb9055a06a7e85c1d23692db8f87f827886310bccc1e29db9aee\"";
-    std::string rpc_example = rpc_name.append(" \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:1234\" \"" + EXAMPLE_ADDRESS[1] + "\" ").append(pubkey_operator).append(" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"");
+    std::string rpc_example = rpc_name.append(" \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:6887\" \"" + EXAMPLE_ADDRESS[1] + "\" ").append(pubkey_operator).append(" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"");
     RPCHelpMan{rpc_full_name,
         "\nCreates an unsigned ProTx and a message that must be signed externally\n"
         "with the private key that corresponds to collateralAddress to prove collateral ownership.\n"
@@ -496,9 +479,6 @@ static void protx_register_fund_evo_help(const JSONRPCRequest& request)
             GetRpcArg("votingAddress_register"),
             GetRpcArg("operatorReward"),
             GetRpcArg("payoutAddress_register"),
-            GetRpcArg("platformNodeID"),
-            GetRpcArg("platformP2PPort"),
-            GetRpcArg("platformHTTPPort"),
             GetRpcArg("fundAddress"),
             GetRpcArg("submit"),
         },
@@ -509,7 +489,7 @@ static void protx_register_fund_evo_help(const JSONRPCRequest& request)
                       RPCResult::Type::STR_HEX, "hex", "The serialized signed ProTx in hex format"},
         },
         RPCExamples{
-            HelpExampleCli("protx", "register_fund_evo \"" + EXAMPLE_ADDRESS[0] + "\" \"1.2.3.4:1234\" \"" + EXAMPLE_ADDRESS[1] + "\" \"93746e8731c57f87f79b3620a7982924e2931717d49540a85864bd543de11c43fb868fd63e501a1db37e19ed59ae6db4\" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\" \"f2dbd9b0a1f541a7c44d34a58674d0262f5feca5\" 22821 22822")},
+            HelpExampleCli("protx", "register_fund_evo \"" + EXAMPLE_ADDRESS[0] + "\" \"1.2.3.4:6887\" \"" + EXAMPLE_ADDRESS[1] + "\" \"93746e8731c57f87f79b3620a7982924e2931717d49540a85864bd543de11c43fb868fd63e501a1db37e19ed59ae6db4\" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"")},
     }.Check(request);
 }
 
@@ -530,9 +510,6 @@ static void protx_register_evo_help(const JSONRPCRequest& request)
             GetRpcArg("votingAddress_register"),
             GetRpcArg("operatorReward"),
             GetRpcArg("payoutAddress_register"),
-            GetRpcArg("platformNodeID"),
-            GetRpcArg("platformP2PPort"),
-            GetRpcArg("platformHTTPPort"),
             GetRpcArg("feeSourceAddress"),
             GetRpcArg("submit"),
         },
@@ -543,7 +520,7 @@ static void protx_register_evo_help(const JSONRPCRequest& request)
                       RPCResult::Type::STR_HEX, "hex", "The serialized signed ProTx in hex format"},
         },
         RPCExamples{
-            HelpExampleCli("protx", "register_evo \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:1234\" \"" + EXAMPLE_ADDRESS[1] + "\" \"93746e8731c57f87f79b3620a7982924e2931717d49540a85864bd543de11c43fb868fd63e501a1db37e19ed59ae6db4\" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\" \"f2dbd9b0a1f541a7c44d34a58674d0262f5feca5\" 22821 22822")},
+            HelpExampleCli("protx", "register_evo \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:6887\" \"" + EXAMPLE_ADDRESS[1] + "\" \"93746e8731c57f87f79b3620a7982924e2931717d49540a85864bd543de11c43fb868fd63e501a1db37e19ed59ae6db4\" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"")},
     }.Check(request);
 }
 
@@ -563,9 +540,6 @@ static void protx_register_prepare_evo_help(const JSONRPCRequest& request)
             GetRpcArg("votingAddress_register"),
             GetRpcArg("operatorReward"),
             GetRpcArg("payoutAddress_register"),
-            GetRpcArg("platformNodeID"),
-            GetRpcArg("platformP2PPort"),
-            GetRpcArg("platformHTTPPort"),
             GetRpcArg("feeSourceAddress"),
         },
         RPCResult{
@@ -574,7 +548,7 @@ static void protx_register_prepare_evo_help(const JSONRPCRequest& request)
                                               {RPCResult::Type::STR_HEX, "collateralAddress", "The collateral address"},
                                               {RPCResult::Type::STR_HEX, "signMessage", "The string message that needs to be signed with the collateral key"},
                                           }},
-        RPCExamples{HelpExampleCli("protx", "register_prepare_evo \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:1234\" \"" + EXAMPLE_ADDRESS[1] + "\" \"93746e8731c57f87f79b3620a7982924e2931717d49540a85864bd543de11c43fb868fd63e501a1db37e19ed59ae6db4\" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\" \"f2dbd9b0a1f541a7c44d34a58674d0262f5feca5\" 22821 22822")},
+        RPCExamples{HelpExampleCli("protx", "register_prepare_evo \"0123456701234567012345670123456701234567012345670123456701234567\" 0 \"1.2.3.4:6887\" \"" + EXAMPLE_ADDRESS[1] + "\" \"93746e8731c57f87f79b3620a7982924e2931717d49540a85864bd543de11c43fb868fd63e501a1db37e19ed59ae6db4\" \"" + EXAMPLE_ADDRESS[1] + "\" 0 \"" + EXAMPLE_ADDRESS[0] + "\"")},
     }.Check(request);
 }
 
@@ -588,15 +562,13 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
 {
     const bool isEvoRequested = mnType == MnType::Evo;
     if (isEvoRequested) {
-      // Disable Evonodes
-      throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
-        // if (isFundRegister && (request.fHelp || (request.params.size() < 10 || request.params.size() > 12))) {
-        //     protx_register_fund_evo_help(request);
-        // } else if (isExternalRegister && (request.fHelp || (request.params.size() < 11 || request.params.size() > 13))) {
-        //     protx_register_evo_help(request);
-        // } else if (isPrepareRegister && (request.fHelp || (request.params.size() != 11 && request.params.size() != 12))) {
-        //     protx_register_prepare_evo_help(request);
-        // }
+       if (isFundRegister && (request.fHelp || (request.params.size() < 7 || request.params.size() > 9))) {
+            protx_register_fund_evo_help(request);
+        } else if (isExternalRegister && (request.fHelp || (request.params.size() < 8 || request.params.size() > 10))) {
+            protx_register_evo_help(request);
+        } else if (isPrepareRegister && (request.fHelp || (request.params.size() != 8 && request.params.size() != 9))) {
+            protx_register_prepare_evo_help(request);
+        }
     } else {
         if (isFundRegister && (request.fHelp || (request.params.size() < 7 || request.params.size() > 9))) {
             protx_register_fund_help(request, specific_legacy_bls_scheme);
@@ -615,7 +587,8 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
     }
 
     const bool isV19active{DeploymentActiveAfter(WITH_LOCK(cs_main, return chainman.ActiveChain().Tip();), Params().GetConsensus(), Consensus::DEPLOYMENT_V19)};
-    if (isEvoRequested && !isV19active) {
+    const bool isEvonodesActive{DeploymentActiveAfter(WITH_LOCK(cs_main, return chainman.ActiveChain().Tip();), Params().GetConsensus(), Consensus::DEPLOYMENT_EVONODES)};
+    if (isEvoRequested && !isEvonodesActive) {
         throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed yet");
     }
 
@@ -637,7 +610,10 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
         }
         CScript collateralScript = GetScriptForDestination(collateralDest);
 
-        CAmount fundCollateral = GetMnType(mnType).collat_amount;
+        const CBlockIndex* activeTip = chainman.ActiveChain().Tip();
+        int32_t blockHeight = (activeTip != nullptr) ? activeTip->nHeight + 1 : 0;
+        CAmount fundCollateral = dmn_types::GetCollateralAmount(mnType, blockHeight);
+
         CTxOut collateralTxOut(fundCollateral, collateralScript);
         tx.vout.emplace_back(collateralTxOut);
 
@@ -684,29 +660,6 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("invalid payout address: %s", request.params[paramIdx + 5].get_str()));
     }
 
-    if (isEvoRequested) {
-        // Disable Evonodes
-        throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
-        // if (!IsHex(request.params[paramIdx + 6].get_str())) {
-        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformNodeID must be hexadecimal string");
-        // }
-        // ptx.platformNodeID.SetHex(request.params[paramIdx + 6].get_str());
-
-        // int32_t requestedPlatformP2PPort = ParseInt32V(request.params[paramIdx + 7], "platformP2PPort");
-        // if (!ValidatePlatformPort(requestedPlatformP2PPort)) {
-        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformP2PPort must be a valid port [1-65535]");
-        // }
-        // ptx.platformP2PPort = static_cast<uint16_t>(requestedPlatformP2PPort);
-
-        // int32_t requestedPlatformHTTPPort = ParseInt32V(request.params[paramIdx + 8], "platformHTTPPort");
-        // if (!ValidatePlatformPort(requestedPlatformHTTPPort)) {
-        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformHTTPPort must be a valid port [1-65535]");
-        // }
-        // ptx.platformHTTPPort = static_cast<uint16_t>(requestedPlatformHTTPPort);
-
-        // paramIdx += 3;
-    }
-
     ptx.keyIDVoting = keyIDVoting;
     ptx.scriptPayout = GetScriptForDestination(payoutDest);
 
@@ -730,7 +683,11 @@ static UniValue protx_register_common_wrapper(const JSONRPCRequest& request,
     if (isFundRegister) {
         FundSpecialTx(wallet.get(), tx, ptx, fundDest);
         UpdateSpecialTxInputsHash(tx, ptx);
-        CAmount fundCollateral = GetMnType(mnType).collat_amount;
+        const CBlockIndex* activeTip = chainman.ActiveChain().Tip();
+        int32_t blockHeight = (activeTip != nullptr) ? activeTip->nHeight + 1 : 0;
+
+        CAmount fundCollateral = dmn_types::GetCollateralAmount(mnType, blockHeight);
+
         uint32_t collateralIndex = (uint32_t) -1;
         for (uint32_t i = 0; i < tx.vout.size(); i++) {
             if (tx.vout[i].nValue == fundCollateral) {
@@ -887,7 +844,7 @@ static void protx_update_service_help(const JSONRPCRequest& request)
             RPCResult::Type::STR_HEX, "txid", "The transaction id"
         },
         RPCExamples{
-            HelpExampleCli("protx", "update_service \"0123456701234567012345670123456701234567012345670123456701234567\" \"1.2.3.4:1234\" 5a2e15982e62f1e0b7cf9783c64cf7e3af3f90a52d6c40f6f95d624c0b1621cd")
+            HelpExampleCli("protx", "update_service \"0123456701234567012345670123456701234567012345670123456701234567\" \"1.2.3.4:6887\" 5a2e15982e62f1e0b7cf9783c64cf7e3af3f90a52d6c40f6f95d624c0b1621cd")
         },
     }.Check(request);
 }
@@ -904,16 +861,13 @@ static void protx_update_service_evo_help(const JSONRPCRequest& request)
             GetRpcArg("proTxHash"),
             GetRpcArg("ipAndPort_update"),
             GetRpcArg("operatorKey"),
-            GetRpcArg("platformNodeID"),
-            GetRpcArg("platformP2PPort"),
-            GetRpcArg("platformHTTPPort"),
             GetRpcArg("operatorPayoutAddress"),
             GetRpcArg("feeSourceAddress"),
         },
         RPCResult{
             RPCResult::Type::STR_HEX, "txid", "The transaction id"},
         RPCExamples{
-            HelpExampleCli("protx", "update_service_evo \"0123456701234567012345670123456701234567012345670123456701234567\" \"1.2.3.4:1234\" \"5a2e15982e62f1e0b7cf9783c64cf7e3af3f90a52d6c40f6f95d624c0b1621cd\" \"f2dbd9b0a1f541a7c44d34a58674d0262f5feca5\" 22821 22822")},
+            HelpExampleCli("protx", "update_service_evo \"0123456701234567012345670123456701234567012345670123456701234567\" \"1.2.3.4:6887\" \"5a2e15982e62f1e0b7cf9783c64cf7e3af3f90a52d6c40f6f95d624c0b1621cd\" \"f2dbd9b0a1f541a7c44d34a58674d0262f5feca5\" 22821 22822")},
     }.Check(request);
 }
 
@@ -927,9 +881,7 @@ static UniValue protx_update_service_common_wrapper(const JSONRPCRequest& reques
 
     const bool isEvoRequested = mnType == MnType::Evo;
     if (isEvoRequested) {
-        // Disable Evonodes
-        throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
-        // protx_update_service_evo_help(request);
+        protx_update_service_evo_help(request);
     } else {
         protx_update_service_help(request);
     }
@@ -958,28 +910,6 @@ static UniValue protx_update_service_common_wrapper(const JSONRPCRequest& reques
     CBLSSecretKey keyOperator = ParseBLSSecretKey(request.params[2].get_str(), "operatorKey", is_bls_legacy);
 
     size_t paramIdx = 3;
-    if (isEvoRequested) {
-        // Disable Evonodes
-        throw JSONRPCError(RPC_INVALID_REQUEST, "EvoNodes aren't allowed");
-        // if (!IsHex(request.params[paramIdx].get_str())) {
-        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformNodeID must be hexadecimal string");
-        // }
-        // ptx.platformNodeID.SetHex(request.params[paramIdx].get_str());
-
-        // int32_t requestedPlatformP2PPort = ParseInt32V(request.params[paramIdx + 1], "platformP2PPort");
-        // if (!ValidatePlatformPort(requestedPlatformP2PPort)) {
-        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformP2PPort must be a valid port [1-65535]");
-        // }
-        // ptx.platformP2PPort = static_cast<uint16_t>(requestedPlatformP2PPort);
-
-        // int32_t requestedPlatformHTTPPort = ParseInt32V(request.params[paramIdx + 2], "platformHTTPPort");
-        // if (!ValidatePlatformPort(requestedPlatformHTTPPort)) {
-        //     throw JSONRPCError(RPC_INVALID_PARAMETER, "platformHTTPPort must be a valid port [1-65535]");
-        // }
-        // ptx.platformHTTPPort = static_cast<uint16_t>(requestedPlatformHTTPPort);
-
-        // paramIdx += 3;
-    }
 
     auto dmn = node.dmnman->GetListAtChainTip().GetMN(ptx.proTxHash);
     if (!dmn) {
@@ -1651,10 +1581,9 @@ static UniValue protx_listdiff(const JSONRPCRequest& request, const ChainstateMa
         "  register                 - Create and send ProTx to network\n"
         "  register_fund            - Fund, create and send ProTx to network\n"
         "  register_prepare         - Create an unsigned ProTx\n"
-        // Disable Evonodes
-        // "  register_evo             - Create and send ProTx to network for an EvoNode\n"
-        // "  register_fund_evo        - Fund, create and send ProTx to network for an EvoNode\n"
-        // "  register_prepare_evo     - Create an unsigned ProTx for an EvoNode\n"
+        "  register_evo             - Create and send ProTx to network for an EvoNode\n"
+        "  register_fund_evo        - Fund, create and send ProTx to network for an EvoNode\n"
+        "  register_prepare_evo     - Create an unsigned ProTx for an EvoNode\n"
         "  register_legacy          - Create a ProTx by parsing BLS using the legacy scheme and send it to network\n"
         "  register_fund_legacy     - Fund and create a ProTx by parsing BLS using the legacy scheme, then send it to network\n"
         "  register_prepare_legacy  - Create an unsigned ProTx by parsing BLS using the legacy scheme\n"
@@ -1664,8 +1593,7 @@ static UniValue protx_listdiff(const JSONRPCRequest& request, const ChainstateMa
         "  info                     - Return information about a ProTx\n"
 #ifdef ENABLE_WALLET
         "  update_service           - Create and send ProUpServTx to network\n"
-        // Disable Evonodes
-        // "  update_service_evo       - Create and send ProUpServTx to network for an EvoNode\n"
+        "  update_service_evo       - Create and send ProUpServTx to network for an EvoNode\n"
         "  update_registrar         - Create and send ProUpRegTx to network\n"
         "  update_registrar_legacy  - Create ProUpRegTx by parsing BLS using the legacy scheme, then send it to network\n"
         "  revoke                   - Create and send ProUpRevTx to network\n"
@@ -1690,16 +1618,16 @@ static UniValue protx(const JSONRPCRequest& request)
 #ifdef ENABLE_WALLET
     if (command == "protxregister" || command == "protxregister_fund" || command == "protxregister_prepare") {
         return protx_register(new_request, chainman);
-    // } else if (command == "protxregister_evo" || command == "protxregister_fund_evo" || command == "protxregister_prepare_evo" || command == "protxregister_hpmn" || command == "protxregister_fund_hpmn" || command == "protxregister_prepare_hpmn") {
-    //     return protx_register_evo(new_request, chainman);
+    } else if (command == "protxregister_evo" || command == "protxregister_fund_evo" || command == "protxregister_prepare_evo" || command == "protxregister_hpmn" || command == "protxregister_fund_hpmn" || command == "protxregister_prepare_hpmn") {
+        return protx_register_evo(new_request, chainman);
     } else if (command == "protxregister_legacy" || command == "protxregister_fund_legacy" || command == "protxregister_prepare_legacy") {
         return protx_register_legacy(new_request, chainman);
     } else if (command == "protxregister_submit") {
         return protx_register_submit(new_request, chainman);
     } else if (command == "protxupdate_service") {
         return protx_update_service_common_wrapper(new_request, chainman, MnType::Regular);
-    // } else if (command == "protxupdate_service_evo" || command == "protxupdate_service_hpmn") {
-    //     return protx_update_service_common_wrapper(new_request, chainman, MnType::Evo);
+    } else if (command == "protxupdate_service_evo" || command == "protxupdate_service_hpmn") {
+        return protx_update_service_common_wrapper(new_request, chainman, MnType::Evo);
     } else if (command == "protxupdate_registrar") {
         return protx_update_registrar(new_request, chainman);
     } else if (command == "protxupdate_registrar_legacy") {

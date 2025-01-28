@@ -122,7 +122,7 @@ def download_binary(tag, args) -> int:
         platform = "osx64"
     tarball = 'hootcore-{tag}-{platform}.tar.gz'.format(
         tag=tag[1:], platform=platform)
-    tarballUrl = 'https://github.com/hoot-labs/hoot/{bin_path}/{tarball}'.format(
+    tarballUrl = 'https://github.com/HootChain/HootChain.git/{bin_path}/{tarball}'.format(
         bin_path=bin_path, tarball=tarball)
 
     print('Fetching: {tarballUrl}'.format(tarballUrl=tarballUrl))
@@ -199,7 +199,7 @@ def download_binary(tag, args) -> int:
 
 
 def build_release(tag, args) -> int:
-    githubUrl = "https://github.com/hoot-labs/hoot"
+    githubUrl = "https://github.com/HootChain/HootChain.git"
     if args.remove_dir:
         if Path(tag).is_dir():
             shutil.rmtree(tag)

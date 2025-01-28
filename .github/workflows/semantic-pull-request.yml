@@ -21,7 +21,7 @@ jobs:
 <<<<<<< HEAD
           # Our specific types/scopes (from https://github.com/dashpay/dash/blob/master/CONTRIBUTING.md#contributor-workflow)
 =======
-          # Our specific types/scopes (from https://github.com/hoot-labs/hoot/blob/master/CONTRIBUTING.md#contributor-workflow)
+          # Our specific types/scopes (from https://github.com/HootChain/HootChain.git/blob/master/CONTRIBUTING.md#contributor-workflow)
 >>>>>>> temporal
           types: |
             feat

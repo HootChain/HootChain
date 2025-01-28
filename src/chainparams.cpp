@@ -180,6 +180,7 @@ public:
         consensus.DIP0024QuorumsHeight = 350;
         consensus.V19Height = 350;
         consensus.MinBIP9WarningHeight = 350 + 960; // V19 activation height + miner confirmation window
+	consensus.EvonodeHeight = 271000;
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20
         consensus.nPowTargetTimespan = 24 * 60 * 60; // Hootchain: 1 day
         consensus.nPowTargetSpacing = 1 * 60; // Hootchain: 1 minute
@@ -211,10 +212,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_MN_RR].useEHF = true;
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000005ae55f4ddd53f86c2"); //9780
+        consensus.nMinimumChainWork = uint256S("0x0000000000000000000000000000000000000000000001d1166162916b7aae73"); //263000
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x000000000000002822c4625ef842cdaf55b4085c3f035873e2a9b6a2067bb630"); // 9780
+        consensus.defaultAssumeValid = uint256S("0xcffa1acf39f01de958497479ec1b34da30c8d29caed9f90816f744f6508a2e2b"); // 263000
 
         // AuxPoW parameters
         consensus.nAuxpowChainId = 0x0088;
@@ -299,7 +300,8 @@ public:
         checkpointData = {
             {
                 {0, uint256S("0x00000d36a5b312d982f7132cecc96ddb01cf218453c02376d31bb4adc9ffcfc3")},
-                {9780, uint256S("0x000000000000002822c4625ef842cdaf55b4085c3f035873e2a9b6a2067bb630")} 
+                {9780, uint256S("0x000000000000002822c4625ef842cdaf55b4085c3f035873e2a9b6a2067bb630")},
+                {263000, uint256S("0xcffa1acf39f01de958497479ec1b34da30c8d29caed9f90816f744f6508a2e2b")}
             }
         };
 
@@ -307,11 +309,11 @@ public:
          // TODO to be specified in a future patch.
         };
 
-        // getchaintxstats 9780 (000000000000060c98d5b7cbd2de85f047f2339f132528ea0d1374ddae96a5c9)
+        // getchaintxstats 263000 (cffa1acf39f01de958497479ec1b34da30c8d29caed9f90816f744f6508a2e2b)
         chainTxData = ChainTxData{
-                  1722066619,
-                  23309,
-                  0.03848,
+                 1738232327,  // "time": timestamp del bloque más reciente
+                 481654,      // "txcount": número total de transacciones hasta ahora
+                 0.0240129    // "txrate": promedio de transacciones por segundo
           };
     }
 };
@@ -356,6 +358,7 @@ public:
         consensus.DIP0024QuorumsHeight = 300;
         consensus.V19Height = 300;
         consensus.MinBIP9WarningHeight = 300 + 960; // v19 activation height + miner confirmation window
+        consensus.EvonodeHeight = 2500;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.nPowTargetTimespan = 24 * 60 * 60; // Hootchain: 1 day
         consensus.nPowTargetSpacing = 60; // Hootchain: 90 seconds for testnet
@@ -523,6 +526,7 @@ public:
         consensus.DIP0024QuorumsHeight = 300;
         consensus.V19Height = 300;
         consensus.MinBIP9WarningHeight = 300 + 2016; // v19 activation height + miner confirmation window
+        consensus.EvonodeHeight = 2700;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.nPowTargetTimespan = 24 * 60 * 60; // Hootchain: 1 day
         consensus.nPowTargetSpacing = 1.5 * 60; // Hootchain: 1.5 minutes
@@ -771,6 +775,7 @@ public:
         consensus.DIP0024QuorumsHeight = 900;
         consensus.V19Height = 900;
         consensus.MinBIP9WarningHeight = 0;
+        consensus.EvonodeHeight = 2700;
         consensus.powLimit = uint256S("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 1
         consensus.nPowTargetTimespan = 24 * 60 * 60; // Hootchain: 1 day
         consensus.nPowTargetSpacing = 1 * 60; // Hootchain: 1 minutes

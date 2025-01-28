@@ -803,20 +803,27 @@ public:
     }
     std::vector<COutPoint> listMNCollaterials(const std::vector<std::pair<const CTransactionRef&, unsigned int>>& outputs) override
     {
-        const CBlockIndex *tip = WITH_LOCK(::cs_main, return ::ChainActive().Tip());
+        const CBlockIndex* tip = WITH_LOCK(::cs_main, return ::ChainActive().Tip());
         CDeterministicMNList mnList{};
-        if  (tip != nullptr && m_node.dmnman != nullptr) {
+        if (tip != nullptr && m_node.dmnman != nullptr) {
             mnList = m_node.dmnman->GetListForBlock(tip);
         }
+
+        // Obtener la altura del bloque
+        int32_t blockHeight = (tip != nullptr) ? tip->nHeight : 0;
+
         std::vector<COutPoint> listRet;
-        for (const auto& [tx, index]: outputs) {
+        for (const auto& [tx, index] : outputs) {
             COutPoint nextOut{tx->GetHash(), index};
-            if (CDeterministicMNManager::IsProTxWithCollateral(tx, index) || mnList.HasMNByCollateral(nextOut)) {
+            if (CDeterministicMNManager::IsProTxWithCollateral(tx, index, blockHeight) || mnList.HasMNByCollateral(nextOut)) {
                 listRet.emplace_back(nextOut);
             }
         }
         return listRet;
     }
+
+
+
     bool findBlock(const uint256& hash, const FoundBlock& block) override
     {
         WAIT_LOCK(cs_main, lock);

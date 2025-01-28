@@ -802,7 +802,7 @@ void SetupServerArgs(NodeContext& node)
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/hoot-labs/hoot>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/HootChain/HootChain.git>";
 
     return CopyrightHolders(_("Copyright (C)").translated, 2014, COPYRIGHT_YEAR) + "\n" +
            "\n" +

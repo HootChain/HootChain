@@ -21,7 +21,7 @@ from textwrap import indent
 
 WORKINGDIR = "/tmp/hoot_verify_binaries"
 HASHFILE = "hashes.tmp"
-HOST1="https://github.com/hoot-labs/hoot/releases/download/v"
+HOST1="https://github.com/HootChain/HootChain.git/releases/download/v"
 HOST2="https://hootcore-binaries.thepasta.org/file/hootcore-binaries/"
 VERSIONPREFIX=""
 SIGNATUREFILENAME = "SHA256SUMS.asc"

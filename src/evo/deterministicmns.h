@@ -64,7 +64,6 @@ public:
         // only non-initial values
         assert(_internalId != std::numeric_limits<uint64_t>::max());
     }
-
     template <typename Stream>
     CDeterministicMN(deserialize_type, Stream& s, const uint8_t format_version)
     {
@@ -168,6 +167,7 @@ private:
     };
 
 public:
+    void BanNodesWithOldCollateral(const CCoinsViewCache& view, int32_t current_height);
     using MnMap = immer::map<uint256, CDeterministicMNCPtr, ImmerHasher>;
     using MnInternalIdMap = immer::map<uint64_t, uint256>;
     using MnUniquePropertyMap = immer::map<uint256, std::pair<uint256, uint32_t>, ImmerHasher>;
@@ -610,7 +610,7 @@ public:
     CDeterministicMNList GetListAtChainTip() LOCKS_EXCLUDED(cs);
 
     // Test if given TX is a ProRegTx which also contains the collateral at index n
-    static bool IsProTxWithCollateral(const CTransactionRef& tx, uint32_t n);
+    static bool IsProTxWithCollateral(const CTransactionRef& tx, uint32_t n, int32_t blockHeight);
 
     bool MigrateDBIfNeeded();
     bool MigrateDBIfNeeded2();

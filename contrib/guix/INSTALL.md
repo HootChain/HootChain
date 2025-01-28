@@ -60,7 +60,7 @@ so you should log out and log back in.
 ## Option 3: Using Docker image
 
 Please refer to Docker's image
-[here](https://github.com/hoot-labs/hoot/tree/master/contrib/guix/Dockerfile).
+[here](https://github.com/HootChain/HootChain.git/tree/master/contrib/guix/Dockerfile).
 
 Note that the `Dockerfile` is largely equivalent to running through the binary
 tarball installation steps.

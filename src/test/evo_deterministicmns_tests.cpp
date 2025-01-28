@@ -111,7 +111,12 @@ static CMutableTransaction CreateProRegTx(const CTxMemPool& mempool, SimpleUTXOM
     CMutableTransaction tx;
     tx.nVersion = 3;
     tx.nType = TRANSACTION_PROVIDER_REGISTER;
-    FundTransaction(tx, utxos, scriptPayout, dmn_types::Regular.collat_amount, coinbaseKey);
+//CAMBIOS
+    int current_height = ::ChainActive().Height();
+    FundTransaction(tx, utxos, scriptPayout, dmn_types::GetCollateralAmount(MnType::Regular, current_height), coinbaseKey);
+
+//    FundTransaction(tx, utxos, scriptPayout, dmn_types::Regular.collat_amount, coinbaseKey);
+
     proTx.inputsHash = CalcTxInputsHash(CTransaction(tx));
     SetTxPayload(tx, proTx);
     SignTransaction(mempool, tx, coinbaseKey);
@@ -606,7 +611,10 @@ void FuncTestMempoolReorg(TestChainSetup& setup)
 
     // Create a MN with an external collateral
     CMutableTransaction tx_collateral;
-    FundTransaction(tx_collateral, utxos, scriptCollateral, dmn_types::Regular.collat_amount, setup.coinbaseKey);
+//CAMBIOS
+    int current_height = ::ChainActive().Height();
+    FundTransaction(tx_collateral, utxos, scriptCollateral, dmn_types::GetCollateralAmount(MnType::Regular, current_height), setup.coinbaseKey);
+//    FundTransaction(tx_collateral, utxos, scriptCollateral, dmn_types::Regular.collat_amount, setup.coinbaseKey);
     SignTransaction(*(setup.m_node.mempool), tx_collateral, setup.coinbaseKey);
 
     auto block = std::make_shared<CBlock>(setup.CreateBlock({tx_collateral}, setup.coinbaseKey));
@@ -624,7 +632,7 @@ void FuncTestMempoolReorg(TestChainSetup& setup)
     payload.scriptPayout = scriptPayout;
 
     for (size_t i = 0; i < tx_collateral.vout.size(); ++i) {
-        if (tx_collateral.vout[i].nValue == dmn_types::Regular.collat_amount) {
+        if (tx_collateral.vout[i].nValue == dmn_types::GetCollateralAmount(MnType::Regular, current_height)) {
             payload.collateralOutpoint = COutPoint(tx_collateral.GetHash(), i);
             break;
         }
@@ -633,7 +641,7 @@ void FuncTestMempoolReorg(TestChainSetup& setup)
     CMutableTransaction tx_reg;
     tx_reg.nVersion = 3;
     tx_reg.nType = TRANSACTION_PROVIDER_REGISTER;
-    FundTransaction(tx_reg, utxos, scriptPayout, dmn_types::Regular.collat_amount, setup.coinbaseKey);
+    FundTransaction(tx_reg, utxos, scriptPayout, dmn_types::GetCollateralAmount(MnType::Regular, current_height), setup.coinbaseKey);
     payload.inputsHash = CalcTxInputsHash(CTransaction(tx_reg));
     CMessageSigner::SignMessage(payload.MakeSignString(), payload.vchSig, collateralKey);
     SetTxPayload(tx_reg, payload);
@@ -691,9 +699,9 @@ void FuncTestMempoolDualProregtx(TestChainSetup& setup)
     payload.pubKeyOperator.Set(operatorKey.GetPublicKey(), bls::bls_legacy_scheme.load());
     payload.keyIDVoting = ownerKey.GetPubKey().GetID();
     payload.scriptPayout = scriptPayout;
-
+    int current_height = ::ChainActive().Height();
     for (size_t i = 0; i < tx_reg1.vout.size(); ++i) {
-        if (tx_reg1.vout[i].nValue == dmn_types::Regular.collat_amount) {
+        if (tx_reg1.vout[i].nValue == dmn_types::GetCollateralAmount(MnType::Regular, current_height)) {
             payload.collateralOutpoint = COutPoint(tx_reg1.GetHash(), i);
             break;
         }
@@ -702,7 +710,7 @@ void FuncTestMempoolDualProregtx(TestChainSetup& setup)
     CMutableTransaction tx_reg2;
     tx_reg2.nVersion = 3;
     tx_reg2.nType = TRANSACTION_PROVIDER_REGISTER;
-    FundTransaction(tx_reg2, utxos, scriptPayout, dmn_types::Regular.collat_amount, setup.coinbaseKey);
+    FundTransaction(tx_reg2, utxos, scriptPayout, dmn_types::GetCollateralAmount(MnType::Regular, current_height), setup.coinbaseKey);
     payload.inputsHash = CalcTxInputsHash(CTransaction(tx_reg2));
     CMessageSigner::SignMessage(payload.MakeSignString(), payload.vchSig, collateralKey);
     SetTxPayload(tx_reg2, payload);
@@ -739,7 +747,8 @@ void FuncVerifyDB(TestChainSetup& setup)
 
     // Create a MN with an external collateral
     CMutableTransaction tx_collateral;
-    FundTransaction(tx_collateral, utxos, scriptCollateral, dmn_types::Regular.collat_amount, setup.coinbaseKey);
+    int current_height = ::ChainActive().Height();
+    FundTransaction(tx_collateral, utxos, scriptCollateral, dmn_types::GetCollateralAmount(MnType::Regular, current_height), setup.coinbaseKey);
     SignTransaction(*(setup.m_node.mempool), tx_collateral, setup.coinbaseKey);
 
     auto block = std::make_shared<CBlock>(setup.CreateBlock({tx_collateral}, setup.coinbaseKey));
@@ -757,7 +766,7 @@ void FuncVerifyDB(TestChainSetup& setup)
     payload.scriptPayout = scriptPayout;
 
     for (size_t i = 0; i < tx_collateral.vout.size(); ++i) {
-        if (tx_collateral.vout[i].nValue == dmn_types::Regular.collat_amount) {
+        if (tx_collateral.vout[i].nValue == dmn_types::GetCollateralAmount(MnType::Regular, current_height)) {
             payload.collateralOutpoint = COutPoint(tx_collateral.GetHash(), i);
             break;
         }
@@ -766,7 +775,7 @@ void FuncVerifyDB(TestChainSetup& setup)
     CMutableTransaction tx_reg;
     tx_reg.nVersion = 3;
     tx_reg.nType = TRANSACTION_PROVIDER_REGISTER;
-    FundTransaction(tx_reg, utxos, scriptPayout, dmn_types::Regular.collat_amount, setup.coinbaseKey);
+    FundTransaction(tx_reg, utxos, scriptPayout, dmn_types::GetCollateralAmount(MnType::Regular, current_height), setup.coinbaseKey);
     payload.inputsHash = CalcTxInputsHash(CTransaction(tx_reg));
     CMessageSigner::SignMessage(payload.MakeSignString(), payload.vchSig, collateralKey);
     SetTxPayload(tx_reg, payload);

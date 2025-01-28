@@ -67,7 +67,7 @@ brew install berkeley-db4
 
 1. Clone the Hootchain Core source code:
     ```shell
-    git clone https://github.com/hoot-labs/hoot
+    git clone https://github.com/HootChain/HootChain.git
     cd hoot
     ```
 

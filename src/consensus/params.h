@@ -30,6 +30,7 @@ enum BuriedDeployment : int16_t
     DEPLOYMENT_DIP0020,
     DEPLOYMENT_DIP0024,
     DEPLOYMENT_BRR,
+    DEPLOYMENT_EVONODES,
     DEPLOYMENT_V19,
 };
 constexpr bool ValidDeployment(BuriedDeployment dep) { return DEPLOYMENT_HEIGHTINCB <= dep && dep <= DEPLOYMENT_V19; }
@@ -143,6 +144,8 @@ struct Params {
      */
     uint32_t nRuleChangeActivationThreshold;
     // Default BIP9Deployment::nWindowSize value for deployments where it's not specified and for unknown deployments.
+    int EvonodeHeight;
+    /** Block height at which Evonodes actived */
     uint32_t nMinerConfirmationWindow;
     BIP9Deployment vDeployments[MAX_VERSION_BITS_DEPLOYMENTS];
     /** Proof of work parameters */
@@ -200,6 +203,8 @@ struct Params {
             return BRRHeight;
         case DEPLOYMENT_V19:
             return V19Height;
+        case DEPLOYMENT_EVONODES:
+            return EvonodeHeight;
         } // no default case, so the compiler can warn about missing cases
         return std::numeric_limits<int>::max();
     }

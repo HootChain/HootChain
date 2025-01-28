@@ -2,7 +2,7 @@ Release Process
 ====================
 
 * [ ] Update translations, see [translation_process.md](https://github.com/dashpay/dash/blob/master/doc/translation_process.md#synchronising-translations).
-* [ ] Update manpages, see [gen-manpages.sh](https://github.com/hoot-labs/hoot/blob/master/contrib/devtools/README.md#gen-manpagessh).
+* [ ] Update manpages, see [gen-manpages.sh](https://github.com/HootChain/HootChain.git/blob/master/contrib/devtools/README.md#gen-manpagessh).
 
 Before every minor and major release:
 
@@ -85,7 +85,7 @@ git -C ./guix.sigs pull
 
 ### Create the macOS SDK tarball: (first time, or when SDK version changes)
 
-_Note: this step can be skipped if [our CI](https://github.com/hoot-labs/hoot/blob/master/ci/test/00_setup_env.sh#L64) still uses bitcoin's SDK package (see SDK_URL)_
+_Note: this step can be skipped if [our CI](https://github.com/HootChain/HootChain.git/blob/master/ci/test/00_setup_env.sh#L64) still uses bitcoin's SDK package (see SDK_URL)_
 
 Create the macOS SDK tarball, see the [macOS build
 instructions](build-osx.md#deterministic-macos-dmg-notes) for
@@ -166,7 +166,7 @@ popd
 Non-codesigners: wait for Windows/macOS detached signatures:
 
 - Once the Windows/macOS builds each have 3 matching signatures, they will be signed with their respective release keys.
-- Detached signatures will then be committed to the [hoot-detached-sigs](https://github.com/hoot-labs/hoot-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
+- Detached signatures will then be committed to the [hoot-detached-sigs](https://github.com/HootChain/HootChain.git-detached-sigs) repository, which can be combined with the unsigned apps to create signed binaries.
 
 Create (and optionally verify) the codesigned outputs:
 - [Codesigning](/contrib/guix/README.md#codesigning)

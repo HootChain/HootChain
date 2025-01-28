@@ -49,6 +49,8 @@ std::string DeploymentName(Consensus::BuriedDeployment dep)
         return "realloc";
     case Consensus::DEPLOYMENT_V19:
         return "v19";
+    case Consensus::DEPLOYMENT_EVONODES:
+        return "Evonodes";
     } // no default case, so the compiler can warn about missing cases
     return "";
 }

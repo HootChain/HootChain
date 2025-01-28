@@ -1,7 +1,3 @@
-// Copyright (c) 2023 The Dash Core developers
-// Distributed under the MIT software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #ifndef BITCOIN_EVO_DMN_TYPES_H
 #define BITCOIN_EVO_DMN_TYPES_H
 
@@ -25,30 +21,39 @@ namespace dmn_types {
 struct mntype_struct
 {
     const int32_t voting_weight;
-    const CAmount collat_amount;
     const std::string_view description;
 };
 
 constexpr auto Regular = mntype_struct{
     .voting_weight = 1,
-    .collat_amount = 3000 * COIN,
     .description = "Regular",
 };
 constexpr auto Evo = mntype_struct{
-    .voting_weight = 1,    
-    .collat_amount = MAX_MONEY,
+    .voting_weight = 4,
     .description = "Evo",
 };
 constexpr auto Invalid = mntype_struct{
     .voting_weight = 0,
-    .collat_amount = MAX_MONEY,
     .description = "Invalid",
 };
 
-[[nodiscard]] static constexpr bool IsCollateralAmount(CAmount amount)
+[[nodiscard]] static constexpr CAmount GetCollateralAmount(MnType type, int32_t current_height)
 {
-    return amount == Regular.collat_amount ||
-        amount == Evo.collat_amount;
+    switch (type) {
+        case MnType::Regular:
+            return (current_height < 271000) ? 3000 * COIN : 6000 * COIN;
+        case MnType::Evo:
+            return (current_height < 271000) ? 12000 * COIN : 24000 * COIN;
+        default:
+            return MAX_MONEY; // Invalid
+    }
+}
+
+
+[[nodiscard]] static constexpr bool IsCollateralAmount(CAmount amount, int32_t current_height)
+{
+    return amount == GetCollateralAmount(MnType::Regular, current_height) ||
+        amount == GetCollateralAmount(MnType::Evo, current_height);
 }
 
 } // namespace dmn_types
@@ -66,5 +71,6 @@ constexpr auto Invalid = mntype_struct{
 {
     return type < MnType::COUNT;
 }
+
 
 #endif // BITCOIN_EVO_DMN_TYPES_H

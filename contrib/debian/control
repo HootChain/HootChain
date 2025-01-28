@@ -23,7 +23,7 @@ Build-Depends: debhelper,
 Standards-Version: 3.9.2
 Homepage: https://www.hoot.space/
 Vcs-Git: git://github.com/hoot-labs/hoot.git
-Vcs-Browser: https://github.com/hoot-labs/hoot
+Vcs-Browser: https://github.com/HootChain/HootChain.git
 
 Package: hootd
 Architecture: any

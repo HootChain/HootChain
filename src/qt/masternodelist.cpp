@@ -1,3 +1,4 @@
+// Copyright (c) 2025 The HootChain developers @Silver
 // Copyright (c) 2016-2023 The Dash Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -12,6 +13,7 @@
 #include <qt/guiutil.h>
 #include <netbase.h>
 #include <qt/walletmodel.h>
+#include <evo/dmn_types.h>
 
 #include <univalue.h>
 
@@ -47,8 +49,7 @@ MasternodeList::MasternodeList(QWidget* parent) :
     GUIUtil::setFont({ui->label_filter_2}, GUIUtil::FontWeight::Normal, 15);
 
     int columnAddressWidth = 200;
-    // Disable EvoNodes
-    // int columnTypeWidth = 160;
+    int columnTypeWidth = 160;
     int columnStatusWidth = 80;
     int columnPoSeScoreWidth = 80;
     int columnRegisteredWidth = 80;
@@ -61,8 +62,7 @@ MasternodeList::MasternodeList(QWidget* parent) :
     int columnVotingWidth = 130;
 
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_SERVICE, columnAddressWidth);
-    // Disable EvoNodes
-    // ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_TYPE, columnTypeWidth);
+    ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_TYPE, columnTypeWidth);
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_STATUS, columnStatusWidth);
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_POSE, columnPoSeScoreWidth);
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_REGISTERED, columnRegisteredWidth);
@@ -191,7 +191,44 @@ void MasternodeList::updateDIP3List()
         });
     }
 
+//CAMBIOS
+
+    int evoCount = 0;
+    int regularCount = 0;
+
+    std::set<COutPoint> setOutpts;
+    if (walletModel && ui->checkBoxMyMasternodesOnly->isChecked()) {
+        std::vector<COutPoint> vOutpts;
+        walletModel->wallet().listProTxCoins(vOutpts);
+        for (const auto& outpt : vOutpts) {
+            setOutpts.emplace(outpt);
+        }
+    }
+
+    mnList.ForEachMN(false, [&](auto& dmn) {
+    // Si "Mis masternodes solamente" está activado, filtrar solo los del usuario
+        if (ui->checkBoxMyMasternodesOnly->isChecked()) {
+            bool fMyMasternode = setOutpts.count(dmn.collateralOutpoint) ||
+                walletModel->wallet().isSpendable(PKHash(dmn.pdmnState->keyIDOwner)) ||
+                walletModel->wallet().isSpendable(PKHash(dmn.pdmnState->keyIDVoting)) ||
+                walletModel->wallet().isSpendable(dmn.pdmnState->scriptPayout) ||
+                walletModel->wallet().isSpendable(dmn.pdmnState->scriptOperatorPayout);
+            if (!fMyMasternode) return; // Si no es mío, no lo cuento
+        }
+
+    // Contabilizar nodos Evo y Regular correctamente
+        if (dmn.nType == MnType::Evo) {
+            evoCount++;
+        } else {
+            regularCount++;
+        }
+    });
+
     LOCK(cs_dip3list);
+
+    ui->countLabelDIP3->setText(QString::number(evoCount + regularCount));
+    ui->countLabelEVO->setText(QString::number(evoCount));
+    ui->countLabelRegular->setText(QString::number(regularCount));
 
     QString strToFilter;
     ui->countLabelDIP3->setText(tr("Updating..."));
@@ -206,8 +243,8 @@ void MasternodeList::updateDIP3List()
         const auto& dmn = projectedPayees[i];
         nextPayments.emplace(dmn->proTxHash, mnList.GetHeight() + (int)i + 1);
     }
-
-    std::set<COutPoint> setOutpts;
+//CAMBIO
+//    std::set<COutPoint> setOutpts;
     if (walletModel && ui->checkBoxMyMasternodesOnly->isChecked()) {
         std::vector<COutPoint> vOutpts;
         walletModel->wallet().listProTxCoins(vOutpts);
@@ -230,8 +267,7 @@ void MasternodeList::updateDIP3List()
         auto addr_key = dmn.pdmnState->addr.GetKey();
         QByteArray addr_ba(reinterpret_cast<const char*>(addr_key.data()), addr_key.size());
         QTableWidgetItem* addressItem = new CMasternodeListWidgetItem<QByteArray>(QString::fromStdString(dmn.pdmnState->addr.ToString()), addr_ba);
-        // Disable EvoNodes
-        // QTableWidgetItem* typeItem = new QTableWidgetItem(QString::fromStdString(std::string(GetMnType(dmn.nType).description)));
+        QTableWidgetItem* typeItem = new QTableWidgetItem(QString::fromStdString(std::string(GetMnType(dmn.nType).description)));
         QTableWidgetItem* statusItem = new QTableWidgetItem(dmn.pdmnState->IsBanned() ? tr("POSE_BANNED") : tr("ENABLED"));
         QTableWidgetItem* PoSeScoreItem = new CMasternodeListWidgetItem<int>(QString::number(dmn.pdmnState->nPoSePenalty), dmn.pdmnState->nPoSePenalty);
         QTableWidgetItem* registeredItem = new CMasternodeListWidgetItem<int>(QString::number(dmn.pdmnState->nRegisteredHeight), dmn.pdmnState->nRegisteredHeight);
@@ -286,8 +322,7 @@ void MasternodeList::updateDIP3List()
 
         if (strCurrentFilterDIP3 != "") {
             strToFilter = addressItem->text() + " " +
-                          // Disable EvoNodes
-                          // typeItem->text() + " " +
+                          typeItem->text() + " " +
                           statusItem->text() + " " +
                           PoSeScoreItem->text() + " " +
                           registeredItem->text() + " " +
@@ -304,8 +339,7 @@ void MasternodeList::updateDIP3List()
 
         ui->tableWidgetMasternodesDIP3->insertRow(0);
         ui->tableWidgetMasternodesDIP3->setItem(0, COLUMN_SERVICE, addressItem);
-        // Disable EvoNodes
-        // ui->tableWidgetMasternodesDIP3->setItem(0, COLUMN_TYPE, typeItem);
+        ui->tableWidgetMasternodesDIP3->setItem(0, COLUMN_TYPE, typeItem);
         ui->tableWidgetMasternodesDIP3->setItem(0, COLUMN_STATUS, statusItem);
         ui->tableWidgetMasternodesDIP3->setItem(0, COLUMN_POSE, PoSeScoreItem);
         ui->tableWidgetMasternodesDIP3->setItem(0, COLUMN_REGISTERED, registeredItem);

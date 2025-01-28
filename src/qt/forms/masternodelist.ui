@@ -94,7 +94,7 @@
          <item>
           <widget class="QLabel" name="label_count_2">
            <property name="text">
-            <string>Node Count:</string>
+            <string>Total :</string>
            </property>
           </widget>
          </item>
@@ -105,6 +105,38 @@
            </property>
           </widget>
          </item>
+         <!-- Start: Added EVO node counter -->
+         <item>
+          <widget class="QLabel" name="label_count_evo">
+           <property name="text">
+            <string>&lt;b&gt;| Evo:&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="countLabelEVO">
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+         <!-- End: Added evo node counter -->
+         <!-- Start: Added regular node counter -->
+         <item>
+          <widget class="QLabel" name="label_count_regular">
+           <property name="text">
+            <string>&lt;b&gt;| Regular:&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="countLabelRegular">
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+         <!-- End: Added regular node counter -->
         </layout>
        </item>
        <item row="1" column="0">
@@ -132,13 +164,11 @@
            <string>Service</string>
           </property>
          </column>
-         <!-- 
-          Disable EvoNodes
-          <column>
+         <column>
           <property name="text">
            <string>Type</string>
           </property>
-         </column> -->
+         </column>
          <column>
           <property name="text">
            <string>Status</string>
@@ -200,3 +230,4 @@
  <resources/>
  <connections/>
 </ui>
+

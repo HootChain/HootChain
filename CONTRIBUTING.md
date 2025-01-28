@@ -31,7 +31,7 @@ Hootchain Core and how to run the unit and functional tests.
 
 There are many open issues of varying difficulty waiting to be fixed.
 If you're looking for somewhere to start contributing, check out the
-[good first issue](https://github.com/hoot-labs/hoot/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
+[good first issue](https://github.com/HootChain/HootChain.git/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
 list.
 Some of them might no longer be applicable. So if you are interested, but
 unsure, you might want to leave a comment on the issue first.

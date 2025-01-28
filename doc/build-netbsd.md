@@ -25,7 +25,7 @@ libtool
 pkg-config
 python37
 
-git clone https://github.com/hoot-labs/hoot.git
+git clone https://github.com/HootChain/HootChain.git.git
 ```
 
 See [dependencies.md](dependencies.md) for a complete overview.

@@ -116,22 +116,21 @@ static UniValue masternode_count(const JSONRPCRequest& request)
     obj.pushKV("total", total);
     obj.pushKV("enabled", enabled);
 
-    // Disable Evonodes
-    // int evo_total = mnList.GetAllEvoCount();
-    // int evo_enabled = mnList.GetValidEvoCount();
+    int evo_total = mnList.GetAllEvoCount();
+    int evo_enabled = mnList.GetValidEvoCount();
 
-    // UniValue evoObj(UniValue::VOBJ);
-    // evoObj.pushKV("total", evo_total);
-    // evoObj.pushKV("enabled", evo_enabled);
+    UniValue evoObj(UniValue::VOBJ);
+    evoObj.pushKV("total", evo_total);
+    evoObj.pushKV("enabled", evo_enabled);
 
-    // UniValue regularObj(UniValue::VOBJ);
-    // regularObj.pushKV("total", total - evo_total);
-    // regularObj.pushKV("enabled", enabled - evo_enabled);
+    UniValue regularObj(UniValue::VOBJ);
+    regularObj.pushKV("total", total - evo_total);
+    regularObj.pushKV("enabled", enabled - evo_enabled);
 
-    // UniValue detailedObj(UniValue::VOBJ);
-    // detailedObj.pushKV("regular", regularObj);
-    // detailedObj.pushKV("evo", evoObj);
-    // obj.pushKV("detailed", detailedObj);
+    UniValue detailedObj(UniValue::VOBJ);
+    detailedObj.pushKV("regular", regularObj);
+    detailedObj.pushKV("evo", evoObj);
+    obj.pushKV("detailed", detailedObj);
 
     return obj;
 }
@@ -274,8 +273,7 @@ static UniValue masternode_status(const JSONRPCRequest& request)
     }
     if (dmn) {
         mnObj.pushKV("proTxHash", dmn->proTxHash.ToString());
-        // Disable Evonodes
-        // mnObj.pushKV("type", std::string(GetMnType(dmn->nType).description));
+        mnObj.pushKV("type", std::string(GetMnType(dmn->nType).description));
         mnObj.pushKV("collateralHash", dmn->collateralOutpoint.hash.ToString());
         mnObj.pushKV("collateralIndex", (int)dmn->collateralOutpoint.n);
         mnObj.pushKV("dmnState", dmn->pdmnState->ToJson(dmn->nType));
@@ -704,13 +702,7 @@ static UniValue masternodelist(const JSONRPCRequest& request, ChainstateManager&
             objMN.pushKV("address", dmn.pdmnState->addr.ToString());
             objMN.pushKV("payee", payeeStr);
             objMN.pushKV("status", dmnToStatus(dmn));
-            // Disable Evonodes
-            // objMN.pushKV("type", std::string(GetMnType(dmn.nType).description));
-            // if (dmn.nType == MnType::Evo) {
-            //     objMN.pushKV("platformNodeID", dmn.pdmnState->platformNodeID.ToString());
-            //     objMN.pushKV("platformP2PPort", dmn.pdmnState->platformP2PPort);
-            //     objMN.pushKV("platformHTTPPort", dmn.pdmnState->platformHTTPPort);
-            // }
+            objMN.pushKV("type", std::string(GetMnType(dmn.nType).description));
             objMN.pushKV("pospenaltyscore", dmn.pdmnState->nPoSePenalty);
             objMN.pushKV("consecutivePayments", dmn.pdmnState->nConsecutivePayments);
             objMN.pushKV("lastpaidtime", dmnToLastPaidTime(dmn));
@@ -750,12 +742,51 @@ static UniValue masternodelist(const JSONRPCRequest& request, ChainstateManager&
     return obj;
 }
 
+// Simplified getcollateralamount command with Evo check
+
+static RPCHelpMan getcollateralamount()
+{
+    return RPCHelpMan{
+        "getcollateralamount",
+        "\nRetrieve the collateral amount for both types of masternodes at the current block height.\n",
+        {}, // No parameters
+        RPCResult{
+            RPCResult::Type::OBJ, "", "",
+            {
+                {RPCResult::Type::NUM, "Regular", "Collateral for Regular masternodes"},
+                {RPCResult::Type::STR, "Evo", "Collateral for Evo masternodes (Disabled if Evo nodes are inactive)"},
+            }
+        },
+        RPCExamples{
+            HelpExampleCli("getcollateralamount", "") +
+            HelpExampleRpc("getcollateralamount", "")
+        },
+        [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+        {
+            LOCK(cs_main);
+
+            // Get current block height
+            int32_t currentHeight = ::ChainActive().Height();
+
+            // Create result object
+            UniValue result(UniValue::VOBJ);
+            result.pushKV("Regular", static_cast<double>(dmn_types::GetCollateralAmount(MnType::Regular, currentHeight)) / COIN);
+
+            result.pushKV("Evo", static_cast<double>(dmn_types::GetCollateralAmount(MnType::Evo, currentHeight)) / COIN);
+
+            return result;
+        }
+    };
+}
+
+
 void RegisterMasternodeRPCCommands(CRPCTable &t)
 {
 // clang-format off
 static const CRPCCommand commands[] =
 { //  category              name                      actor (function)         argNames
   //  --------------------- ------------------------  -----------------------  ----------
+    { "masternodes",        "getcollateralamount",    &getcollateralamount,    {} },
     { "hoot",               "masternode",             &masternode,             {} },
     { "hoot",               "masternodelist",         &masternode,             {} },
 };

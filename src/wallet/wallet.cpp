@@ -2615,14 +2615,19 @@ void CWallet::AvailableCoins(std::vector<COutput> &vCoins, bool fOnlySafe, const
             if (nCoinType == CoinType::ONLY_FULLY_MIXED) {
                 if (!CoinJoin::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
                 found = IsFullyMixed(COutPoint(wtxid, i));
-            } else if(nCoinType == CoinType::ONLY_READY_TO_MIX) {
+            } else if (nCoinType == CoinType::ONLY_READY_TO_MIX) {
                 if (!CoinJoin::IsDenominatedAmount(pcoin->tx->vout[i].nValue)) continue;
                 found = !IsFullyMixed(COutPoint(wtxid, i));
-            } else if(nCoinType == CoinType::ONLY_NONDENOMINATED) {
-                if (CoinJoin::IsCollateralAmount(pcoin->tx->vout[i].nValue)) continue; // do not use collateral amounts
+            } else if (nCoinType == CoinType::ONLY_NONDENOMINATED) {
+                if (CoinJoin::IsCollateralAmount(pcoin->tx->vout[i].nValue)) continue; // Do not use collateral amounts
                 found = !CoinJoin::IsDenominatedAmount(pcoin->tx->vout[i].nValue);
-            } else if(nCoinType == CoinType::ONLY_MASTERNODE_COLLATERAL) {
-                found = dmn_types::IsCollateralAmount(pcoin->tx->vout[i].nValue);
+            } else if (nCoinType == CoinType::ONLY_MASTERNODE_COLLATERAL) {
+                // Get the block height using GetLastBlockHeight
+                int32_t blockHeight = GetLastBlockHeight();
+
+               // Verify if it is a valid collateral for the masternode
+                found = dmn_types::IsCollateralAmount(pcoin->tx->vout[i].nValue, blockHeight);
+
             } else if(nCoinType == CoinType::ONLY_COINJOIN_COLLATERAL) {
                 found = CoinJoin::IsCollateralAmount(pcoin->tx->vout[i].nValue);
             } else {
@@ -3322,7 +3327,9 @@ std::vector<CompactTallyItem> CWallet::SelectCoinsGroupedByAddresses(bool fSkipD
             if(fAnonymizable) {
                 // ignore collaterals
                 if(CoinJoin::IsCollateralAmount(wtx.tx->vout[i].nValue)) continue;
-                if (fMasternodeMode && dmn_types::IsCollateralAmount(wtx.tx->vout[i].nValue)) continue;
+                int32_t blockHeight = GetLastBlockHeight();
+                if (fMasternodeMode && dmn_types::IsCollateralAmount(wtx.tx->vout[i].nValue, blockHeight)) continue;
+
                 // ignore outputs that are 10 times smaller then the smallest denomination
                 // otherwise they will just lead to higher fee / lower priority
                 if(wtx.tx->vout[i].nValue <= nSmallestDenom/10) continue;

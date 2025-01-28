@@ -230,7 +230,7 @@ void TransactionView::setModel(WalletModel *_model)
         transactionView->setColumnWidth(TransactionTableModel::Watchonly, WATCHONLY_COLUMN_WIDTH);
         transactionView->setColumnWidth(TransactionTableModel::Date, DATE_COLUMN_WIDTH);
         transactionView->setColumnWidth(TransactionTableModel::Type, TYPE_COLUMN_WIDTH);
-        transactionView->setColumnWidth(TransactionTableModel::Amount, AMOUNT_MINIMUM_COLUMN_WIDTH);
+        transactionView->setColumnWidth(TransactionTableModel::ToAddress, ADDRESS_COLUMN_WIDTH);
 
         // Note: it's a good idea to connect this signal AFTER the model is set
         connect(transactionView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &TransactionView::computeSum);
@@ -240,8 +240,8 @@ void TransactionView::setModel(WalletModel *_model)
         transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::Watchonly, QHeaderView::Fixed);
         transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::Date, QHeaderView::Interactive);
         transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::Type, QHeaderView::Interactive);
-        transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::ToAddress, QHeaderView::Stretch);
-        transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::Amount, QHeaderView::Fixed);
+        transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::ToAddress, QHeaderView::Interactive);
+        transactionView->horizontalHeader()->setSectionResizeMode(TransactionTableModel::Amount, QHeaderView::Stretch);
 
         if (_model->getOptionsModel())
         {

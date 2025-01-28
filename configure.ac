@@ -1,10 +1,10 @@
 AC_PREREQ([2.69])
 dnl Don't forget to push a corresponding tag when updating any of _CLIENT_VERSION_* numbers
 define(_CLIENT_VERSION_MAJOR, 1)
-define(_CLIENT_VERSION_MINOR, 2)
+define(_CLIENT_VERSION_MINOR, 3)
 define(_CLIENT_VERSION_BUILD, 0)
 define(_CLIENT_VERSION_IS_RELEASE, true)
-define(_COPYRIGHT_YEAR, 2024)
+define(_COPYRIGHT_YEAR, 2025)
 define(_COPYRIGHT_HOLDERS,[The %s developers])
 define(_COPYRIGHT_HOLDERS_SUBSTITUTION,[[Hootchain Core]])
 AC_INIT([Hootchain Core],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_BUILD),[https://github.com/HootChain/HootChain/issues],[hootcore],[https://hootchain.org/])

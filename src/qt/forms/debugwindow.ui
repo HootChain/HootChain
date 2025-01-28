@@ -317,8 +317,6 @@
          </property>
         </widget>
        </item>
-       <!-- 
-        Disable Evonodes
         <item row="10" column="0">
         <widget class="QLabel" name="evoCountLabel">
          <property name="text">
@@ -338,7 +336,7 @@
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
          </property>
         </widget>
-       </item> -->
+       </item>
        <item row="11" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">

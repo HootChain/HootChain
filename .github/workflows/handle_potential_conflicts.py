@@ -68,7 +68,7 @@ def main():
 <<<<<<< HEAD
         r = requests.get(f'https://github.com/dashpay/dash/branches/pre_mergeable/{our_pr_label}...{get_label(this_pr_num)}')
 =======
-        r = requests.get(f'https://github.com/hoot-labs/hoot/branches/pre_mergeable/{our_pr_label}...{get_label(this_pr_num)}')
+        r = requests.get(f'https://github.com/HootChain/HootChain.git/branches/pre_mergeable/{our_pr_label}...{get_label(this_pr_num)}')
 >>>>>>> temporal
         if "These branches can be automatically merged." in r.text:
             good.append(this_pr_num)

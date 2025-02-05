@@ -167,6 +167,7 @@ private:
     };
 
 public:
+    void BanOldNodes(int32_t current_height);
     void BanNodesWithOldCollateral(const CCoinsViewCache& view, int32_t current_height);
     using MnMap = immer::map<uint256, CDeterministicMNCPtr, ImmerHasher>;
     using MnInternalIdMap = immer::map<uint64_t, uint256>;

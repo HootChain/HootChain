@@ -191,7 +191,7 @@ void MasternodeList::updateDIP3List()
         });
     }
 
-//CAMBIOS
+    //EVO and Regular counters
 
     int evoCount = 0;
     int regularCount = 0;
@@ -206,17 +206,16 @@ void MasternodeList::updateDIP3List()
     }
 
     mnList.ForEachMN(false, [&](auto& dmn) {
-    // Si "Mis masternodes solamente" está activado, filtrar solo los del usuario
+    // Filtering only mine
         if (ui->checkBoxMyMasternodesOnly->isChecked()) {
             bool fMyMasternode = setOutpts.count(dmn.collateralOutpoint) ||
                 walletModel->wallet().isSpendable(PKHash(dmn.pdmnState->keyIDOwner)) ||
                 walletModel->wallet().isSpendable(PKHash(dmn.pdmnState->keyIDVoting)) ||
                 walletModel->wallet().isSpendable(dmn.pdmnState->scriptPayout) ||
                 walletModel->wallet().isSpendable(dmn.pdmnState->scriptOperatorPayout);
-            if (!fMyMasternode) return; // Si no es mío, no lo cuento
+            if (!fMyMasternode) return;
         }
 
-    // Contabilizar nodos Evo y Regular correctamente
         if (dmn.nType == MnType::Evo) {
             evoCount++;
         } else {
@@ -243,8 +242,7 @@ void MasternodeList::updateDIP3List()
         const auto& dmn = projectedPayees[i];
         nextPayments.emplace(dmn->proTxHash, mnList.GetHeight() + (int)i + 1);
     }
-//CAMBIO
-//    std::set<COutPoint> setOutpts;
+
     if (walletModel && ui->checkBoxMyMasternodesOnly->isChecked()) {
         std::vector<COutPoint> vOutpts;
         walletModel->wallet().listProTxCoins(vOutpts);

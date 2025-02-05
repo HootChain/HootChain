@@ -111,11 +111,9 @@ static CMutableTransaction CreateProRegTx(const CTxMemPool& mempool, SimpleUTXOM
     CMutableTransaction tx;
     tx.nVersion = 3;
     tx.nType = TRANSACTION_PROVIDER_REGISTER;
-//CAMBIOS
+
     int current_height = ::ChainActive().Height();
     FundTransaction(tx, utxos, scriptPayout, dmn_types::GetCollateralAmount(MnType::Regular, current_height), coinbaseKey);
-
-//    FundTransaction(tx, utxos, scriptPayout, dmn_types::Regular.collat_amount, coinbaseKey);
 
     proTx.inputsHash = CalcTxInputsHash(CTransaction(tx));
     SetTxPayload(tx, proTx);

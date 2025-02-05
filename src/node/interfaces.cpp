@@ -809,7 +809,6 @@ public:
             mnList = m_node.dmnman->GetListForBlock(tip);
         }
 
-        // Obtener la altura del bloque
         int32_t blockHeight = (tip != nullptr) ? tip->nHeight : 0;
 
         std::vector<COutPoint> listRet;

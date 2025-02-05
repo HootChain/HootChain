@@ -1227,7 +1227,8 @@ const std::vector<MasternodePayment> masternodePayments = {
     {130201, 173400, 70.30},
     {173401, 216600, 72.15},
     {216601, 270000, 74},
-    {270001, INT_MAX, 85},
+    {270001, 273000, 85},
+    {273001, INT_MAX, 89.74},
 };
 
 CAmount GetMasternodePayment(int nHeight, CAmount blockValue, bool fV20Active)

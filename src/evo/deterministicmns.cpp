@@ -77,100 +77,6 @@ UniValue CDeterministicMN::ToJson() const
     obj.pushKV("state", pdmnState->ToJson(nType));
     return obj;
 }
-//new ban function
-void CDeterministicMNList::BanOldNodes(int32_t current_height)
-{
-    LogPrintf("BanOldNodes: Start banning process at height %d\n", current_height);
-
-    // Lista temporal para almacenar los proTxHash de los masternodes a banear
-    std::vector<uint256> mnToBan;
-
-    // Primera pasada: Identificar los nodos a banear sin modificar la lista
-    ForEachMN(false, [current_height, this, &mnToBan](const auto& dmn) {
-        if (!dmn.pdmnState) {
-            LogPrintf("ERROR: MN %s has a NULL state, skipping...\n", dmn.proTxHash.ToString());
-            return;
-        }
-
-        int32_t registeredHeight = dmn.pdmnState->nRegisteredHeight;
-        LogPrintf("Checking MN %s - Registered at height %d\n",
-                  dmn.proTxHash.ToString(), registeredHeight);
-
-        if (registeredHeight < 271000) {
-            LogPrintf("MN %s will be banned (registered at height %d)\n",
-                      dmn.proTxHash.ToString(), registeredHeight);
-            mnToBan.push_back(dmn.proTxHash);
-        }
-    });
-
-    // Segunda pasada: Banear los nodos identificados
-    for (const auto& proTxHash : mnToBan) {
-        auto dmn = GetMN(proTxHash);
-        if (!dmn || !dmn->pdmnState) {
-            LogPrintf("ERROR: MN %s is no longer available, skipping...\n", proTxHash.ToString());
-            continue;
-        }
-
-        auto newState = std::make_shared<CDeterministicMNState>(*dmn->pdmnState);
-        if (!newState) {
-            LogPrintf("ERROR: Failed to create newState for MN %s\n", proTxHash.ToString());
-            continue;
-        }
-
-        LogPrintf("Banning MN %s (registered at height %d)\n",
-                  proTxHash.ToString(), dmn->pdmnState->nRegisteredHeight);
-
-        newState->BanIfNotBanned(current_height);
-        UpdateMN(proTxHash, newState);
-    }
-
-    LogPrintf("BanOldNodes: Finished banning process at height %d\n", current_height);
-}
-
-
-//old funtion to ban nodes
-void CDeterministicMNList::BanNodesWithOldCollateral(const CCoinsViewCache& view, int32_t current_height)
-{
-    LogPrintf("BanNodesWithOldCollateral: Start banning process at height %d\n", current_height);
-
-    ForEachMN(false, [current_height, this, &view](const auto& dmn) {
-
-        LogPrintf("Checking MN %s\n", dmn.proTxHash.ToString());
-
-        if (!dmn.pdmnState) {
-            LogPrintf("ERROR: MN %s has a NULL state!\n", dmn.proTxHash.ToString());
-            return;
-        }
-
-        // colaterals
-        CAmount actualCollateral = GetCollateralAmountFromOutpoint(dmn.collateralOutpoint, view);
-        CAmount expectedCollateral = dmn_types::GetCollateralAmount(dmn.nType, current_height);
-
-        LogPrintf("MN %s - Expected Collateral: %d - Actual Collateral: %d\n",
-                  dmn.proTxHash.ToString(), expectedCollateral, actualCollateral);
-
-        // Check and ban
-        if (actualCollateral != expectedCollateral) {
-            LogPrintf("Banning MN %s\n", dmn.proTxHash.ToString());
-
-            auto newState = std::make_shared<CDeterministicMNState>(*dmn.pdmnState);
-            if (!newState) {
-                LogPrintf("ERROR: Failed to create newState for MN %s\n", dmn.proTxHash.ToString());
-                return;
-            }
-
-            newState->BanIfNotBanned(current_height);
-
-            LogPrintf("Updating MN state for %s\n", dmn.proTxHash.ToString());
-            UpdateMN(dmn.proTxHash, newState);
-        } else {
-            LogPrintf("MN %s has valid collateral. No action taken.\n", dmn.proTxHash.ToString());
-        }
-    });
-
-    LogPrintf("BanNodesWithOldCollateral: Finished banning process at height %d\n", current_height);
-}
-
 
 bool CDeterministicMNList::IsMNValid(const uint256& proTxHash) const
 {
@@ -812,19 +718,6 @@ bool CDeterministicMNManager::BuildNewListFromBlock(const CBlock& block, gsl::no
     });
 
     newList.DecreaseScores();
-
-    // Blocks where collateral validation is performed
-    static const std::set<int32_t> banningBlocks = {272000};
-
-    // Check if we are at a block relevant for validation
-    if (banningBlocks.count(nHeight)) {
-        newList.BanNodesWithOldCollateral(view, nHeight);
-    }
-
-    if (nHeight == 272500) {
-        LogPrintf("Calling BanOldNodes at block %d\n", nHeight);
-        newList.BanOldNodes(nHeight);
-    }
 
     const bool isV19Active{DeploymentActiveAfter(pindexPrev, Params().GetConsensus(), Consensus::DEPLOYMENT_V19)};
     const bool isMNRewardReallocation{DeploymentActiveAfter(pindexPrev, Params().GetConsensus(), Consensus::DEPLOYMENT_MN_RR)};

@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2024 The Dash Core developers
+// Copyright (c) 2018-2024 The Dash Core developer
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -27,17 +27,8 @@
 static const std::string DB_LIST_SNAPSHOT = "dmn_S3";
 static const std::string DB_LIST_DIFF = "dmn_D3";
 
-std::unique_ptr<CDeterministicMNManager> deterministicMNManager;
 
-// Auxiliary function to get the collateral from the COutPoint
-static CAmount GetCollateralAmountFromOutpoint(const COutPoint& outpoint, const CCoinsViewCache& view)
-{
-    const Coin& coin = view.AccessCoin(outpoint);
-    if (!coin.IsSpent()) {
-        return coin.out.nValue; // Returns the collateral value
-    }
-    return 0; // If already spent, returns 0
-}
+std::unique_ptr<CDeterministicMNManager> deterministicMNManager;
 
 uint64_t CDeterministicMN::GetInternalId() const
 {
@@ -613,6 +604,40 @@ bool CDeterministicMNManager::ProcessBlock(const CBlock& block, gsl::not_null<co
 
         oldList = GetListForBlockInternal(pindex->pprev);
         diff = oldList.BuildDiff(newList);
+        //Old nodes banning
+        if (nHeight >= 287000 && nHeight < 288000 && (nHeight % 5 == 0)) { // Apply banning every 5 blocks, stop at 295000
+                std::vector<CDeterministicMNCPtr> mnSorted;
+
+                // Get eligible masternodes
+                newList.ForEachMN(false, [&](const CDeterministicMN& mn) {
+                        bool isBanned = CDeterministicMNList::IsMNPoSeBanned(mn);
+
+                        if (!isBanned && mn.pdmnState->nRegisteredHeight < 271000) {
+                                mnSorted.push_back(std::make_shared<CDeterministicMN>(mn));
+                        }
+                });
+
+                // Sort by registration block (oldest first)
+                std::sort(mnSorted.begin(), mnSorted.end(), [](const CDeterministicMNCPtr& a, const CDeterministicMNCPtr& b) {
+                        return a->pdmnState->nRegisteredHeight < b->pdmnState->nRegisteredHeight;
+                });
+
+                int punishedCount = 0;
+                for (auto& mn : mnSorted) {
+                        if (punishedCount >= 5) break; // Limit to 5 per cycle
+
+                        // Apply PoSe punishment
+                        newList.PoSePunish(mn->proTxHash, 1000, true);
+                        punishedCount++;
+                }
+
+                // Save updated masternode list
+                m_evoDb.Write(std::make_pair(DB_LIST_DIFF, newList.GetBlockHash()), diff);
+                m_evoDb.Write(std::make_pair(DB_LIST_SNAPSHOT, newList.GetBlockHash()), newList);
+
+                // Debug log (only essential info)
+                LogPrintf("PoSe punishment applied to %d masternodes at block %d\n", punishedCount, nHeight);
+        }
 
         m_evoDb.Write(std::make_pair(DB_LIST_DIFF, newList.GetBlockHash()), diff);
         if ((nHeight % DISK_SNAPSHOT_PERIOD) == 0 || pindex->pprev == m_initial_snapshot_index) {
@@ -624,6 +649,7 @@ bool CDeterministicMNManager::ProcessBlock(const CBlock& block, gsl::not_null<co
 
         diff.nHeight = pindex->nHeight;
         mnListDiffsCache.emplace(pindex->GetBlockHash(), diff);
+
     } catch (const std::exception& e) {
         LogPrintf("CDeterministicMNManager::%s -- internal error: %s\n", __func__, e.what());
         return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "failed-dmn-block");

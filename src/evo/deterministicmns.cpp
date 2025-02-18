@@ -605,7 +605,7 @@ bool CDeterministicMNManager::ProcessBlock(const CBlock& block, gsl::not_null<co
         oldList = GetListForBlockInternal(pindex->pprev);
         diff = oldList.BuildDiff(newList);
         //Old nodes banning
-        if (nHeight >= 287000 && nHeight < 288000 && (nHeight % 5 == 0)) { // Apply banning every 5 blocks, stop at 295000
+        if (nHeight >= 287000 && nHeight < 288000 && (nHeight % 5 == 0)) { // Apply banning every 5 blocks, stop at 288000
                 std::vector<CDeterministicMNCPtr> mnSorted;
 
                 // Get eligible masternodes

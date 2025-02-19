@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2024 The Dash Core developer
+// Copyright (c) 2018-2024 The Dash Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -605,7 +605,7 @@ bool CDeterministicMNManager::ProcessBlock(const CBlock& block, gsl::not_null<co
         oldList = GetListForBlockInternal(pindex->pprev);
         diff = oldList.BuildDiff(newList);
         //Old nodes banning
-        if (nHeight >= 287000 && nHeight < 288000 && (nHeight % 5 == 0)) { // Apply banning every 5 blocks, stop at 288000
+        if (nHeight >= 289000 && nHeight < 290000 && (nHeight % 5 == 0)) { // Apply banning every 5 blocks, stop at 288000
                 std::vector<CDeterministicMNCPtr> mnSorted;
 
                 // Get eligible masternodes

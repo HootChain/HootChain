@@ -50,7 +50,7 @@ MasternodeList::MasternodeList(QWidget* parent) :
 
     int columnAddressWidth = 200;
     int columnTypeWidth = 120;
-    int columnCollateralWidth = 100;
+    int columnCollateralAmountWidth = 100;
     int columnStatusWidth = 80;
     int columnPoSeScoreWidth = 80;
     int columnRegisteredWidth = 80;
@@ -64,7 +64,7 @@ MasternodeList::MasternodeList(QWidget* parent) :
 
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_SERVICE, columnAddressWidth);
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_TYPE, columnTypeWidth);
-    ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_COLLATERAL_AMOUNT, columnTypeWidth);
+    ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_COLLATERAL_AMOUNT, columnCollateralAmountWidth);
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_STATUS, columnStatusWidth);
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_POSE, columnPoSeScoreWidth);
     ui->tableWidgetMasternodesDIP3->setColumnWidth(COLUMN_REGISTERED, columnRegisteredWidth);
@@ -321,13 +321,11 @@ void MasternodeList::updateDIP3List()
         QTableWidgetItem* proTxHashItem = new QTableWidgetItem(QString::fromStdString(dmn.proTxHash.ToString()));
 
         CAmount collateralAmount = 0;
+        Coin coin;
+
         if (!CDeterministicMNList::IsMNPoSeBanned(dmn)) {
-            CTransactionRef tx;
-            uint256 hashBlock;
-            if (GetTransaction(dmn.collateralOutpoint.hash, tx, Params().GetConsensus(), hashBlock)) {
-                if (dmn.collateralOutpoint.n < tx->vout.size()) {
-                    collateralAmount = tx->vout[dmn.collateralOutpoint.n].nValue / COIN;
-                }
+            if (clientModel->node().getUnspentOutput(dmn.collateralOutpoint, coin)) {
+                collateralAmount = coin.out.nValue / COIN;
             }
         }
 

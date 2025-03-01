@@ -3,7 +3,7 @@ name: Build HootChain Wallets (Linux x86_64 y ARM64)
 on:
   push:
     tags:
-      - v1.2
+      - v1.4.3
   workflow_dispatch:
     inputs:
       version:

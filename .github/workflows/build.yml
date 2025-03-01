@@ -1,0 +1,149 @@
+name: Build HootChain Wallets (Linux x86_64 y ARM64)
+
+on:
+  push:
+    tags:
+      - v1.2
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versión de HootChain'
+        required: true
+        default: '1.4.3'
+        
+permissions:
+  contents: write 
+
+jobs:
+  build-x86_64:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Chequear el código
+        uses: actions/checkout@v3
+
+      - name: Configurar permisos para scripts
+        run: |
+          chmod -R +x depends
+          chmod +x autogen.sh
+
+      - name: Instalar dependencias de compilación
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Compilar dependencias internas (x86_64)
+        run: |
+          cd depends
+          make HOST=x86_64-pc-linux-gnu
+          cd ..
+
+      - name: Generar archivos de configuración
+        run: |
+          ./autogen.sh
+
+      - name: Configurar el proyecto para x86_64
+        run: |
+          export PATH=$(pwd)/depends/x86_64-pc-linux-gnu/bin:$PATH
+          CONFIG_SITE=$PWD/depends/x86_64-pc-linux-gnu/share/config.site ./configure --prefix=$(pwd)/depends/x86_64-pc-linux-gnu --disable-tests --disable-bench
+
+      - name: Compilar el proyecto para x86_64
+        run: |
+          make -j$(nproc)
+
+      - name: Aplicar strip a los ejecutables
+        run: |
+          strip src/hootd
+          strip src/hoot-cli
+          strip src/hoot-wallet
+          strip src/hoot-tx
+          strip src/qt/hoot-qt
+
+      - name: Empaquetar los ejecutables en tar.gz
+        run: |
+          mkdir release-x86_64
+          cp src/hootd release-x86_64/
+          cp src/hoot-cli release-x86_64/
+          cp src/hoot-wallet release-x86_64/
+          cp src/hoot-tx release-x86_64/
+          cp src/qt/hoot-qt release-x86_64/
+          tar -czvf HootChain-${{ github.event.inputs.version }}-x86_64-linux-gnu.tar.gz -C release-x86_64 .
+
+      - name: Subir archivo al release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: HootChain-${{ github.event.inputs.version }}-x86_64-linux-gnu.tar.gz
+          tag_name: v1.2
+          name: HootChain-${{ github.event.inputs.version }}-x86_64-linux-gnu
+          body: |
+            Versión x86_64 de HootChain Wallet
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  build-aarch64:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Chequear el código
+        uses: actions/checkout@v3
+
+      - name: Configurar permisos para scripts
+        run: |
+          chmod -R +x depends
+          chmod +x autogen.sh
+
+      - name: Instalar dependencias de compilación para ARM64
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential g++-aarch64-linux-gnu
+
+      - name: Compilar dependencias internas (aarch64)
+        run: |
+          cd depends
+          make HOST=aarch64-linux-gnu
+          cd ..
+
+      - name: Generar archivos de configuración
+        run: |
+          ./autogen.sh
+
+      - name: Configurar el proyecto para aarch64
+        run: |
+          export PATH=$(pwd)/depends/aarch64-linux-gnu/bin:$PATH
+          CONFIG_SITE=$PWD/depends/aarch64-linux-gnu/share/config.site ./configure --prefix=$(pwd)/depends/aarch64-linux-gnu --disable-tests --disable-bench
+
+      - name: Compilar el proyecto para aarch64
+        run: |
+          make -j$(nproc)
+
+      - name: Aplicar strip a los ejecutables
+        run: |
+          aarch64-linux-gnu-strip src/hootd
+          aarch64-linux-gnu-strip src/hoot-cli
+          aarch64-linux-gnu-strip src/hoot-wallet
+          aarch64-linux-gnu-strip src/hoot-tx
+          aarch64-linux-gnu-strip src/qt/hoot-qt
+
+      - name: Empaquetar los ejecutables en tar.gz
+        run: |
+          mkdir release-aarch64
+          cp src/hootd release-aarch64/
+          cp src/hoot-cli release-aarch64/
+          cp src/hoot-wallet release-aarch64/
+          cp src/hoot-tx release-aarch64/
+          cp src/qt/hoot-qt release-aarch64/
+          tar -czvf HootChain-${{ github.event.inputs.version }}-aarch64-linux-gnu.tar.gz -C release-aarch64 .
+
+      - name: Subir archivo al release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: HootChain-${{ github.event.inputs.version }}-aarch64-linux-gnu.tar.gz
+          tag_name: v1.4.3
+          name: HootChain-${{ github.event.inputs.version }}-aarch64-linux-gnu
+          body: |
+            Versión ARM64 de HootChain Wallet
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

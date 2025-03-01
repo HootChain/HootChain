@@ -43,6 +43,7 @@ public:
     enum {
         COLUMN_SERVICE,
         COLUMN_TYPE,
+        COLUMN_COLLATERAL_AMOUNT,
         COLUMN_STATUS,
         COLUMN_POSE,
         COLUMN_REGISTERED,

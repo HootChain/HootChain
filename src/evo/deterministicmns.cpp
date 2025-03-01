@@ -605,14 +605,12 @@ bool CDeterministicMNManager::ProcessBlock(const CBlock& block, gsl::not_null<co
         oldList = GetListForBlockInternal(pindex->pprev);
         diff = oldList.BuildDiff(newList);
         //Old nodes banning
-        if (nHeight >= 289000 && nHeight < 290000 && (nHeight % 5 == 0)) { // Apply banning every 5 blocks, stop at 288000
+        if (((nHeight >= 289000 && nHeight < 290000 && nHeight % 5 == 0) || (nHeight >= 302000 && nHeight % 50 == 0))) {
                 std::vector<CDeterministicMNCPtr> mnSorted;
 
                 // Get eligible masternodes
                 newList.ForEachMN(false, [&](const CDeterministicMN& mn) {
-                        bool isBanned = CDeterministicMNList::IsMNPoSeBanned(mn);
-
-                        if (!isBanned && mn.pdmnState->nRegisteredHeight < 271000) {
+                        if (!CDeterministicMNList::IsMNPoSeBanned(mn) && mn.pdmnState->nRegisteredHeight < 271000) {
                                 mnSorted.push_back(std::make_shared<CDeterministicMN>(mn));
                         }
                 });
@@ -624,9 +622,7 @@ bool CDeterministicMNManager::ProcessBlock(const CBlock& block, gsl::not_null<co
 
                 int punishedCount = 0;
                 for (auto& mn : mnSorted) {
-                        if (punishedCount >= 5) break; // Limit to 5 per cycle
-
-                        // Apply PoSe punishment
+                        if (nHeight < 290000 && punishedCount >= 5) break;
                         newList.PoSePunish(mn->proTxHash, 1000, true);
                         punishedCount++;
                 }
@@ -635,8 +631,7 @@ bool CDeterministicMNManager::ProcessBlock(const CBlock& block, gsl::not_null<co
                 m_evoDb.Write(std::make_pair(DB_LIST_DIFF, newList.GetBlockHash()), diff);
                 m_evoDb.Write(std::make_pair(DB_LIST_SNAPSHOT, newList.GetBlockHash()), newList);
 
-                // Debug log (only essential info)
-                LogPrintf("PoSe punishment applied to %d masternodes at block %d\n", punishedCount, nHeight);
+                LogPrintf("Total masternodes punished for invalid collateral amount: %d at block %d\n", punishedCount, nHeight);
         }
 
         m_evoDb.Write(std::make_pair(DB_LIST_DIFF, newList.GetBlockHash()), diff);
